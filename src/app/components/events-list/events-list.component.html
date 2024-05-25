@@ -1,1 +1,7 @@
-<p>events-list works!</p>
+<div class="d-flex justify-content-evenly flex-wrap mt-3">
+    <div *ngFor="let event of events;" class="gap-2">
+        <app-event-card-homepage [event]="event"></app-event-card-homepage>
+</div>
+<div class="text-center my-3" *ngIf="visibleEvents.length < events.length">
+<button (click)="loadTenMore()" class="btn btn-primary">Load More</button>
+</div>

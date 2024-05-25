@@ -1,12 +1,32 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { EventCardHomepageComponent } from 'src/app/event-card-homepage/event-card-homepage.component';
+import { Event, EventsList } from 'src/app/shared/interfaces/event';
 
 @Component({
   selector: 'app-events-list',
   standalone: true,
-  imports: [],
+  imports: [EventCardHomepageComponent, CommonModule],
   templateUrl: './events-list.component.html',
   styleUrl: './events-list.component.css'
 })
 export class EventsListComponent {
+  events: Event[] = EventsList
 
+  visibleEvents: any[] = [];
+  loadCount = 10;
+
+  ngOnInit(): void {
+    this.sortEventsByDate()
+    this.loadTenMore();
+  }
+
+  sortEventsByDate(): void {
+    this.events.sort((a, b) => new Date(a.date).getDate() - new Date(b.date).getDate());
+  }
+
+  loadTenMore() : void {
+    const nextEvents = this.events.slice(this.visibleEvents.length, this.visibleEvents.length + this.loadCount)
+    this.events = [...this.visibleEvents, ...nextEvents]
+  }
 }

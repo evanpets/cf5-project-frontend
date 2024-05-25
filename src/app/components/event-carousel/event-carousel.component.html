@@ -2,7 +2,7 @@
     <div id="carouselExample" class="carousel slide w-50 mx-auto pt-2">
         <div class="carousel-inner">
           <div *ngFor="let event of events; let i = index" [class.active]="i === 0" class="carousel-item">
-              <app-event-card [event]="event"></app-event-card>
+              <app-event-slide [event]="event"></app-event-slide>
           </div>
             <!-- <div class="carousel-item active">
                 <img src="https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg" class="d-block w-100 rounded-2" height="350px" width="500px" alt="pic1">
