@@ -1,7 +1,7 @@
 <div class="card container text-center shadow my-2 mx-1" style="width: 16rem; height: 18rem; overflow:hidden;" >
     <img src="https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg" class="card-img-top" alt="eventpic">
     <div class="card-body">
-        <p class="card-text"> {{ formatDate(event.date) }}</p>
+        <p class="card-text"> {{ event.date.toDateString() }}</p>
         <h5 class="card-text"> {{ event.title }}</h5>
         <p class="card-text"> {{ event.venue.name }}</p>
       <!-- <a href="#" class="btn btn-primary">Go somewhere</a> wrap around card, send to get event-->
