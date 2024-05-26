@@ -1,22 +1,27 @@
-import { Component, Input, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UserService } from 'src/app/shared/services/user.service';
 import { MatIconModule } from '@angular/material/icon';
-import { User } from 'src/app/shared/interfaces/user';
 import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, MatIconModule],
+  imports: [RouterLink, MatIconModule, CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+  // user : User = dummyUser
   // userService = inject(UserService)
-  // user = this.userService.user
+  // User = this.userService.user
+  // constructor() {}
 
+  // get user() {
+  //   return this.userService.user();
+  // }
+  
   // logout() {
   //   this.userService.logoutUser();
   // }

@@ -26,8 +26,9 @@ export class UserRegistrationComponent {
 
 
   form = new FormGroup({
-    givenName: new FormControl('', Validators.required),
-    surName: new FormControl('', Validators.required),
+    username: new FormControl('', Validators.required),
+    firstName: new FormControl('', Validators.required),
+    lastName: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.email, Validators.required]),
     password: new FormControl('', [Validators.required, Validators.minLength(4)]),
     confirmPassword: new FormControl('', [Validators.required, Validators.minLength(4)])

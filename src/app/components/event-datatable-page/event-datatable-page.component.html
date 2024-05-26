@@ -1,0 +1,23 @@
+<h3 class="text-center mt-3">View Events</h3>
+
+<div class="container mt-4">
+    <div class="mx-auto d-flex justify-content-center">
+        <div class="btn-group" role="group">
+            <button id="upcoming-events-btn"
+            class="btn rounded-start border-end-2 border-black" type="button"
+            [ngClass]="{'btn-primary text-light': activeTab === 'upcoming', 'btn-outline-primary': activeTab !== 'upcoming'}"
+            routerLink="upcoming-events" (click)="setActiveTab('upcoming')">Upcoming events</button>
+
+            <button id="past-events-btn"
+            class="btn rounded-end border-start-2 border-black" type="button" 
+            [ngClass]="{'btn-primary text-light': activeTab === 'past', 'btn-outline-primary': activeTab !== 'past'}" 
+            routerLink="past-events" (click)="setActiveTab('past')">Past events</button>
+        </div>
+    </div>
+    <div>
+        <app-upcoming-events-datatable *ngIf="activeTab === 'upcoming'"></app-upcoming-events-datatable>
+        <app-past-events-datatable *ngIf="activeTab === 'past'"></app-past-events-datatable>
+    </div>
+</div>
+
+

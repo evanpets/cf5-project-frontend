@@ -1,0 +1,31 @@
+@if (!event) {
+    <div class="alert alert-danger text-center">No event details!</div>
+  } @else {
+    <table class="table table-bordered">
+        <caption class="caption-top fw-bold bg-primary text-light text-center">
+            Event Details
+        </caption>
+        <tr>
+            <td class="fw-semibold text-end">Title</td>
+            <td class="ps-2"> {{ event.title ? event.title : 'TBA' }}
+            </td>
+        </tr>
+        <tr>
+        <td class="fw-semibold text-end">Date</td>
+        <td class="ps-2">{{ event.date ? event.date : 'TBA'}}</td>
+        </tr>
+        <tr>
+        <td class="fw-semibold text-end">Venue</td>
+        <td class="ps-2">{{ event.venue ? event.venue.name : 'TBA'}}</td>
+        </tr>
+        <tr>
+        <td class="fw-semibold text-end">Performers</td>
+        <td class="ps-2">{{ event.performer ? event.performer.name : 'TBA'}}</td>
+        </tr>
+        <tr>
+        <td class="fw-semibold text-end">About</td>
+        <td class="ps-2">{{ event.description ? event.description : 'TBA'}}</td>
+        </tr>
+    </table>
+}
+  

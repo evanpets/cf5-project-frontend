@@ -1,0 +1,39 @@
+<table class="table table-bordered table-striped text-wrap">
+    <thead>
+      <tr class="align-middle text-center small">
+        <th role="button" (click)="sortData('date')">
+            Date {{ sortSign("date") }}
+          </th>
+        <th role="button" (click)="sortData('title')">
+          Title {{ sortSign("title") }}
+        </th>
+        <th role="button" (click)="sortData('venue')">Venue {{ sortSign("venue") }}</th>
+        <th
+          role="button"
+          (click)="sortData('performer')"
+          class="d-none d-lg-table-cell"
+        >
+          Performer {{ sortSign("performer") }}
+        </th>
+        <th
+          role="button"
+          (click)="sortData('price')"
+          class="d-none d-lg-table-cell"
+        >
+          Price {{ sortSign("price") }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of data; track row) {
+        <tr class="align-middle" (click)="onEventClicked(row)">
+            <td>{{ row.date.toDateString() }}</td>
+            <td>{{ row.title }}</td>
+            <td>{{ row.venue.name }}</td>
+            <td class="d-none d-lg-table-cell">{{ row.performer.name }}</td>
+            <td class="d-none d-lg-table-cell">{{ row.price }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  

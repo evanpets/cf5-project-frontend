@@ -1,49 +1,20 @@
-<h4>User Registration Example</h4>
+<h4>Registration Page</h4>
 
 @if (registrationStatus.message === 'Not attempted yet') {
 
     <form [formGroup]="form" class="d-flex flex-column" action="post">
         <mat-form-field>
             <mat-label>
-                First name
+                Username
             </mat-label>
-            <input matInput type="text" formControlName= "givenName" />
-            @if (form.get('givenName').invalid && form.get('givenName').touched) {
+            <input matInput type="text" formControlName= "username" />
+            @if (form.get('username').invalid && form.get('username').touched) {
                 <mat-error>
-                    First name is required
+                    Username is required
                 </mat-error>
             }
         </mat-form-field>
-    
-        <mat-form-field>
-            <mat-label>
-                Last name
-            </mat-label>
-            <input matInput type="text" formControlName= "surName" />
-            @if (form.get('surName').invalid && form.get('surName').touched) {
-                <mat-error>
-                    Last name is required
-                </mat-error>
-            }
-        </mat-form-field>
-    
-        <mat-form-field>
-            <mat-label>
-                Email
-            </mat-label>
-            <input matInput type="text" (blur)="check_duplicate_email()" formControlName= "email" />
-            @if (form.get("email").hasError("duplicateEmail")) {
-                <mat-error>
-                    Email is already registered
-                </mat-error>
-            }
-            @if (form.get('email').invalid && form.get('email').touched) {
-                <mat-error>
-                    Email is missing or invalid
-                </mat-error>
-            }
-        </mat-form-field>
-    
+
         <mat-form-field>
             <mat-label>
                 Password
@@ -66,6 +37,47 @@
             } @else if (form.get('confirmPassword').invalid && form.get('confirmPassword').touched) {
                 <mat-error>
                     Password is missing or invalid
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>
+                Email
+            </mat-label>
+            <input matInput type="text" (blur)="check_duplicate_email()" formControlName= "email" />
+            @if (form.get("email").hasError("duplicateEmail")) {
+                <mat-error>
+                    Email is already registered
+                </mat-error>
+            }
+            @if (form.get('email').invalid && form.get('email').touched) {
+                <mat-error>
+                    Email is missing or invalid
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>
+                First name
+            </mat-label>
+            <input matInput type="text" formControlName= "firstName" />
+            @if (form.get('firstName').invalid && form.get('firstName').touched) {
+                <mat-error>
+                    First name is required
+                </mat-error>
+            }
+        </mat-form-field>
+    
+        <mat-form-field>
+            <mat-label>
+                Last name
+            </mat-label>
+            <input matInput type="text" formControlName= "lastName" />
+            @if (form.get('lastName').invalid && form.get('lastName').touched) {
+                <mat-error>
+                    Last name is required
                 </mat-error>
             }
         </mat-form-field>
