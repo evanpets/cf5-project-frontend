@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 import { EventService } from 'src/app/shared/services/event.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { Event } from 'src/app/shared/interfaces/event';
+import { Event, Performer } from 'src/app/shared/interfaces/event';
 
 @Component({
   selector: 'app-event-submission-form',
@@ -38,7 +38,6 @@ export class EventSubmissionFormComponent implements OnInit {
       newVenueStreet: ['', [Validators.required, Validators.minLength(3)]],
       newVenueStreetNo: ['', [Validators.required, Validators.minLength(1)]],
       newVenueZipCode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
-      performer: ['', [Validators.required, Validators.minLength(3)]],
       price: ['', [Validators.required]],
       date: ['', [Validators.required]],
       category: ['', [Validators.required]],
@@ -52,9 +51,9 @@ export class EventSubmissionFormComponent implements OnInit {
 
   createPerformer(): FormGroup {
     return this.fb.group({
-      performer: ['', Validators.required]
+      name: ['', [Validators.required, Validators.minLength(1)]]
     });
-  }
+  }  
 
   addPerformer() {
     this.performers.push(this.createPerformer());
@@ -105,10 +104,14 @@ export class EventSubmissionFormComponent implements OnInit {
       this.eventService.createEvent(event).subscribe ({
         next: (response) => {
           console.log("Event created", response.msg)
+          this.submissionStatus = {success: true, message: response.msg}
+
         }, 
         error: (response) => {
           const message = response.error.msg
           console.log("Error registering user", message)
+          this.submissionStatus = {success: false, message}
+
         }
       })
     }
