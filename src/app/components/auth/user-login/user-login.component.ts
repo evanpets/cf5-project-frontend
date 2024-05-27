@@ -10,7 +10,7 @@ import { jwtDecode } from 'jwt-decode';
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './user-login.component.html',
-  styleUrl: './user-login.component.css'
+  styleUrls: ['./user-login.component.css']
 })
 
 export class UserLoginComponent {
@@ -33,11 +33,11 @@ export class UserLoginComponent {
         const decodedTokenSubject = jwtDecode(access_token).sub as unknown as LoggedInUser
 
         this.userService.user.set({
-          firstName: decodedTokenSubject.firstName,
+          username: decodedTokenSubject.username,
           email: decodedTokenSubject.email
         })
 
-        this.router.navigate(['restricted-content-example'])
+        this.router.navigate(['home'])
       },
       error: (response) => {
         console.error('Login Error', response)

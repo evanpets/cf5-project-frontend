@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { UserLoginComponent } from './components/user-login/user-login.component';
-import { UserRegistrationComponent } from './components/user-registration/user-registration.component';
+import { UserLoginComponent } from './components/auth/user-login/user-login.component';
+import { UserRegistrationComponent } from './components/auth/user-registration/user-registration.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 
 @Component({

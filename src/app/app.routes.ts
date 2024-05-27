@@ -1,49 +1,25 @@
-import { Routes } from '@angular/router';
-import { NavbarComponent } from './components/navbar/navbar.component';
-import { AppComponent } from './app.component';
-import { EventCarouselComponent } from './components/homepage/event-carousel/event-carousel.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { EventsListComponent } from './components/homepage/events-list/events-list.component';
-import { EventSlideComponent } from './components/homepage/event-slide/event-slide.component';
-import { SearchBarComponent } from './components/homepage/search-bar/search-bar.component';
-import { EventCardHomepageComponent } from './components/homepage/event-card-homepage/event-card-homepage.component';
-import { UserLoginComponent } from './components/user-login/user-login.component';
-import { UserRegistrationComponent } from './components/user-registration/user-registration.component';
-import { HomepageComponent } from './components/homepage/homepage.component';
-import { UpcomingEventsDatatableComponent } from './components/event-datatable-page/upcoming-events-datatable/upcoming-events-datatable.component';
-import { EventSubmissionFormComponent } from './components/event-submission-form/event-submission-form.component';
-import { PastEventsDatatableComponent } from './components/event-datatable-page/past-events-datatable/past-events-datatable.component';
-import { EventsDatatableComponent } from './components/event-datatable-page/events-datatable/events-datatable.component';
-import { EventDatatablePageComponent } from './components/event-datatable-page/event-datatable-page.component';
+import { Routes } from "@angular/router";
+import { AppComponent } from "./app.component";
+import { UserLoginComponent } from "./components/auth/user-login/user-login.component";
+import { UserRegistrationComponent } from "./components/auth/user-registration/user-registration.component";
+import { FooterComponent } from "./components/footer/footer.component";
+import { HomepageComponent } from "./components/homepage/homepage.component";
+import { EventDatatablePageComponent } from "./components/navbar/event-datatable-page/event-datatable-page.component";
+import { PastEventsDatatableComponent } from "./components/navbar/event-datatable-page/past-events-datatable/past-events-datatable.component";
+import { UpcomingEventsDatatableComponent } from "./components/navbar/event-datatable-page/upcoming-events-datatable/upcoming-events-datatable.component";
+import { EventSubmissionFormComponent } from "./components/navbar/event-submission-form/event-submission-form.component";
+import { NavbarComponent } from "./components/navbar/navbar.component";
+import { AboutUsComponent } from "./components/navbar/about-us/about-us.component";
+
 
 export const routes: Routes = [
-    {
-        path: "navbar",
-        component: NavbarComponent
-    },
     // {
-    //     path: "event-carousel",
-    //     component: EventCarouselComponent
-    // },
-    {
-        path: "footer",
-        component: FooterComponent
-    },
-    // {
-    //     path: "events-list",
-    //     component: EventsListComponent
+    //     path: "navbar",
+    //     component: NavbarComponent
     // },
     // {
-    //     path: "event-card-homepage",
-    //     component: EventCardHomepageComponent
-    // },
-    // {
-    //     path: "event-slide",
-    //     component: EventSlideComponent
-    // },
-    // {
-    //     path: "search-bar",
-    //     component: SearchBarComponent
+    //     path: "footer",
+    //     component: FooterComponent
     // },
     {
         path: "login",
@@ -57,24 +33,23 @@ export const routes: Routes = [
         path: "home",
         component: HomepageComponent
     },
-    {
-        path: 'events',
-        component: EventDatatablePageComponent
+
+    { path: 'events', component: EventDatatablePageComponent,
+        children: [
+            { path: 'upcoming', component: UpcomingEventsDatatableComponent },
+            { path: 'past', component: PastEventsDatatableComponent }
+        ]
     },
     {
-        path: 'upcoming-events',
-        component: UpcomingEventsDatatableComponent
-    },
-    {
-        path: 'past-events',
-        component: PastEventsDatatableComponent
-    },
-    {
-        path: 'event-submission-form',
+        path: 'create-event',
         component: EventSubmissionFormComponent
+    },
+    {
+        path: 'about-us',
+        component: AboutUsComponent
     },
     { 
         path: '',
-        component: AppComponent 
+        component: HomepageComponent
     },
 ];

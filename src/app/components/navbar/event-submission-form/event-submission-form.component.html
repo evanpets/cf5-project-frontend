@@ -1,0 +1,238 @@
+<div class="container col-8 border border-2 bg-primary-subtle rounded-5 my-4">
+    <h3 class="text-center my-4">Event submission form</h3>
+    <div class="container-fluid w-75 mt-3 d-flex flex-column">
+
+      <form [formGroup]="form" class="d-flex flex-column" action="post">
+        <mat-form-field>
+          <mat-label>Event title</mat-label>
+          <input matInput type="text" formControlName="title" />
+          <mat-error *ngIf="form.get('title').invalid && form.get('title').touched">
+            An event title is required
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Description</mat-label>
+          <input matInput type="text" formControlName="description" />
+          <mat-error *ngIf="form.get('description').invalid && form.get('description').touched">
+            Description is required
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Venue</mat-label>
+          <input matInput type="text" formControlName="venue" (blur)="checkDuplicateVenue()" />
+          <mat-error *ngIf="form.get('venue').invalid && form.get('venue').touched">
+            A venue is required
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-checkbox class="mb-3" (change)="toggleNewVenue()">
+          I want to add a new venue
+        </mat-checkbox>
+  
+        <div *ngIf="showNewVenueFields" class="border border-2 border-dark-subtle px-4 pt-4 mb-4 rounded-2">
+          <h5 class="text-center">Please fill in the information for your venue:</h5>
+          <div class="d-flex flex-column align-items-center mt-3">
+            <div >
+                <mat-form-field class="mb-3 me-3">
+                    <mat-label>Venue name</mat-label>
+                    <input matInput type="text" formControlName="newVenueName" />
+                    <mat-error *ngIf="form.get('newVenueName').invalid && form.get('newVenueName').touched">
+                      A venue name is required
+                    </mat-error>
+                  </mat-form-field>
+          
+                  <mat-form-field class="mb-3">
+                    <mat-label>Street</mat-label>
+                    <input matInput type="text" formControlName="newVenueStreet" />
+                    <mat-error *ngIf="form.get('newVenueStreet').invalid && form.get('newVenueStreet').touched">s
+                      A street name is required
+                    </mat-error>
+                  </mat-form-field>
+              </div>
+    
+              <div>
+                <mat-form-field class="mb-3 me-3">
+                    <mat-label>Street no</mat-label>
+                    <input matInput type="text" formControlName="newVenueStreetNo" />
+                    <mat-error *ngIf="form.get('newVenueStreetNo').invalid && form.get('newVenueStreetNo').touched">
+                      A street number is required
+                    </mat-error>
+                  </mat-form-field>
+          
+                  <mat-form-field class="mb-3">
+                    <mat-label>ZIP Code</mat-label>
+                    <input matInput type="text" formControlName="newVenueZipCode" />
+                    <mat-error *ngIf="form.get('newVenueZipCode').invalid && form.get('newVenueZipCode').touched">
+                      The ZIP code is required
+                    </mat-error>
+                  </mat-form-field>
+              </div>
+          </div>
+        </div>
+  
+        <!-- <div *ngFor="let performer of performers; let i = index" class=" d-flex align-items-center">
+
+        <mat-form-field class="flex-fill">
+          <mat-label>Performer</mat-label>
+          <input matInput type="text" formControlName="performer" />
+          <mat-error *ngIf="form.get('performer').invalid && form.get('performer').touched">
+            A performer is required
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-icon-button color="warn" (click)="removePerformer(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div> -->
+
+        <div formArrayName="performers" *ngFor="let performer of performers.controls; let i = index" class="d-flex align-items-center">
+          <mat-form-field class="flex-fill">
+            <mat-label>Performer</mat-label>
+            <input matInput type="text" />
+            <mat-error *ngIf="performer.invalid && performer.touched">
+              A performer name is required
+            </mat-error>
+          </mat-form-field>
+          <button mat-icon-button color="warn" (click)="removePerformer(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+  
+        <button mat-raised-button color="primary" type="button" (click)="addPerformer()">I want to add more performers</button>
+  
+        <mat-form-field class="mt-4">
+          <mat-label>Ticket price</mat-label>
+          <input matInput type="text" formControlName="price" />
+          <mat-error *ngIf="form.get('price').invalid && form.get('price').touched">
+            A ticket price is required
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Event date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="form.get('date').invalid && form.get('date').touched">
+            An event date is required
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field class="mb-3">
+          <mat-label>Event category</mat-label>
+          <mat-select formControlName="category">
+            <mat-option value="" disabled>Select category</mat-option>
+            <mat-option value="Music">Music</mat-option>
+            <mat-option value="Cinema">Cinema</mat-option>
+            <mat-option value="Theater">Theater</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('category').invalid && form.get('category').touched">
+            An event category is required
+          </mat-error>
+        </mat-form-field>
+  
+        <div class="d-md-flex justify-content-lg-evenly mt-4 mb-3">
+          <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+          <button mat-raised-button color="warn" type="button" routerLink="../home">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- performer prev version -->
+    <!-- <label class="form-label">Performers</label>
+    <div *ngFor="let performer of performers; let i = index" class="mb-3 d-flex align-items-center">
+        <input matInput type="text" [(ngModel)]="performers[i]" name="performer{{i}}" class="form-control me-2" />
+        <button mat-icon-button color="warn" (click)="removePerformer(i)">
+        <mat-icon>delete</mat-icon>
+        </button>
+    </div> -->
+
+
+
+
+<!-- <div class="container col-8 border border-2 bg-primary-subtle rounded-5 my-4">
+    <h3 class="text-lg-center my-4">Event submission form</h3>
+
+    <div class="container-fluid w-75 mt-3">
+        <form [formGroup]="form" class="d-flex flex-column" action="post">
+            <div class="mb-3">
+                <label for="titleInput" class="form-label">Event title</label>
+                <input type="text" class="form-control" id="titleInput">
+            </div>
+    
+            <div class="mb-3">
+                <label for="descriptionInput" class="form-label">Event description</label>
+                <input type="text" class="form-control" id="descriptionInput">
+            </div>
+    
+            <div class="mb-3">
+                <label for="venueInput" class="form-label">Venue</label>
+                <input type="text" class="form-control" id="venueInput">
+            </div>
+    
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="newVenueBtn" (change)="toggleNewVenue()">
+                <label class="form-check-label" for="newVenueBtn">I want to add a new venue</label>
+            </div>
+    
+            <div *ngIf="showNewVenueFields" class="border border-2 border-dark-subtle p-2 m-2 rounded-2">
+                <div class="mb-3">
+                    <label for="newVenueNameInput" class="form-label">Venue name</label>
+                    <input type="text" class="form-control" id="newVenueNameInput">
+                </div>
+    
+                <div class="mb-3">
+                    <label for="newVenueStreetInput" class="form-label">Street</label>
+                    <input type="text" class="form-control" id="newVenueStreetInput">
+                </div>
+    
+                <div class="mb-3">
+                    <label for="newVenueStreetNoInput" class="form-label">Street number</label>
+                    <input type="text" class="form-control" id="newVenueStreetNoInput">
+                </div>
+    
+                <div class="mb-3">
+                    <label for="newVenueZipCodeInput" class="form-label">ZIP Code</label>
+                    <input type="text" class="form-control" id="newVenueZipCodeInput">
+                </div>
+            </div>
+            
+            <label for="performerInput" class="form-label">Performer </label>
+            <div *ngFor="let performer of performers; let i = index" class="mb-3 d-flex align-items-center">
+                
+                <input type="text" class="form-control me-2" [(ngModel)]="performers[i]" name="performer{{i}}">
+                <button type="button" class="btn btn-danger" (click)="removePerformer(i)">X</button>
+              </div>
+    
+            <button type="button" class="btn btn-primary mb-3" (click)="addPerformer()">I want to add more performers</button>
+    
+            <div class="mb-3">
+                <label for="priceInput" class="form-label">Ticket price</label>
+                <input type="text" class="form-control" id="priceInput">
+            </div>
+    
+            <div class="mb-3">
+                <label for="dateInput" class="form-label">Event date</label>
+                <input type="datetime-local" class="form-control" id="dateInput">
+            </div>
+    
+            <div class="mb-3">
+                <label for="event-category" class="form-label">Event category</label>
+                <select class="form-select" aria-label="event-category">
+                    <option selected disabled>Select category</option>
+                    <option value="1">Music</option>
+                    <option value="2">Cinema</option>
+                    <option value="3">Theater</option>
+                  </select>
+            </div>
+    
+            <div class="d-md-flex justify-content-lg-evenly mt-4 mb-3">
+                <button type="submit" class="btn btn-primary mb-3">Submit</button>
+                <button type="button" class="btn btn-danger mb-3" routerLink='../home'>Cancel</button>
+            </div>
+      </form>
+    </div>
+</div> -->

@@ -13,18 +13,12 @@ import { CommonModule } from '@angular/common';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-  // user : User = dummyUser
-  // userService = inject(UserService)
-  // User = this.userService.user
-  // constructor() {}
-
-  // get user() {
-  //   return this.userService.user();
-  // }
+  userService = inject(UserService)
+  user = this.userService.user
   
-  // logout() {
-  //   this.userService.logoutUser();
-  // }
+  logout() {
+    this.userService.logoutUser();
+  }
 }
 
 

@@ -1,6 +1,7 @@
-<h4>User Login</h4>
+<div class="d-flex flex-column align-items-center rounded-3 py-3 mt-5 mb-3 border border-2 bg-primary-subtle col-4 container">
+  <h4>User Login</h4>
 
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="d-flex flex-column gap-3 w-50">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="d-flex flex-column gap-3 my-3">
 
     <div class="form-group">
         <label for="email">Email:</label>
@@ -20,18 +21,17 @@
       </div>
     <button
     type="submit"
-    class="btn btn-primary "
-    [disabled]="!form.valid">Login</button>
+    class="btn btn-primary mt-2"
+    >Login</button>
     @if (invalidLogin) {
         <div class="alert alert-danger">
             <strong>Error:</strong>
-            Invalid email or password. Click
-            <a
-              role="button"
-              routerLink='/register'>
-              here
-            </a>
-            to register
+            Invalid email or password.
+
           </div>
     }
 </form>
+  <div class="my-3">
+    <span>Not a user? Register </span><a role="button" routerLink='/register'>here</a><span>!</span>
+  </div>
+</div>

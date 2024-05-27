@@ -14,16 +14,16 @@ export interface Credentials {
 }
 
 export interface LoggedInUser {
-    firstName: string
+    username: string
     email: string
 }
 
 export const dummyUser : User = {
-    username: "vagpet",
+    username: "alansmith",
     password: "12345",
-    email: "vagelis.pets@yahoo.gr",
-    firstName: "Vangelis",
-    lastName: "Petsalis",
+    email: "alansmith@yahoo.gr",
+    firstName: "alan",
+    lastName: "smith",
     phoneNumber: "1234567890",
     userRole: "User"
 }

@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { set } from 'lodash-es';
 import { User } from 'src/app/shared/interfaces/user';
 import { UserService } from 'src/app/shared/services/user.service';
 
@@ -24,13 +25,13 @@ export class UserRegistrationComponent {
     message: 'Not attempted yet',
   }
 
-
   form = new FormGroup({
     username: new FormControl('', Validators.required),
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.email, Validators.required]),
     password: new FormControl('', [Validators.required, Validators.minLength(4)]),
+    phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10)]),
     confirmPassword: new FormControl('', [Validators.required, Validators.minLength(4)])
   },
   this.passwordConfirmValidator
@@ -45,10 +46,11 @@ export class UserRegistrationComponent {
   }
 
   onSubmit (value:any) {
-    console.log(value)
+    // console.log(value)
 
     const user = this.form.value as User
     delete user['confirmPassword']
+    set (user, user.userRole, 'User')
 
     this.userService.registerUser(user).subscribe ({
       next: (response) => {
@@ -62,14 +64,6 @@ export class UserRegistrationComponent {
       }
     })
 
-  }
-
-  registerAnotherUser() {
-    this.form.reset()
-    this.registrationStatus = 
-    {success: false,
-      message: 'Not attempted yet',
-    }
   }
 
   check_duplicate_email() {
@@ -86,8 +80,21 @@ export class UserRegistrationComponent {
         this.form.get('email').setErrors({duplicateEmail: true})
       },
     })
+  }
 
-
-
+  check_duplicate_username() {
+    const username = this.form.get('username').value
+    
+    this.userService.check_duplicate_username(username).subscribe({
+      next: (response) => {
+        console.log(response.msg)
+        this.form.get('username').setErrors(null)
+      },
+      error: (response) => {
+        const message = response.error.msg
+        console.log(message)
+        this.form.get('username').setErrors({duplicateUsername: true})
+      },
+    })
   }
 }

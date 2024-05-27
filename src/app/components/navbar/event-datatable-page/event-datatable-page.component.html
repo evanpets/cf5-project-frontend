@@ -6,12 +6,12 @@
             <button id="upcoming-events-btn"
             class="btn rounded-start border-end-2 border-black" type="button"
             [ngClass]="{'btn-primary text-light': activeTab === 'upcoming', 'btn-outline-primary': activeTab !== 'upcoming'}"
-            routerLink="upcoming-events" (click)="setActiveTab('upcoming')">Upcoming events</button>
+            routerLink="upcoming" (click)="setActiveTab('upcoming')">Upcoming events</button>
 
             <button id="past-events-btn"
             class="btn rounded-end border-start-2 border-black" type="button" 
             [ngClass]="{'btn-primary text-light': activeTab === 'past', 'btn-outline-primary': activeTab !== 'past'}" 
-            routerLink="past-events" (click)="setActiveTab('past')">Past events</button>
+            routerLink="past" (click)="setActiveTab('past')">Past events</button>
         </div>
     </div>
     <div>
