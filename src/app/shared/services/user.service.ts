@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, effect, inject, signal } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.development';
 import { Credentials, LoggedInUser, User } from '../interfaces/user';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 
 
-const API_URL = `${environment.apiURL}/user`;
+const API_URL = `${environment.apiURL}/api/user`;
 
 @Injectable({
   providedIn: 'root',
@@ -25,14 +25,14 @@ export class UserService {
       const decodedTokenSubject = jwtDecode(access_token).sub as unknown as LoggedInUser
 
       this.user.set({
-        username: decodedTokenSubject.username,
-        email: decodedTokenSubject.email
+        Username: decodedTokenSubject.Username,
+        Email: decodedTokenSubject.Email
       })
     }
     
     effect(()=> {
       if (this.user()) {
-        console.log('User logged in', this.user().username)
+        console.log('User logged in', this.user().Username)
       } else {
         console.log('No user logged in')
       }

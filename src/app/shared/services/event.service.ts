@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Event, EventsList } from '../interfaces/event';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 

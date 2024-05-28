@@ -20,7 +20,7 @@
           <a class="nav-link" routerLink="home">Theater</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" routerLink="create-event">Submit an event</a>
+          <a class="nav-link active" routerLink="api/event/create">Submit an event</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -28,8 +28,8 @@
           </a>
 
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" routerLink="events/upcoming">Upcoming events</a></li>
-            <li><a class="dropdown-item" routerLink="events/past">Past events</a></li>
+            <li><a class="dropdown-item" routerLink="api/event/upcoming">Upcoming events</a></li>
+            <li><a class="dropdown-item" routerLink="api/event/past">Past events</a></li>
           </ul>
         </li>
         <li class="nav-item">
@@ -41,12 +41,12 @@
         <li class="nav-item">
           @if(user()) {
             <span class="me-3 d-flex gap-2">
-                Welcome, {{ user().username }}
+                Welcome, {{ user().Username }}
                 <mat-icon role="button" (click)="logout()">logout</mat-icon>
             </span>
           } @else {
             <span class="me-3 d-flex gap-2 align-items-center"> Login
-            <mat-icon role="button" class="icon-link-hover" routerLink="login">login</mat-icon>
+            <mat-icon role="button" class="icon-link-hover" routerLink="api/user/login">login</mat-icon>
             </span>
           }
         </li>

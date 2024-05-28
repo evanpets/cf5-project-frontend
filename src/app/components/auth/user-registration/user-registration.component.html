@@ -1,14 +1,14 @@
-<div class="container col-5 border border-2 bg-primary-subtle rounded-3 p-3 my-4">
-    <h4>Registration Page</h4>
+<div class="container col-4 border border-2 bg-primary-subtle rounded-3 p-3 my-4">
+    <h4 class="text-center">Registration Page</h4>
 
     @if (registrationStatus.message === 'Not attempted yet') {
     
-        <form [formGroup]="form" class="d-flex flex-column mt-4 " action="post">
+        <form [formGroup]="form" class="d-flex flex-column mt-4 px-5" action="post">
             <mat-form-field>
                 <mat-label>Username </mat-label>
 
-                <input matInput type="text" formControlName= "username" />
-                @if (form.get('username').invalid && form.get('username').touched) {
+                <input matInput type="text" formControlName= "Username" />
+                @if (form.get('Username').invalid && form.get('Username').touched) {
 
                     <mat-error> Username is required </mat-error>
                 }
@@ -17,8 +17,8 @@
             <mat-form-field>
                 <mat-label> Password </mat-label>
 
-                <input matInput type="password" formControlName= "password" />
-                @if (form.get('password').invalid && form.get('password').touched) {
+                <input matInput type="password" formControlName= "Password" />
+                @if (form.get('Password').invalid && form.get('Password').touched) {
 
                     <mat-error> Password is missing or invalid </mat-error>
                 }
@@ -40,12 +40,12 @@
             <mat-form-field>
                 <mat-label> Email </mat-label>
 
-                <input matInput type="text" (blur)="check_duplicate_email()" formControlName= "email" />
-                @if (form.get('email').invalid && form.get('email').touched) {
+                <input matInput type="text" (blur)="check_duplicate_email()" formControlName= "Email" />
+                @if (form.get('Email').invalid && form.get('Email').touched) {
 
                     <mat-error> Email is missing or invalid </mat-error>
                 }
-                @if (form.get("email").hasError("duplicateEmail")) {
+                @if (form.get("Email").hasError("duplicateEmail")) {
 
                     <mat-error> Email is already registered </mat-error>
                 }
@@ -55,8 +55,8 @@
             <mat-form-field>
                 <mat-label> First name </mat-label>
                 
-                <input matInput type="text" formControlName= "firstName" />
-                @if (form.get('firstName').invalid && form.get('firstName').touched) {
+                <input matInput type="text" formControlName= "FirstName" />
+                @if (form.get('FirstName').invalid && form.get('FirstName').touched) {
 
                     <mat-error> First name is required </mat-error>
                 }
@@ -65,8 +65,8 @@
             <mat-form-field>
 
                 <mat-label> Last name </mat-label>
-                <input matInput type="text" formControlName= "lastName" />
-                @if (form.get('lastName').invalid && form.get('lastName').touched) {
+                <input matInput type="text" formControlName= "LastName" />
+                @if (form.get('LastName').invalid && form.get('LastName').touched) {
 
                     <mat-error> Last name is required </mat-error>
                 }
@@ -75,8 +75,8 @@
             <mat-form-field>
 
                 <mat-label> Phone Number </mat-label>
-                <input matInput type="text" formControlName= "phoneNumber" />
-                @if (form.get('phoneNumber').invalid && form.get('phoneNumber').touched) {
+                <input matInput type="text" formControlName= "PhoneNumber" />
+                @if (form.get('PhoneNumber').invalid && form.get('PhoneNumber').touched) {
 
                     <mat-error> Phone number is required </mat-error>
                 }
@@ -87,8 +87,9 @@
     
     } @else {
         @if (registrationStatus.success) {
-            <div class="alert alert-success mt-2 w-50 ">
+            <div class="alert alert-success mt-2 w-50 d-flex flex-column align-items-center">
                 <strong>Success:</strong> {{ registrationStatus.message}}
+                <a role="button" routerLink='../login'>Go to the login page</a>
             </div>
         } @else { 
             <div class="alert alert-danger mt-2 w-50 ">

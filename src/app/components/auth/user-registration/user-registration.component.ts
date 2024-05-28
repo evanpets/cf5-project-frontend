@@ -26,19 +26,19 @@ export class UserRegistrationComponent {
   }
 
   form = new FormGroup({
-    username: new FormControl('', Validators.required),
-    firstName: new FormControl('', Validators.required),
-    lastName: new FormControl('', Validators.required),
-    email: new FormControl('', [Validators.email, Validators.required]),
-    password: new FormControl('', [Validators.required, Validators.minLength(4)]),
-    phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10)]),
+    Username: new FormControl('', Validators.required),
+    FirstName: new FormControl('', Validators.required),
+    LastName: new FormControl('', Validators.required),
+    Email: new FormControl('', [Validators.email, Validators.required]),
+    Password: new FormControl('', [Validators.required, Validators.minLength(4)]),
+    PhoneNumber: new FormControl('', [Validators.required, Validators.minLength(10)]),
     confirmPassword: new FormControl('', [Validators.required, Validators.minLength(4)])
   },
   this.passwordConfirmValidator
 );
 
   passwordConfirmValidator(form: FormGroup) {
-    if (form.get('password').value !== form.get('confirmPassword').value) {
+    if (form.get('Password').value !== form.get('confirmPassword').value) {
       form.get('confirmPassword').setErrors({passwordMismatch: true})
       return {passwordMismatch: true}
     }
@@ -50,7 +50,7 @@ export class UserRegistrationComponent {
 
     const user = this.form.value as User
     delete user['confirmPassword']
-    set (user, user.userRole, 'User')
+    set (user, user.Role, 'User')
 
     this.userService.registerUser(user).subscribe ({
       next: (response) => {
@@ -67,33 +67,33 @@ export class UserRegistrationComponent {
   }
 
   check_duplicate_email() {
-    const email = this.form.get('email').value
+    const email = this.form.get('Email').value
     
     this.userService.check_duplicate_email(email).subscribe({
       next: (response) => {
         console.log(response.msg)
-        this.form.get('email').setErrors(null)
+        this.form.get('Email').setErrors(null)
       },
       error: (response) => {
         const message = response.error.msg
         console.log(message)
-        this.form.get('email').setErrors({duplicateEmail: true})
+        this.form.get('Email').setErrors({duplicateEmail: true})
       },
     })
   }
 
   check_duplicate_username() {
-    const username = this.form.get('username').value
+    const username = this.form.get('Username').value
     
     this.userService.check_duplicate_username(username).subscribe({
       next: (response) => {
         console.log(response.msg)
-        this.form.get('username').setErrors(null)
+        this.form.get('Username').setErrors(null)
       },
       error: (response) => {
         const message = response.error.msg
         console.log(message)
-        this.form.get('username').setErrors({duplicateUsername: true})
+        this.form.get('Username').setErrors({duplicateUsername: true})
       },
     })
   }

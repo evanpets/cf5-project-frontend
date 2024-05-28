@@ -20,8 +20,9 @@ export class UserLoginComponent {
   invalidLogin = false
 
   form = new FormGroup ({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', Validators.required)
+    Username: new FormControl('', Validators.required),
+    // email: new FormControl('', [Validators.required, Validators.email]),
+    Password: new FormControl('', Validators.required)
   })
 
   onSubmit() {
@@ -33,8 +34,8 @@ export class UserLoginComponent {
         const decodedTokenSubject = jwtDecode(access_token).sub as unknown as LoggedInUser
 
         this.userService.user.set({
-          username: decodedTokenSubject.username,
-          email: decodedTokenSubject.email
+          Username: decodedTokenSubject.Username,
+          Email: decodedTokenSubject.Email
         })
 
         this.router.navigate(['home'])

@@ -1,29 +1,30 @@
 export interface User {
-    username: string
-    password: string
-    email: string
-    firstName: string
-    lastName: string
-    phoneNumber: string
-    userRole: string
+    Username: string
+    Password: string
+    Email: string
+    FirstName: string
+    LastName: string
+    PhoneNumber: string
+    Role: string
 }
 
 export interface Credentials {
-    email: string
-    password: string
+    Username: string
+    // email: string
+    Password: string
 }
 
 export interface LoggedInUser {
-    username: string
-    email: string
+    Username: string
+    Email: string
 }
 
-export const dummyUser : User = {
-    username: "alansmith",
-    password: "12345",
-    email: "alansmith@yahoo.gr",
-    firstName: "alan",
-    lastName: "smith",
-    phoneNumber: "1234567890",
-    userRole: "User"
-}
+// export const dummyUser : User = {
+//     username: "alansmith",
+//     password: "12345",
+//     email: "alansmith@yahoo.gr",
+//     firstName: "alan",
+//     lastName: "smith",
+//     phoneNumber: "1234567890",
+//     userRole: "User"
+// }

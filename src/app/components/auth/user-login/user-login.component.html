@@ -3,21 +3,29 @@
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="d-flex flex-column gap-3 my-3">
 
-    <div class="form-group">
+    <!-- <div class="form-group">
         <label for="email">Email:</label>
         <input
           type="text"
           id="email"
           class="form-control"
           formControlName="email" />
-      </div>
+      </div> -->
     <div class="form-group">
-        <label for="password">Password:</label>
+      <label for="Username">Username:</label>
+      <input
+        type="text"
+        id="Username"
+        class="form-control"
+        formControlName="Username" />
+    </div>
+    <div class="form-group">
+        <label for="Password">Password:</label>
         <input
           type="password"
-          id="password"
+          id="Password"
           class="form-control"
-          formControlName="password" />
+          formControlName="Password" />
       </div>
     <button
     type="submit"
@@ -32,6 +40,6 @@
     }
 </form>
   <div class="my-3">
-    <span>Not a user? Register </span><a role="button" routerLink='/register'>here</a><span>!</span>
+    <span>Not a user? Register </span><a role="button" routerLink='../register'>here</a><span>!</span>
   </div>
 </div>
