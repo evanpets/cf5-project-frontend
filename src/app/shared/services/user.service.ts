@@ -5,12 +5,12 @@ import { Credentials, LoggedInUser, User } from '../interfaces/user';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 
-
 const API_URL = `${environment.apiURL}/api/user`;
 
 @Injectable({
   providedIn: 'root',
 })
+
 export class UserService {
   http: HttpClient = inject(HttpClient);
   router: Router = inject(Router)
@@ -36,7 +36,6 @@ export class UserService {
       } else {
         console.log('No user logged in')
       }
-
     })
   }
 
@@ -59,7 +58,7 @@ export class UserService {
    logoutUser() {
     this.user.set(null)
     localStorage.removeItem('access-token')
-    this.router.navigate(['login'])
+    this.router.navigate([`${API_URL}/login`])
    }
 
 }
