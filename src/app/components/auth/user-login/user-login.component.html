@@ -1,16 +1,7 @@
 <div class="d-flex flex-column align-items-center rounded-3 py-3 mt-5 mb-3 border border-2 bg-primary-subtle col-4 container">
   <h4>User Login</h4>
-
-  <form [formGroup]="form" action="post" (ngSubmit)="onSubmit()" class="d-flex flex-column gap-3 my-3">
-
-    <!-- <div class="form-group">
-        <label for="email">Email:</label>
-        <input
-          type="text"
-          id="email"
-          class="form-control"
-          formControlName="email" />
-      </div> -->
+  <!-- action="post" -->
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" action="post" class="d-flex flex-column gap-3 my-3">
     <div class="form-group">
       <label for="Username">Username:</label>
       <input
@@ -34,9 +25,12 @@
     @if (invalidLogin) {
         <div class="alert alert-danger">
             <strong>Error:</strong>
-            Invalid email or password.
-
+            Invalid username or password.
           </div>
+    } @else {
+      <div class="alert-success">
+        <strong>Login successful.</strong>
+      </div>
     }
 </form>
   <div class="my-3">

@@ -24,26 +24,22 @@ export class EventService {
   }
 
   checkDuplicateVenue(venue: string) {
-    return this.http.get<{msg: string}> (`${API_URL}/check_duplicate_venue/${venue}`)
+    return this.http.get<{msg: string}> (`${API_URL}/checkDuplicateVenue/${venue}`)
    }
 
    createEvent(event: Event) {
     return this.http.post<{ msg: string }> ( `${API_URL}/create`, event )
    }
 
-  //  getEvents() {
-  //   return this.http.get<Event[]>(this.apiUrl);
-  // }
-
-  // createEvent(event: Event) {
-  //   return this.http.post<Event>(this.apiUrl, event);
+  //  getEvents(events: Event[]) {
+  //   return this.http.get<Event[]>(`${API_URL}/get`, events);
   // }
 
   // updateEvent(event: Event) {
-  //   return this.http.put<Event>(`${this.apiUrl}/${event.id}`, event);
+  //   return this.http.patch<Event>(`${API_URL}/${event.id}`, event);
   // }
 
   // deleteEvent(eventId: number) {
-  //   return this.http.delete(`${this.apiUrl}/${eventId}`);
+  //   return this.http.delete(`${API_URL}/${eventId}`);
   // }
 }

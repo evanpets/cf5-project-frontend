@@ -7,6 +7,7 @@ import { PastEventsDatatableComponent } from "./components/navbar/event-datatabl
 import { UpcomingEventsDatatableComponent } from "./components/navbar/event-datatable-page/upcoming-events-datatable/upcoming-events-datatable.component";
 import { EventSubmissionFormComponent } from "./components/navbar/event-submission-form/event-submission-form.component";
 import { AboutUsComponent } from "./components/navbar/about-us/about-us.component";
+import { authGuard } from "./shared/guards/auth.guard";
 
 
 export const routes: Routes = [

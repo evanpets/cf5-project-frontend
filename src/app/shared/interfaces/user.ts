@@ -19,6 +19,12 @@ export interface LoggedInUser {
     Email: string
 }
 
+export interface DecodedTokenSubject {
+    Username: string;
+    Email: string;
+    // Add other properties if present in the token subject
+  }
+
 // export const dummyUser : User = {
 //     username: "alansmith",
 //     password: "12345",

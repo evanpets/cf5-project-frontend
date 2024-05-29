@@ -7,11 +7,10 @@ import { HomepageComponent } from './components/homepage/homepage.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, FooterComponent, HomepageComponent], //check if anything can be removed
+  imports: [RouterOutlet, NavbarComponent, FooterComponent, HomepageComponent], 
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-
 
 export class AppComponent {
   title = 'final-project-frontend';

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, effect, inject, signal } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
-import { Credentials, LoggedInUser, User } from '../interfaces/user';
+import { Credentials, DecodedTokenSubject, LoggedInUser, User } from '../interfaces/user';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 
@@ -22,7 +22,10 @@ export class UserService {
     const access_token = localStorage.getItem('access_token')
 
     if (access_token) {
-      const decodedTokenSubject = jwtDecode(access_token).sub as unknown as LoggedInUser
+      // const decodedTokenSubject = jwtDecode(access_token).sub as unknown as LoggedInUser
+
+      const decodedToken = jwtDecode<DecodedTokenSubject>(access_token) as LoggedInUser;
+      const decodedTokenSubject = decodedToken;
 
       this.user.set({
         Username: decodedTokenSubject.Username,
@@ -52,7 +55,7 @@ export class UserService {
    }
 
    loginUser(credentials: Credentials) {
-    return this.http.post<{access_token: string}>(`${API_URL}/login`, credentials)
+    return this.http.post<{token: string}>(`${API_URL}/login`, credentials)
    }
 
    logoutUser() {
