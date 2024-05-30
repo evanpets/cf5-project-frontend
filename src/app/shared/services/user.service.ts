@@ -16,16 +16,20 @@ export class UserService {
   router: Router = inject(Router)
 
   user = signal<LoggedInUser | null>(null)
+  claimName = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
+  claimEmail = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
 
   constructor() {
-    //keeps token active through refreshes. doesn't check for expired tokens?
     const access_token = localStorage.getItem('access_token')
 
     if (access_token) {
-      // const decodedTokenSubject = jwtDecode(access_token).sub as unknown as LoggedInUser
 
-      const decodedToken = jwtDecode<DecodedTokenSubject>(access_token) as LoggedInUser;
-      const decodedTokenSubject = decodedToken;
+      const decodedToken = jwtDecode<DecodedTokenSubject>(access_token);
+
+      const decodedTokenSubject: LoggedInUser = {
+        Username: decodedToken[this.claimName],
+        Email: decodedToken[this.claimEmail]
+      };
 
       this.user.set({
         Username: decodedTokenSubject.Username,

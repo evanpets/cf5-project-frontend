@@ -20,9 +20,11 @@ export interface LoggedInUser {
 }
 
 export interface DecodedTokenSubject {
-    Username: string;
-    Email: string;
-    // Add other properties if present in the token subject
+    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name": string;
+    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": string;
+    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": string;
+    nbf: number;
+    exp: number;
   }
 
 // export const dummyUser : User = {

@@ -39,7 +39,8 @@ export const routes: Routes = [
     },
     {
         path: 'about-us',
-        component: AboutUsComponent
+        component: AboutUsComponent,
+        // canActivate: [authGuard]
     },
     { 
         path: '',

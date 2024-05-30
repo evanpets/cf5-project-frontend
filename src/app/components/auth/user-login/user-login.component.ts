@@ -29,24 +29,31 @@ export class UserLoginComponent {
 
   onSubmit() {
     const credentials = this.form.value as Credentials
+
+    const claimName = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
+    const claimEmail = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+
     this.userService.loginUser(credentials).subscribe({
       next: (response) => {
         console.log(response)
-        // const access_token = response.access_token
         const access_token =  response.token;
         console.log("Access token: ", access_token)
 
         localStorage.setItem('access_token', access_token)
         console.log("Access token after set: ", access_token)
 
-        // const decodedTokenSubject = jwtDecode<String>(access_token).substring as unknown as LoggedInUser
-        // const decodedTokenSubject = jwtDecode(access_token).sub as unknown as LoggedInUser
-        const decodedToken = jwtDecode<DecodedTokenSubject>(access_token) as LoggedInUser;
-        const decodedTokenSubject = decodedToken;
+        const decodedToken = jwtDecode<DecodedTokenSubject>(access_token);
+        console.log('Decoded Token Subject:', decodedToken);
+
+        const decodedTokenSubject: LoggedInUser = {
+          Username: decodedToken[claimName],
+          Email: decodedToken[claimEmail]
+        };
 
         console.log('Decoded Token Subject:', decodedTokenSubject);
 
-        // console.log("Decoded items: " + decodedTokenSubject.Email + " " + decodedTokenSubject.Username)
+        console.log("Decoded items: " + decodedTokenSubject.Email + " " + decodedTokenSubject.Username)
+        
         this.userService.user.set({
           Username: decodedTokenSubject.Username,
           Email: decodedTokenSubject.Email
