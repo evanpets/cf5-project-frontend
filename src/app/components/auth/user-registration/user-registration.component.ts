@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,7 +12,7 @@ import { UserService } from 'src/app/shared/services/user.service';
   selector: 'app-user-registration',
   standalone: true,
   imports: [ReactiveFormsModule, MatFormFieldModule,
-    MatInputModule, MatButtonModule
+    MatInputModule, MatButtonModule, CommonModule
   ],
   templateUrl: './user-registration.component.html',
   styleUrl: './user-registration.component.css'
@@ -44,6 +45,8 @@ export class UserRegistrationComponent {
     }
     return {}
   }
+
+
 
   onSubmit (value:any) {
     // console.log(value)
@@ -83,7 +86,7 @@ export class UserRegistrationComponent {
   }
 
   check_duplicate_username() {
-    const username = this.form.get('Username').value
+    const username = this.form.get('username').value
     
     this.userService.check_duplicate_username(username).subscribe({
       next: (response) => {
@@ -93,8 +96,8 @@ export class UserRegistrationComponent {
       error: (response) => {
         const message = response.error.msg
         console.log(message)
-        this.form.get('Username').setErrors({duplicateUsername: true})
+        this.form.get('Username').setErrors({takenUsername: true})
       },
     })
-  }
+   }
 }

@@ -8,10 +8,16 @@
                 <mat-label>Username </mat-label>
 
                 <input matInput type="text" formControlName= "Username" />
-                @if (form.get('Username').invalid && form.get('Username').touched) {
+                <mat-error *ngIf="form.get('Username').hasError('takenUsername')">
+                    This username is already taken
+                </mat-error>
+                <mat-error *ngIf="form.get('Username').invalid && form.get('Username').touched">
+                    Username is required
+                </mat-error>
+                <!-- @if (form.get('Username').invalid && form.get('Username').touched) {
 
                     <mat-error> Username is required </mat-error>
-                }
+                } -->
             </mat-form-field>
     
             <mat-form-field>

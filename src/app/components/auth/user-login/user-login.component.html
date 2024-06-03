@@ -1,39 +1,26 @@
 <div class="d-flex flex-column align-items-center rounded-3 py-3 mt-5 mb-3 border border-2 bg-primary-subtle col-4 container">
-  <h4>User Login</h4>
-  <!-- action="post" -->
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" action="post" class="d-flex flex-column gap-3 my-3">
-    <div class="form-group">
-      <label for="Username">Username:</label>
-      <input
-        type="text"
-        id="Username"
-        class="form-control"
-        formControlName="Username" />
+  <h3 class="text-center my-4">User Login</h3>
+
+    <form [formGroup]="form" class="d-flex flex-column" action="post">
+      <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput type="text" formControlName="Username" />
+        <mat-error *ngIf="form.get('Username').invalid && form.get('Username').touched">
+          A valid username is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="Password" />
+        <mat-error *ngIf="form.get('Password').invalid && form.get('Password').touched">
+          A valid password is required
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button class="bg-primary text-white" (click)="onSubmit()">Log in</button>
+    </form>
+    <div class="mb-3 mt-4">
+      <span>Not a user? Register </span><a role="button" routerLink='../register'>here</a><span>!</span>
     </div>
-    <div class="form-group">
-        <label for="Password">Password:</label>
-        <input
-          type="password"
-          id="Password"
-          class="form-control"
-          formControlName="Password" />
-      </div>
-    <button
-    type="submit"
-    class="btn btn-primary mt-2"
-    >Login</button>
-    @if (invalidLogin) {
-        <div class="alert alert-danger">
-            <strong>Error:</strong>
-            Invalid username or password.
-          </div>
-    } @else {
-      <div class="alert-success">
-        <strong>Login successful.</strong>
-      </div>
-    }
-</form>
-  <div class="my-3">
-    <span>Not a user? Register </span><a role="button" routerLink='../register'>here</a><span>!</span>
-  </div>
 </div>

@@ -5,11 +5,15 @@ import { Credentials, DecodedTokenSubject, LoggedInUser } from 'src/app/shared/i
 import { UserService } from 'src/app/shared/services/user.service';
 import { jwtDecode } from 'jwt-decode';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { MatButtonModule } from '@angular/material/button';
+import {  MatFormFieldModule } from '@angular/material/form-field';
+import { CommonModule } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-user-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatFormFieldModule, CommonModule, MatInputModule],
   templateUrl: './user-login.component.html',
   styleUrls: ['./user-login.component.css']
 })
@@ -19,7 +23,6 @@ export class UserLoginComponent {
   router = inject(Router)
 
   invalidLogin = false
-
   
   form = new FormGroup ({
     Username: new FormControl('', Validators.required),

@@ -1,28 +1,47 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatSelectModule } from '@angular/material/select';
-import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { RouterLink } from '@angular/router';
-import { EventService } from 'src/app/shared/services/event.service';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { Event, Performer } from 'src/app/shared/interfaces/event';
+import { CommonModule } from "@angular/common";
+import { Component, OnInit } from "@angular/core";
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatOptionModule, MatNativeDateModule } from "@angular/material/core";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+import { RouterLink } from "@angular/router";
+import { EventService } from "src/app/shared/services/event.service";
+import { Event } from "src/app/shared/interfaces/event";
+import { animate, state, style, transition, trigger } from "@angular/animations";
+
 
 @Component({
   selector: 'app-event-submission-form',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCheckboxModule, MatSelectModule],
   templateUrl: './event-submission-form.component.html',
-  styleUrl: './event-submission-form.component.css'
+  styleUrl: './event-submission-form.component.css',
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        height: '*',
+        opacity: 1,
+        transform: 'translateY(0)'
+      })),
+      transition(':enter', [
+        style({ height: 0, opacity: 0, transform: 'translateY(-20px)' }),
+        animate('500ms ease-in')
+      ]),
+      transition(':leave', [
+        animate('200ms ease-out', style({ height: 0, opacity: 0, transform: 'translateY(-20px)' }))
+      ])
+    ])
+  ]
 })
 
-export class EventSubmissionFormComponent implements OnInit {
+export class EventSubmissionFormComponent implements OnInit{
   form: FormGroup;
+  showNewVenueFields = false;
 
   constructor(private fb: FormBuilder, private eventService: EventService) {}
 
@@ -31,16 +50,16 @@ export class EventSubmissionFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(3)]],
-      description: ['', [Validators.required]],
-      venue: ['', [Validators.required, Validators.minLength(3)]],
-      newVenueName: ['', [Validators.required, Validators.minLength(3)]],
-      newVenueStreet: ['', [Validators.required, Validators.minLength(3)]],
-      newVenueStreetNo: ['', [Validators.required, Validators.minLength(1)]],
-      newVenueZipCode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
-      price: ['', [Validators.required]],
-      date: ['', [Validators.required]],
-      category: ['', [Validators.required]],
+      title: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
+      description: ['', [Validators.maxLength(250)]],
+      venue: ['', Validators.required],
+      newVenueName: [''],
+      newVenueStreet: [''],
+      newVenueStreetNo: [''],
+      newVenueZipCode: [''],
+      price: [null, [Validators.required]],
+      date: [null, [Validators.required]],
+      category: [null, [Validators.required]],
       performers: this.fb.array([this.createPerformer()])
     });
   }
@@ -51,7 +70,7 @@ export class EventSubmissionFormComponent implements OnInit {
 
   createPerformer(): FormGroup {
     return this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(1)]]
+      name: ['', [Validators.required, Validators.minLength(1)], ]
     });
   }  
 
@@ -63,23 +82,26 @@ export class EventSubmissionFormComponent implements OnInit {
     this.performers.removeAt(index);
   }
 
-  showNewVenueFields = false;
-
   toggleNewVenue() {
     this.showNewVenueFields = !this.showNewVenueFields;
-    //   this.form.controls['newVenueName'].reset();
-    //   this.form.controls['newVenueStreet'].reset();
-    //   this.form.controls['newVenueStreetNo'].reset();
-    //   this.form.controls['newVenueZipCode'].reset();
+    if (this.showNewVenueFields) {
+      this.form.get('venue').clearValidators()
+      this.form.get('venue').updateValueAndValidity()
+
+      this.form.get('newVenueName').setValidators([Validators.required, Validators.minLength(3)]);
+      this.form.get('newVenueStreet').setValidators([Validators.required, Validators.minLength(3)]);
+      this.form.get('newVenueStreetNo').setValidators([Validators.required, Validators.minLength(1)]);
+      this.form.get('newVenueZipCode').setValidators([Validators.required, Validators.minLength(5), Validators.maxLength(5)]);
+    } else {
+      this.form.get('venue').setValidators([Validators.required]);
+      this.form.get('venue').updateValueAndValidity();
+
+      this.form.get('newVenueName').clearValidators();
+      this.form.get('newVenueStreet').clearValidators();
+      this.form.get('newVenueStreetNo').clearValidators();
+      this.form.get('newVenueZipCode').clearValidators();
+    }
   }
-
-  // addPerformer() {
-  //   this.performers.push('');
-  // }
-
-  // removePerformer(index: number) {
-  //   this.performers.splice(index, 1);
-  // }
 
   checkDuplicateVenue() {
     const venue = this.form.get('venue').value
@@ -99,9 +121,30 @@ export class EventSubmissionFormComponent implements OnInit {
 
   onSubmit () {
     if (this.form.valid) {
-      const event = this.form.value as unknown as Event
+      // const eventToCreate = this.form.value as unknown as Event
+      const formValue = this.form.value;
 
-      this.eventService.createEvent(event).subscribe ({
+      const eventToCreate: any = {
+        title: formValue.title,
+        description: formValue.description,
+        venueId: this.showNewVenueFields ? null : formValue.venue,
+        newVenue: this.showNewVenueFields ? {
+          name: formValue.newVenueName,
+          venueAddress: {
+            street: formValue.newVenueStreet,
+            streetNumber: formValue.newVenueStreetNo,
+            zipCode: formValue.newVenueZipCode
+          }
+        } : null,
+        price: formValue.price,
+        date: formValue.date,
+        category: formValue.category,
+        performerIds: [], 
+        newPerformers: formValue.performers.map(p => ({ name: p.name }))
+      };
+      console.log(eventToCreate)
+      
+      this.eventService.createEvent(eventToCreate).subscribe ({
         next: (response) => {
           console.log("Event created", response.msg)
           this.submissionStatus = {success: true, message: response.msg}
@@ -109,7 +152,7 @@ export class EventSubmissionFormComponent implements OnInit {
         }, 
         error: (response) => {
           const message = response.error.msg
-          console.log("Error registering user", message)
+          console.log("Error registering event", message)
           this.submissionStatus = {success: false, message}
 
         }

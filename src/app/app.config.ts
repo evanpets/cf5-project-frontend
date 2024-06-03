@@ -1,6 +1,6 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { JWT_OPTIONS, JwtHelperService, JwtModule } from '@auth0/angular-jwt';
+import { JwtModule } from '@auth0/angular-jwt';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -24,7 +24,5 @@ export const appConfig: ApplicationConfig = {
   ),
     provideHttpClient(withInterceptorsFromDi()),
     
-    // { provide: JWT_OPTIONS, useValue: JWT_OPTIONS},
-    // JwtHelperService
   ]
 };
