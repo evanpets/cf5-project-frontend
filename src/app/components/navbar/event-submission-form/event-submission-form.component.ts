@@ -11,7 +11,6 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { RouterLink } from "@angular/router";
 import { EventService } from "src/app/shared/services/event.service";
-import { Event } from "src/app/shared/interfaces/event";
 import { animate, state, style, transition, trigger } from "@angular/animations";
 
 
@@ -42,11 +41,13 @@ import { animate, state, style, transition, trigger } from "@angular/animations"
 export class EventSubmissionFormComponent implements OnInit{
   form: FormGroup;
   showNewVenueFields = false;
+  newVenueNameInput = ''
+  venues = []; 
 
   constructor(private fb: FormBuilder, private eventService: EventService) {}
 
   submissionStatus: {success: boolean, message: string} = 
-  {success: false, message: "Event submission was not successful." }
+  {success: false, message: "Something went wrong." }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -61,6 +62,18 @@ export class EventSubmissionFormComponent implements OnInit{
       date: [null, [Validators.required]],
       category: [null, [Validators.required]],
       performers: this.fb.array([this.createPerformer()])
+    });
+    this.loadVenues();
+  }
+
+  loadVenues() {
+    this.eventService.getVenues().subscribe({
+      next: (venues) => {
+        this.venues = venues;
+      },
+      error: (error) => {
+        console.error('Error fetching venues', error);
+      }
     });
   }
 
@@ -92,7 +105,8 @@ export class EventSubmissionFormComponent implements OnInit{
       this.form.get('newVenueStreet').setValidators([Validators.required, Validators.minLength(3)]);
       this.form.get('newVenueStreetNo').setValidators([Validators.required, Validators.minLength(1)]);
       this.form.get('newVenueZipCode').setValidators([Validators.required, Validators.minLength(5), Validators.maxLength(5)]);
-    } else {
+    }
+    else {
       this.form.get('venue').setValidators([Validators.required]);
       this.form.get('venue').updateValueAndValidity();
 
@@ -104,17 +118,22 @@ export class EventSubmissionFormComponent implements OnInit{
   }
 
   checkDuplicateVenue() {
-    const venue = this.form.get('venue').value
+    const venueName = this.form.get('newVenueName').value;
     
-    this.eventService.checkDuplicateVenue(venue).subscribe({
+    this.eventService.checkDuplicateVenue(venueName).subscribe({
       next: (response) => {
+        if (response && response.msg) {
         console.log(response.msg)
-        this.form.get('venue').setErrors(null)
+        this.form.get('newVenueName').setErrors(null)
+
+        } else {
+          console.error('No message returned in response');
+        }
       },
       error: (response) => {
         const message = response.error.msg
         console.log(message)
-        this.form.get('venue').setErrors({duplicateVenue: true})
+        this.form.get('newVenueName').setErrors({duplicateVenue: true})
       },
     })
   }
@@ -137,7 +156,8 @@ export class EventSubmissionFormComponent implements OnInit{
           }
         } : null,
         price: formValue.price,
-        date: formValue.date,
+        date: formValue.date.toISOString().split('T')[0],
+        // date: formValue.date,
         category: formValue.category,
         performerIds: [], 
         newPerformers: formValue.performers.map(p => ({ name: p.name }))
@@ -146,6 +166,8 @@ export class EventSubmissionFormComponent implements OnInit{
       
       this.eventService.createEvent(eventToCreate).subscribe ({
         next: (response) => {
+          console.log("response" + response)
+
           console.log("Event created", response.msg)
           this.submissionStatus = {success: true, message: response.msg}
 

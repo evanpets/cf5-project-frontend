@@ -19,7 +19,7 @@ import { EventService } from 'src/app/shared/services/event.service';
 })
 
 export class UpcomingEventsDatatableComponent {
-  upcomingEvents = EventsList;
+  upcomingEvents: Event[] =[];
 
   constructor(public dialog: Dialog, private eventService: EventService){}
 
@@ -38,7 +38,7 @@ export class UpcomingEventsDatatableComponent {
     })
   }
 
-  personTemplate(event: Event) {
+  eventTemplate(event: Event) {
     return `
     Event Details:
   

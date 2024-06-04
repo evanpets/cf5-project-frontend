@@ -21,16 +21,17 @@ export class EventService {
   //   return of(this.events);
   // }
 
-  checkDuplicateVenue(venue: string) {
-    return this.http.get<{msg: string}> (`${API_URL}/check-duplicate-venue/${venue}`)
+  checkDuplicateVenue(venueName: string) {
+    return this.http.get<{msg: string}> (`${API_URL}/check-duplicate-venue?venue=${venueName}`)
    }
 
    createEvent(event: any): Observable< {msg: string} > {
+    console.log("Service:" + JSON.stringify(event))
     return this.http.post<{ msg: string }> ( `${API_URL}/create`, event )
    }
 
    getEvents(): Observable<Event[]> {
-    return this.http.get<Event[]>(`${API_URL}/events`);
+    return this.http.get<Event[]>(`${API_URL}`);
   }
 
   // updateEvent(event: Event) {
@@ -42,6 +43,9 @@ export class EventService {
   // }
   filterEvents(searchCategory: string): Observable<any[]> {
     return this.http.get<any[]>(`${API_URL}/filter-events?filter=${searchCategory}`);
+  }
 
+  getVenues(): Observable<any> {
+    return this.http.get(`${API_URL}/venues`);
   }
 }

@@ -27,10 +27,10 @@
     <tbody>
       @for (row of data; track row) {
         <tr class="align-middle" (click)="onEventClicked(row)">
-            <td>{{ row.date.toDateString() }}</td>
+            <td>{{ row.date }}</td>
             <td>{{ row.title }}</td>
             <td>{{ row.venue.name }}</td>
-            <td class="d-none d-lg-table-cell">{{ row.performer.name }}</td>
+            <td class="d-none d-lg-table-cell">{{ row.performer }}</td> <!--won't load the name-->
             <td class="d-none d-lg-table-cell">{{ row.price }}</td>
         </tr>
       }
