@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { EventSlideComponent } from '../event-slide/event-slide.component';
-import { Event, EventsList } from 'src/app/shared/interfaces/event'
+import { Event } from 'src/app/shared/interfaces/event'
 import { CommonModule } from '@angular/common';
 import { EventService } from 'src/app/shared/services/event.service';
 

@@ -13,7 +13,7 @@
           (click)="sortData('performer')"
           class="d-none d-lg-table-cell"
         >
-          Performer {{ sortSign("performer") }}
+          Performers {{ sortSign("performer") }}
         </th>
         <th
           role="button"
@@ -30,7 +30,13 @@
             <td>{{ row.date }}</td>
             <td>{{ row.title }}</td>
             <td>{{ row.venue.name }}</td>
-            <td class="d-none d-lg-table-cell">{{ row.performer }}</td> <!--won't load the name-->
+            <td class="d-none d-lg-table-cell">
+              <div class="performers-list">
+                <span *ngFor="let performer of row.performers; let i = index">
+                  {{ performer.name }} <span *ngIf="i < row.performers.length - 1">, </span>
+                </span>
+              </div>
+            </td>
             <td class="d-none d-lg-table-cell">{{ row.price }}</td>
         </tr>
       }

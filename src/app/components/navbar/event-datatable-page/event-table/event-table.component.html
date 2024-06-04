@@ -1,30 +1,39 @@
 @if (!event) {
     <div class="alert alert-danger text-center">No event details!</div>
   } @else {
-    <table class="table table-bordered">
+    <table class="table table-bordered container" style="height: 15rem; width: 15rem;">
         <caption class="caption-top fw-bold bg-primary text-light text-center">
             Event Details
         </caption>
         <tr>
             <td class="fw-semibold text-end">Title</td>
-            <td class="ps-2"> {{ event.title ? event.title : 'TBA' }}
+            <td class="ps-2"> {{ event.title || 'TBA' }}
             </td>
         </tr>
         <tr>
-        <td class="fw-semibold text-end">Date</td>
-        <td class="ps-2">{{ event.date ? event.date : 'TBA'}}</td>
+            <td class="fw-semibold text-end">Date</td>
+            <td class="ps-2">{{ event.date || 'TBA'}}</td>
         </tr>
         <tr>
-        <td class="fw-semibold text-end">Venue</td>
-        <td class="ps-2">{{ event.venue ? event.venue.name : 'TBA'}}</td>
+            <td class="fw-semibold text-end">Venue</td>
+            <td class="ps-2">{{event.venue?.name || 'TBA'}}</td>
         </tr>
         <tr>
-        <td class="fw-semibold text-end">Performers</td>
-        <td class="ps-2">{{ event.performer ? event.performer.name : 'TBA'}}</td>
+            <td class="fw-semibold text-end">Performers</td>
+            <td class="ps-2">
+                <ul class="list-unstyled">
+                    <li *ngFor="let performer of event.performers; let i = index">
+                        {{ performer.name || 'TBA'}}
+                    </li>
+                </ul>
+                <!-- <span *ngFor="let performer of event.performers; let i = index">
+                    {{ performer.name || 'TBA'}} <span *ngIf="i < event.performers.length - 1">, </span>
+                </span> -->
+            </td>
         </tr>
         <tr>
-        <td class="fw-semibold text-end">About</td>
-        <td class="ps-2">{{ event.description ? event.description : 'TBA'}}</td>
+            <td class="fw-semibold text-end">About</td>
+            <td class="ps-2">{{ event.description || 'TBA'}}</td>
         </tr>
     </table>
 }

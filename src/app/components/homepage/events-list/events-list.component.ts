@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Event, EventsList } from 'src/app/shared/interfaces/event';
+import { Event } from 'src/app/shared/interfaces/event';
 import { EventCardHomepageComponent } from '../event-card-homepage/event-card-homepage.component';
 import { EventService } from 'src/app/shared/services/event.service';
 

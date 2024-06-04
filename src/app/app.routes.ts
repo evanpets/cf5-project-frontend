@@ -12,7 +12,7 @@ import { EventSubmissionFormComponent } from "./components/navbar/event-submissi
 
 export const routes: Routes = [
     { 
-        path: "api/event/create",
+        path: "api/events/create",
         component: EventSubmissionFormComponent,
         canActivate: [authGuard]
     },
@@ -30,11 +30,10 @@ export const routes: Routes = [
             }
         ]},
 
-    { path: 'event', component: EventDatatablePageComponent,
+    { path: 'events', component: EventDatatablePageComponent,
         children: [
             { path: 'upcoming', component: UpcomingEventsDatatableComponent },
             { path: 'past', component: PastEventsDatatableComponent},
-            // { path: 'create', component: EventSubmissionFormComponent, canActivate: [authGuard] }
         ]},
 
         ]},
@@ -45,7 +44,6 @@ export const routes: Routes = [
     {
         path: 'about-us',
         component: AboutUsComponent,
-        // canActivate: [authGuard]
     },
     { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];

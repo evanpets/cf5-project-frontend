@@ -39,6 +39,9 @@ export class EventDatatablePageComponent {
   
   setActiveTab(tab: string) {
     this.activeTab = tab;
-    this.router.navigate([`/events/${tab}`])
+    // this.router.navigate([`/events/${tab}`])
+    this.router.navigate([`${tab}`])
+
   }
+  
 }

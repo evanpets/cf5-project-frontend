@@ -6,7 +6,7 @@ import {
   DialogModule,
 } from '@angular/cdk/dialog';
 import { EventsDatatableComponent } from '../events-datatable/events-datatable.component';
-import { Event, EventsList } from 'src/app/shared/interfaces/event';
+import { Event } from 'src/app/shared/interfaces/event';
 import { EventTableComponent } from '../event-table/event-table.component';
 import { EventService } from 'src/app/shared/services/event.service';
 
@@ -46,7 +46,7 @@ export class UpcomingEventsDatatableComponent {
     Date: ${event.date}
     Venue: ${event.venue.name}
     Address: ${event.venue.venueAddress.streetNumber, " ", event.venue.venueAddress.street}
-    Performers: ${event.performer.name}
+    Performers: ${event.performers[0].name}
     Price: ${event.price}
     Category: ${event.category}
     Description: ${event.description}

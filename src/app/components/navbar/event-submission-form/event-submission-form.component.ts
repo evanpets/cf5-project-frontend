@@ -51,9 +51,9 @@ export class EventSubmissionFormComponent implements OnInit{
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
+      title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       description: ['', [Validators.maxLength(250)]],
-      venue: ['', Validators.required],
+      venue: [''],
       newVenueName: [''],
       newVenueStreet: [''],
       newVenueStreetNo: [''],
@@ -70,6 +70,8 @@ export class EventSubmissionFormComponent implements OnInit{
     this.eventService.getVenues().subscribe({
       next: (venues) => {
         this.venues = venues;
+        console.log('Venues loaded:', this.venues);  // Debug log to check if venues are loaded
+
       },
       error: (error) => {
         console.error('Error fetching venues', error);
@@ -123,11 +125,12 @@ export class EventSubmissionFormComponent implements OnInit{
     this.eventService.checkDuplicateVenue(venueName).subscribe({
       next: (response) => {
         if (response && response.msg) {
-        console.log(response.msg)
-        this.form.get('newVenueName').setErrors(null)
-
-        } else {
-          console.error('No message returned in response');
+          console.log(response.msg);
+          if (response.msg === "Venue name available") {
+            this.form.get('newVenueName').setErrors(null);
+          } else {
+            this.form.get('newVenueName').setErrors({duplicateVenue: true});
+          }
         }
       },
       error: (response) => {
@@ -166,11 +169,9 @@ export class EventSubmissionFormComponent implements OnInit{
       
       this.eventService.createEvent(eventToCreate).subscribe ({
         next: (response) => {
-          console.log("response" + response)
-
+          console.log("response" + response.msg)
           console.log("Event created", response.msg)
           this.submissionStatus = {success: true, message: response.msg}
-
         }, 
         error: (response) => {
           const message = response.error.msg

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Event, EventsList } from '../interfaces/event';
+import { Event } from '../interfaces/event';
 import { environment } from 'src/environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -21,8 +21,8 @@ export class EventService {
   //   return of(this.events);
   // }
 
-  checkDuplicateVenue(venueName: string) {
-    return this.http.get<{msg: string}> (`${API_URL}/check-duplicate-venue?venue=${venueName}`)
+  checkDuplicateVenue(venueName: string) : Observable<{msg: string}> {
+    return this.http.get<{msg: string}> (`${API_URL}/check-duplicate-venue`, { params: {venueName} })
    }
 
    createEvent(event: any): Observable< {msg: string} > {
@@ -30,8 +30,17 @@ export class EventService {
     return this.http.post<{ msg: string }> ( `${API_URL}/create`, event )
    }
 
+   
    getEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(`${API_URL}`);
+  }
+
+  getUpcomingEvents(): Observable<Event[]> {
+    return this.http.get<Event[]>(`${API_URL}/upcoming`);
+  }
+
+  getPastEvents(): Observable<Event[]> {
+    return this.http.get<Event[]>(`${API_URL}/past`);
   }
 
   // updateEvent(event: Event) {

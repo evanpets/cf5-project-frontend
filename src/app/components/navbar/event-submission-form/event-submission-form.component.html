@@ -26,7 +26,7 @@
       <mat-form-field *ngIf="!showNewVenueFields" [@slideInOut]="'in'" aria-expanded="true">
         <mat-label>Venue</mat-label>
         <mat-select formControlName="venue" [ariaRequired]="!showNewVenueFields">
-          <mat-option *ngFor="let venue of venues" [value]="venue.id">{{ venue.name }}</mat-option>
+          <mat-option *ngFor="let venue of venues" [value]="venue.venueId">{{ venue.name }}</mat-option>
         </mat-select>
         <mat-error *ngIf="form.get('venue').invalid && form.get('venue').touched">
           A venue is required
@@ -39,9 +39,10 @@
           <div >
               <mat-form-field class="mb-3 me-3">
                   <mat-label>Venue name</mat-label>
-                  <input matInput type="text" formControlName="newVenueName" [(ngModel)]="newVenueNameInput" name="newVenueNameInput" (blur)="checkDuplicateVenue()"/>
+                  <input matInput type="text" formControlName="newVenueName" (blur)="checkDuplicateVenue()"/>
                   <mat-error *ngIf="form.get('newVenueName').invalid && form.get('newVenueName').touched">
-                    A venue name is required
+                    <span *ngIf="form.get('newVenueName').hasError('required')">A venue name is required</span>
+                    <span *ngIf="form.get('newVenueName').hasError('duplicateVenue')">Venue already registered</span>
                   </mat-error>
                 </mat-form-field>
         

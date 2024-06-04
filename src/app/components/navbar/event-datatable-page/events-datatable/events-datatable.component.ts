@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import sortBy from 'lodash-es/sortBy';
 import { Event } from 'src/app/shared/interfaces/event';
@@ -5,7 +6,7 @@ import { Event } from 'src/app/shared/interfaces/event';
 @Component({
   selector: 'app-events-datatable',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './events-datatable.component.html',
   styleUrl: './events-datatable.component.css'
 })
@@ -17,7 +18,7 @@ export class EventsDatatableComponent {
     title: 'none',
     date: 'none',
     venue: 'none',
-    performer: 'none',
+    performers: 'none',
     price: 'none',
   };
 
