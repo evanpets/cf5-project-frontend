@@ -32,6 +32,7 @@ export class UserRegistrationComponent {
     LastName: new FormControl('', Validators.required),
     Email: new FormControl('', [Validators.email, Validators.required]),
     Password: new FormControl('', [Validators.required, Validators.minLength(4)]),
+    //Validators.pattern("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\]).{8,}$")
     PhoneNumber: new FormControl('', [Validators.required, Validators.minLength(10)]),
     confirmPassword: new FormControl('', [Validators.required, Validators.minLength(4)])
   },
@@ -46,10 +47,7 @@ export class UserRegistrationComponent {
     return {}
   }
 
-
-
   onSubmit (value:any) {
-    // console.log(value)
 
     const user = this.form.value as User
     delete user['confirmPassword']
@@ -71,11 +69,18 @@ export class UserRegistrationComponent {
 
   check_duplicate_email() {
     const email = this.form.get('Email').value
-    
+    console.log(`Checking email: ${email}`);
+
     this.userService.check_duplicate_email(email).subscribe({
       next: (response) => {
-        console.log(response.msg)
-        this.form.get('Email').setErrors(null)
+        if(response && response.msg) {
+          console.log(response.msg)
+          if (response.msg === "Email not registered yet") {
+          this.form.get('Email').setErrors(null)
+          } else {
+            this.form.get('Email').setErrors({duplicateEmail: true})
+          }
+        }
       },
       error: (response) => {
         const message = response.error.msg
@@ -86,12 +91,18 @@ export class UserRegistrationComponent {
   }
 
   check_duplicate_username() {
-    const username = this.form.get('username').value
+    const username = this.form.get('Username').value
     
     this.userService.check_duplicate_username(username).subscribe({
       next: (response) => {
-        console.log(response.msg)
-        this.form.get('Username').setErrors(null)
+        if(response && response.msg) {
+          console.log(response.msg)
+          if (response.msg === "Username available") {
+          this.form.get('Username').setErrors(null)
+          } else {
+            this.form.get('Username').setErrors({takenUsername: true})
+          }
+        }
       },
       error: (response) => {
         const message = response.error.msg

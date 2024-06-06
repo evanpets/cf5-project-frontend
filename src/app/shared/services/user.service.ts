@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment.development';
 import { Credentials, DecodedTokenSubject, LoggedInUser, User } from '../interfaces/user';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { Observable } from 'rxjs';
 
 const API_URL = `${environment.apiURL}/api/user`;
 
@@ -50,12 +51,12 @@ export class UserService {
     return this.http.post<{ msg: string }>(`${API_URL}/register`, user);
   }
 
-   check_duplicate_email(email: string) {
-    return this.http.get<{msg: string}> (`${API_URL}/check_duplicate_email/${email}`)
+   check_duplicate_email(email: string) : Observable<{ msg: string }>{
+    return this.http.get<{msg: string}> (`${API_URL}/check-duplicate-email`, {params: {email} })
    }
 
-   check_duplicate_username(username: string) {
-    return this.http.get<{msg: string}> (`${API_URL}/check_duplicate_username/${username}`)
+   check_duplicate_username(username: string) : Observable<{ msg: string }> {
+    return this.http.get<{msg: string}> (`${API_URL}/check-duplicate-username`, {params: {username}})
    }
 
    loginUser(credentials: Credentials) {
@@ -65,7 +66,7 @@ export class UserService {
    logoutUser() {
     this.user.set(null)
     localStorage.removeItem('access-token')
-    this.router.navigate([`${API_URL}/login`])
+    this.router.navigate([`api/user/login`])
    }
 
 }

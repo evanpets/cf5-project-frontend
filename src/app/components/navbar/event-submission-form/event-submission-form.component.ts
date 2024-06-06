@@ -70,7 +70,7 @@ export class EventSubmissionFormComponent implements OnInit{
     this.eventService.getVenues().subscribe({
       next: (venues) => {
         this.venues = venues;
-        console.log('Venues loaded:', this.venues);  // Debug log to check if venues are loaded
+        console.log('Venues loaded:', this.venues);
 
       },
       error: (error) => {
@@ -126,7 +126,7 @@ export class EventSubmissionFormComponent implements OnInit{
       next: (response) => {
         if (response && response.msg) {
           console.log(response.msg);
-          if (response.msg === "Venue name available") {
+          if (response.msg === "Venue name not registered yet") {
             this.form.get('newVenueName').setErrors(null);
           } else {
             this.form.get('newVenueName').setErrors({duplicateVenue: true});

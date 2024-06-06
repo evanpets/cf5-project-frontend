@@ -29,7 +29,7 @@ export class PastEventsDatatableComponent {
   }
 
   ngOnInit(): void {
-    this.eventService.getEvents().subscribe(events => {
+    this.eventService.getPastEvents().subscribe(events => {
       const currentDate = new Date();
       this.pastEvents = events
         .filter(event => new Date(event.date) < currentDate)

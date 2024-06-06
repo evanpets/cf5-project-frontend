@@ -36,10 +36,12 @@ export class EventService {
   }
 
   getUpcomingEvents(): Observable<Event[]> {
+    console.log("Upcoming events")
     return this.http.get<Event[]>(`${API_URL}/upcoming`);
   }
 
   getPastEvents(): Observable<Event[]> {
+    console.log("Past events")
     return this.http.get<Event[]>(`${API_URL}/past`);
   }
 
