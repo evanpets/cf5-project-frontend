@@ -40,10 +40,19 @@
       <ul class="navbar-nav">
         <li class="nav-item">
           @if(user()) {
-            <span class="me-3 d-flex gap-2">
-                Welcome, {{ user().Username }}
-                <mat-icon role="button" (click)="logout()">logout</mat-icon>
-            </span>
+            <div class="dropdown">
+              <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                
+                <i class="bi bi-person-circle"> {{user().username}}</i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" routerLink="api/user/user-details">Edit profile</a></li>
+                <li><a class="dropdown-item" routerLink="api/user/events/submitted">My events</a></li>
+                <li><a class="dropdown-item" routerLink="api/user/events/liked">Liked events</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item " (click)="logout()">Logout <i class="bi bi-box-arrow-left"></i></a></li>
+              </ul>
+            </div>
           } @else {
             <span class="me-3 d-flex gap-2 align-items-center"> Login
             <mat-icon role="button" class="icon-link-hover" routerLink="api/user/login">login</mat-icon>
@@ -52,6 +61,10 @@
         </li>
       </ul>
 
+            <!-- <span class="me-3 d-flex gap-2">
+                Welcome, {{ user().Username }}
+                <mat-icon role="button" (click)="logout()">logout</mat-icon>
+            </span> -->
     </div>
   </div>
 </nav>

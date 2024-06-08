@@ -1,0 +1,60 @@
+<div class="m-3 container d-flex flex-column align-items-center">
+  <h2 class="text-center">My Events</h2>
+  <div class="mt-lg-3 col-11">
+    <app-events-datatable [data]="myEvents"></app-events-datatable>
+  </div>
+  <!-- <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let event of myEvents">
+        <td>{{ event.title }}</td>
+        <td>{{ event.description }}</td>
+        <td>{{ event.date | date }}</td>
+        <td>
+          <button (click)="editEvent(event)">Edit</button>
+          <button (click)="deleteEvent(event.eventId)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table> -->
+</div>
+
+
+<div *ngIf="isEditing">
+  <h2>Edit Event</h2>
+  <form [formGroup]="editForm" (ngSubmit)="saveEvent()">
+    <div>
+      <label for="title">Name</label>
+      <input id="title" formControlName="title">
+    </div>
+    <div>
+      <label for="description">Description</label>
+      <input id="description" formControlName="description">
+    </div>
+    <div>
+      <label for="date">Date</label>
+      <input id="date" formControlName="date" type="date">
+    </div>
+    <div>
+      <label for="venueName">Venue</label>
+      <input id="venueName" formControlName="venueName">
+    </div>
+    <div>
+      <label for="performers">Performers</label>
+      <input id="performers" formControlName="performers">
+    </div>
+    <div>
+      <label for="price">Price</label>
+      <input id="price" formControlName="price">
+    </div>
+    <button type="submit">Save</button>
+    <button type="button" (click)="isEditing = false">Cancel</button>
+  </form>
+</div>

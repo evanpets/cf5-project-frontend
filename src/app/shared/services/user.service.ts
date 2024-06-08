@@ -16,7 +16,7 @@ export class UserService {
   http: HttpClient = inject(HttpClient);
   router: Router = inject(Router)
 
-  user = signal<LoggedInUser | null>(null)
+  user = signal<LoggedInUser | User | null>(null) 
   claimName = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
   claimEmail = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
 
@@ -28,19 +28,19 @@ export class UserService {
       const decodedToken = jwtDecode<DecodedTokenSubject>(access_token);
 
       const decodedTokenSubject: LoggedInUser = {
-        Username: decodedToken[this.claimName],
-        Email: decodedToken[this.claimEmail]
+        username: decodedToken[this.claimName],
+        email: decodedToken[this.claimEmail]
       };
 
       this.user.set({
-        Username: decodedTokenSubject.Username,
-        Email: decodedTokenSubject.Email
+        username: decodedTokenSubject.username,
+        email: decodedTokenSubject.email
       })
     }
     
     effect(()=> {
       if (this.user()) {
-        console.log('User logged in', this.user().Username)
+        console.log('User logged in', this.user().username)
       } else {
         console.log('No user logged in')
       }
@@ -49,6 +49,15 @@ export class UserService {
 
   registerUser(user: User) {
     return this.http.post<{ msg: string }>(`${API_URL}/register`, user);
+  }
+
+  getUser(username: string): Observable<User> {
+    return this.http.get<User>(`${API_URL}/get/username`, {params: {username}});
+  }
+
+  updateUser(user: User): Observable<{ msg: string }> {
+    console.log("Service: ", user.userId, user.username)
+    return this.http.patch<{ msg: string, user: User }>(`${API_URL}/update/${user.userId}`, user);
   }
 
    check_duplicate_email(email: string) : Observable<{ msg: string }>{

@@ -7,18 +7,18 @@
             <mat-form-field>
                 <mat-label>Username </mat-label>
 
-                <input matInput type="text" formControlName= "Username" (blur)="check_duplicate_username()"/>
-                <mat-error *ngIf="form.get('Username').invalid && form.get('Username').touched">
-                    <span *ngIf="form.get('Username').hasError('takenUsername')">This username is already taken</span>
-                    <span *ngIf="form.get('Username').hasError('required')">Username is required</span>
+                <input matInput type="text" formControlName= "username" (blur)="check_duplicate_username()"/>
+                <mat-error *ngIf="form.get('username').invalid && form.get('username').touched">
+                    <span *ngIf="form.get('username').hasError('takenUsername')">This username is already taken</span>
+                    <span *ngIf="form.get('username').hasError('required')">Username is required</span>
                 </mat-error>
 
             </mat-form-field>
     
             <mat-form-field>
                 <mat-label> Password </mat-label>
-                <input matInput type="password" formControlName= "Password" />
-                <mat-error *ngIf="form.get('Password').invalid && form.get('Password').touched">
+                <input matInput type="password" formControlName= "password" />
+                <mat-error *ngIf="form.get('password').invalid && form.get('password').touched">
                     Password is missing or invalid
                 </mat-error>
 
@@ -28,7 +28,7 @@
                 <mat-label>Confirm Password </mat-label>
                 <input matInput type="password" formControlName= "confirmPassword" />
 
-                <mat-error *ngIf="form.get('Password').invalid && form.get('Password').touched">
+                <mat-error *ngIf="form.get('password').invalid && form.get('password').touched">
                     <span *ngIf="form.get('confirmPassword').hasError('passwordMismatch')">Passwords do not match</span>
                     <span *ngIf="form.get('confirmPassword').hasError('required')">Password is missing or invalid</span>
                 </mat-error>
@@ -37,18 +37,18 @@
     
             <mat-form-field>
                 <mat-label> Email </mat-label>
-                <input matInput type="email" formControlName= "Email" (blur)="check_duplicate_email()"/>
-                <mat-error *ngIf="form.get('Email')?.invalid && form.get('Email').touched">
-                    <span *ngIf="form.get('Email')?.hasError('duplicateEmail')">Email is already registered</span>
-                    <span *ngIf="form.get('Email')?.hasError('required')">Email is missing or invalid</span>
+                <input matInput type="email" formControlName= "email" (blur)="check_duplicate_email()"/>
+                <mat-error *ngIf="form.get('email')?.invalid && form.get('email').touched">
+                    <span *ngIf="form.get('email')?.hasError('duplicateEmail')">Email is already registered</span>
+                    <span *ngIf="form.get('email')?.hasError('required')">Email is missing or invalid</span>
                 </mat-error>
             </mat-form-field>
     
             <mat-form-field>
                 <mat-label> First name </mat-label>
-                <input matInput type="text" formControlName= "FirstName" />
+                <input matInput type="text" formControlName= "firstName" />
 
-                <mat-error *ngIf="form.get('FirstName')?.invalid && form.get('FirstName').touched">
+                <mat-error *ngIf="form.get('firstName')?.invalid && form.get('firstName').touched">
                     First name is required
                 </mat-error>
             </mat-form-field>
@@ -56,9 +56,9 @@
             <mat-form-field>
 
                 <mat-label> Last name </mat-label>
-                <input matInput type="text" formControlName= "LastName" />
+                <input matInput type="text" formControlName= "lastName" />
 
-                <mat-error *ngIf="form.get('LastName')?.invalid && form.get('LastName').touched">
+                <mat-error *ngIf="form.get('lastName')?.invalid && form.get('lastName').touched">
                     Last name is required
                 </mat-error>
             </mat-form-field>
@@ -66,8 +66,8 @@
             <mat-form-field>
 
                 <mat-label> Phone Number </mat-label>
-                <input matInput type="text" formControlName= "PhoneNumber" />
-                <mat-error *ngIf="form.get('PhoneNumber')?.invalid && form.get('PhoneNumber').touched">
+                <input matInput type="text" formControlName= "phoneNumber" />
+                <mat-error *ngIf="form.get('phoneNumber')?.invalid && form.get('phoneNumber').touched">
                     Phone number is required
                 </mat-error>
             </mat-form-field>

@@ -1,0 +1,8 @@
+<div class="m-3 d-flex bg-info-subtle flex-row rounded-2">
+    <div class="col-3 list-group m-3 me-0">
+        <a *ngFor="let entry of menu; trackBy: entryTrackFn" [routerLink]="entry.routerLink" routerLinkActive="active" class="list-group-item list-group-item-action text-truncate"> {{ entry.text }} </a>
+    </div>
+    <div class="flex-fill">
+        <router-outlet></router-outlet>
+    </div>
+</div>

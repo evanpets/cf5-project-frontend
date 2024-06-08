@@ -1,0 +1,51 @@
+<div class="container my-3">
+    <div class="card">
+      <div class="card-header">
+        Profile
+      </div>
+      <div class="card-body">
+        <form [formGroup]="profileForm">
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" formControlName="username" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" formControlName="firstName" [readonly]="!isEditing">
+          </div>
+          <div class="mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" formControlName="lastName" [readonly]="!isEditing">
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" formControlName="email" [readonly]="!isEditing">
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" formControlName="password" [readonly]="!isEditing">
+          </div>
+          <div class="mb-3" *ngIf="isEditing">
+            <label for="confirmPassword" class="form-label">Confirm New Password</label>
+            <input type="password" class="form-control" id="confirmPassword" formControlName="confirmPassword">
+            <div *ngIf="profileForm.get('confirmPassword')?.hasError('passwordMismatch') && profileForm.get('confirmPassword')?.touched" class="text-danger">
+              Passwords do not match.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="phoneNumber" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" id="phoneNumber" formControlName="phoneNumber" [readonly]="!isEditing">
+          </div>
+          <div class="mt-3">
+            <button *ngIf="!isEditing" type="button" class="btn btn-primary" (click)="enableEdit()">Edit</button>
+            <div *ngIf="isEditing">
+              <button type="button" class="btn btn-success me-2" (click)="saveChanges()">Save</button>
+              <button type="button" class="btn btn-danger" (click)="cancelChanges()">Cancel</button>
+            </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  

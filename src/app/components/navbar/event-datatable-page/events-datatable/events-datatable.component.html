@@ -27,17 +27,17 @@
     <tbody>
       @for (row of data; track row) {
         <tr class="align-middle" (click)="onEventClicked(row)">
-            <td>{{ row.date }}</td>
-            <td>{{ row.title }}</td>
-            <td>{{ row.venue.name }}</td>
+            <td>{{ row.date || "TBA" }}</td>
+            <td>{{ row.title || "TBA" }}</td>
+            <td>{{ row.venue?.name || "TBA"}}</td>
             <td class="d-none d-lg-table-cell">
               <div class="performers-list">
                 <span *ngFor="let performer of row.performers; let i = index">
-                  {{ performer.name }} <span *ngIf="i < row.performers.length - 1">, </span>
+                  {{ performer?.name || "TBA" }} <span *ngIf="i < row.performers.length - 1">, </span>
                 </span>
               </div>
             </td>
-            <td class="d-none d-lg-table-cell">{{ row.price }}</td>
+            <td class="d-none d-lg-table-cell">{{ row.price || "TBA"}}</td>
         </tr>
       }
     </tbody>

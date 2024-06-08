@@ -12,6 +12,8 @@ import { MatSelectModule } from "@angular/material/select";
 import { RouterLink } from "@angular/router";
 import { EventService } from "src/app/shared/services/event.service";
 import { animate, state, style, transition, trigger } from "@angular/animations";
+import { UserService } from "src/app/shared/services/user.service";
+import {LoggedInUser, User} from "src/app/shared/interfaces/user"
 
 
 @Component({
@@ -43,11 +45,12 @@ export class EventSubmissionFormComponent implements OnInit{
   showNewVenueFields = false;
   newVenueNameInput = ''
   venues = []; 
+  currentUser: User
 
-  constructor(private fb: FormBuilder, private eventService: EventService) {}
+  constructor(private fb: FormBuilder, private eventService: EventService, private userService: UserService) {}
 
   submissionStatus: {success: boolean, message: string} = 
-  {success: false, message: "Something went wrong." }
+  {success: false, message: "Not submitted yet." }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -63,7 +66,8 @@ export class EventSubmissionFormComponent implements OnInit{
       category: [null, [Validators.required]],
       performers: this.fb.array([this.createPerformer()])
     });
-    this.loadVenues();
+    this.loadVenues()
+    this.loadCurrentUser()
   }
 
   loadVenues() {
@@ -75,6 +79,22 @@ export class EventSubmissionFormComponent implements OnInit{
       },
       error: (error) => {
         console.error('Error fetching venues', error);
+      }
+    });
+  }
+
+  loadCurrentUser() {
+    // Replace 'username' with the actual username, or retrieve it from a session/local storage
+    const username = (this.userService.user() as LoggedInUser).username
+    console.log(username)
+    this.userService.getUser(username).subscribe({
+      next: (response) => {
+        this.currentUser = response;
+        console.log('Current user: ', this.currentUser.userId)
+        console.log('Current user:', this.currentUser);
+      },
+      error: (error) => {
+        console.error('Error fetching current user', error);
       }
     });
   }
@@ -163,7 +183,8 @@ export class EventSubmissionFormComponent implements OnInit{
         // date: formValue.date,
         category: formValue.category,
         performerIds: [], 
-        newPerformers: formValue.performers.map(p => ({ name: p.name }))
+        newPerformers: formValue.performers.map(p => ({ name: p.name })),
+        userId: this.currentUser.userId
       };
       console.log(eventToCreate)
       

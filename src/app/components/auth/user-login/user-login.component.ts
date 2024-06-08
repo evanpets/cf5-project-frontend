@@ -25,9 +25,9 @@ export class UserLoginComponent {
   invalidLogin = false
   
   form = new FormGroup ({
-    Username: new FormControl('', Validators.required),
+    username: new FormControl('', Validators.required),
     // email: new FormControl('', [Validators.required, Validators.email]),
-    Password: new FormControl('', Validators.required)
+    password: new FormControl('', Validators.required)
   })
 
   onSubmit() {
@@ -49,17 +49,17 @@ export class UserLoginComponent {
         console.log('Decoded Token Subject:', decodedToken);
 
         const decodedTokenSubject: LoggedInUser = {
-          Username: decodedToken[claimName],
-          Email: decodedToken[claimEmail]
+          username: decodedToken[claimName],
+          email: decodedToken[claimEmail]
         };
 
         console.log('Decoded Token Subject:', decodedTokenSubject);
 
-        console.log("Decoded items: " + decodedTokenSubject.Email + " " + decodedTokenSubject.Username)
+        console.log("Decoded items: " + decodedTokenSubject.email + " " + decodedTokenSubject.username)
         
         this.userService.user.set({
-          Username: decodedTokenSubject.Username,
-          Email: decodedTokenSubject.Email
+          username: decodedTokenSubject.username,
+          email: decodedTokenSubject.email
         })
 
 

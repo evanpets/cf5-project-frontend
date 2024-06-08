@@ -8,6 +8,10 @@ import { UpcomingEventsDatatableComponent } from "./components/navbar/event-data
 import { AboutUsComponent } from "./components/navbar/about-us/about-us.component";
 import { authGuard } from "./shared/guards/auth.guard";
 import { EventSubmissionFormComponent } from "./components/navbar/event-submission-form/event-submission-form.component";
+import { MyEventsComponent } from "./components/navbar/user-side-menu/my-events/my-events.component";
+import { LikedEventsComponent } from "./components/navbar/user-side-menu/liked-events/liked-events.component";
+import { EditProfileComponent } from "./components/navbar/user-side-menu/edit-profile/edit-profile.component";
+import { UserSideMenuComponent } from "./components/navbar/user-side-menu/user-side-menu.component";
 
 
 export const routes: Routes = [
@@ -18,7 +22,8 @@ export const routes: Routes = [
     },
     {path: "api",
         children: [
-            {path: "user", 
+            {
+                path: "user",
         children: [
             {
                 path: "login",
@@ -27,8 +32,9 @@ export const routes: Routes = [
             {
                 path: "register",
                 component: UserRegistrationComponent
-            }
-        ]},
+            },
+        ],
+    },
 
     { path: 'events', component: EventDatatablePageComponent,
         children: [
@@ -44,6 +50,30 @@ export const routes: Routes = [
     {
         path: 'about-us',
         component: AboutUsComponent,
+    },
+    {
+        path: "api/user",
+        component: UserSideMenuComponent,
+        children:
+        [
+            {
+                path: "user-details",
+                component: EditProfileComponent
+            },
+            {
+                path: "events",
+                children: [
+                    {
+                        path: "submitted",
+                        component: MyEventsComponent
+                    },
+                    {
+                        path: "liked",
+                        component: LikedEventsComponent
+                    }
+                ]
+            }
+        ]
     },
     { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];

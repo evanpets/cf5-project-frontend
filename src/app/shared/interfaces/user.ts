@@ -1,22 +1,23 @@
 export interface User {
-    Username: string
-    Password: string
-    Email: string
-    FirstName: string
-    LastName: string
-    PhoneNumber: string
-    Role: string
+    userId: number //just added
+    username: string
+    password: string
+    email: string
+    firstName: string
+    lastName: string
+    phoneNumber: string
+    role: string
 }
 
 export interface Credentials {
-    Username: string
+    username: string
     // email: string
-    Password: string
+    password: string
 }
 
 export interface LoggedInUser {
-    Username: string
-    Email: string
+    username: string
+    email: string
 }
 
 export interface DecodedTokenSubject {
