@@ -27,11 +27,14 @@ export class EventService {
   }
 
   //Get functions
+  getSingleEvent(eventId: number): Observable<Event> {
+    return this.http.get<Event>(`${API_URL}/${eventId}`)
+  }
    /**
     * Fetches a list of all the events.
     * @returns A list of all the events.
     */
-   getEvents(): Observable<Event[]> {
+  getEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(`${API_URL}`);
   }
 

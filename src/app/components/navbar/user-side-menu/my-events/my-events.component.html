@@ -1,35 +1,22 @@
-<div class="m-3 container d-flex flex-column align-items-center">
+<div class="m-3 container d-flex flex-column">
   <h2 class="text-center">My Events</h2>
-  <div class="mt-lg-3 col-11">
-    <app-events-datatable [data]="myEvents"></app-events-datatable>
+  <div class="container d-flex flex-row">
+    <div class="mt-lg-3 col-12 d-flex flex-column justify-content-between me-2">
+      <app-events-datatable [data]="myEvents" [actionsTemplate]="actionsTemplate"></app-events-datatable>
+    </div>
   </div>
-  <!-- <table>
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Date</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let event of myEvents">
-        <td>{{ event.title }}</td>
-        <td>{{ event.description }}</td>
-        <td>{{ event.date | date }}</td>
-        <td>
-          <button (click)="editEvent(event)">Edit</button>
-          <button (click)="deleteEvent(event.eventId)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table> -->
 </div>
 
+  <ng-template #actionsTemplate let-event>
+    <div class="d-flex justify-content-center">
+      <button class="btn btn-primary me-2" (click)="editEvent(event)">Edit</button>
+      <button class="btn btn-danger" (click)="deleteEvent(event.eventId)">Delete</button>
+    </div>
+  </ng-template>
 
 <div *ngIf="isEditing">
   <h2>Edit Event</h2>
-  <form [formGroup]="editForm" (ngSubmit)="saveEvent()">
+  <!-- <form [formGroup]="editForm" (ngSubmit)="saveEvent()">
     <div>
       <label for="title">Name</label>
       <input id="title" formControlName="title">
@@ -56,5 +43,6 @@
     </div>
     <button type="submit">Save</button>
     <button type="button" (click)="isEditing = false">Cancel</button>
-  </form>
+  </form> -->
+  
 </div>

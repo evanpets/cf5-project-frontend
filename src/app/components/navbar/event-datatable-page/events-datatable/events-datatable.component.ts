@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import sortBy from 'lodash-es/sortBy';
-import { Event } from 'src/app/shared/interfaces/event';
+import { BackendEvent, Event } from 'src/app/shared/interfaces/event';
 
 @Component({
   selector: 'app-events-datatable',
@@ -12,7 +12,10 @@ import { Event } from 'src/app/shared/interfaces/event';
 })
 export class EventsDatatableComponent {
   @Input() data: Event[];
+  @Input() actionsTemplate?: TemplateRef<any>;
   @Output() eventClicked = new EventEmitter<Event>()
+  event: any;
+
 
   sortOrder = {
     title: 'none',

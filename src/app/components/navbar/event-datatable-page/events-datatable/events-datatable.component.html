@@ -22,6 +22,7 @@
         >
           Price {{ sortSign("price") }}
         </th>
+        <th *ngIf="actionsTemplate">Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -38,6 +39,9 @@
               </div>
             </td>
             <td class="d-none d-lg-table-cell">{{ row.price || "TBA"}}</td>
+            <td *ngIf="actionsTemplate" class="d-flex justify-content-center align-content-center d-sm-table-cell">
+              <ng-container *ngTemplateOutlet="actionsTemplate; context: {$implicit: row}"></ng-container>
+            </td>
         </tr>
       }
     </tbody>

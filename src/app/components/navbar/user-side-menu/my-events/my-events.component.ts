@@ -38,6 +38,8 @@ export class MyEventsComponent implements OnInit{
   loadUserEvents(): void {
     let userId = 1;
     this.eventService.getUserEvents(userId).subscribe((response: BackendEvent[]) => {
+      console.log("Response: ",response);
+      
       this.myEvents = response.map(event => ({
         eventId: event.eventId,
         title: event.title,
@@ -56,19 +58,41 @@ export class MyEventsComponent implements OnInit{
         performers: event.performers,
         price: event.price
       }));
-      console.log(this.myEvents);
+      console.log("MyEvents list",this.myEvents);
       for (let event of this.myEvents) {
-        console.log(JSON.stringify(event));
+        console.log("Event: ",JSON.stringify(event));
       }
     });
   }
   
-  
-
   editEvent(event: Event): void {
+    this.eventService.getSingleEvent(event.eventId).subscribe({
+      next: (response) => {
+        console.log("Response",response);
+        
+      },
+      error: (err) => {
+        console.log("Error fetching response", err);
+        
+      }
+    })
+    
+    if (!event) {
+      console.error('Event is undefined or null');
+      return;
+    }    
     this.currentEvent = event;
+    console.log(this.currentEvent);
+    
     this.isEditing = true;
-    this.editForm.patchValue(event);
+    this.editForm.patchValue({
+      title: event.title,
+      venueName: event.venue.name,
+      description: event.description,
+      date: event.date,
+      performers: event.performers.map(p => p.name).join(', '),
+      price: event.price
+    });
   }
 
   saveEvent(): void {
@@ -83,6 +107,10 @@ export class MyEventsComponent implements OnInit{
   }
 
   deleteEvent(eventId: number): void {
+    if (!eventId) {
+      console.error('Event is undefined or null');
+      return;
+    } 
     this.eventService.deleteEvent(eventId).subscribe(response => {
       this.loadUserEvents();
     });
