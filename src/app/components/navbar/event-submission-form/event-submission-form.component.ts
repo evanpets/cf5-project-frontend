@@ -54,13 +54,14 @@ export class EventSubmissionFormComponent implements OnInit{
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      title: ['', [Validators.required, Validators.maxLength(50)]],
       description: ['', [Validators.maxLength(250)]],
       venue: [''],
       newVenueName: [''],
       newVenueStreet: [''],
       newVenueStreetNo: [''],
       newVenueZipCode: [''],
+      newVenueCity: [''],
       price: [null, [Validators.required]],
       date: [null, [Validators.required]],
       category: [null, [Validators.required]],
@@ -84,7 +85,6 @@ export class EventSubmissionFormComponent implements OnInit{
   }
 
   loadCurrentUser() {
-    // Replace 'username' with the actual username, or retrieve it from a session/local storage
     const username = (this.userService.user() as LoggedInUser).username
     console.log(username)
     this.userService.getUser(username).subscribe({
@@ -123,10 +123,12 @@ export class EventSubmissionFormComponent implements OnInit{
       this.form.get('venue').clearValidators()
       this.form.get('venue').updateValueAndValidity()
 
-      this.form.get('newVenueName').setValidators([Validators.required, Validators.minLength(3)]);
-      this.form.get('newVenueStreet').setValidators([Validators.required, Validators.minLength(3)]);
-      this.form.get('newVenueStreetNo').setValidators([Validators.required, Validators.minLength(1)]);
+      this.form.get('newVenueName').setValidators([Validators.required]);
+      this.form.get('newVenueStreet').setValidators([Validators.required]);
+      this.form.get('newVenueStreetNo').setValidators([Validators.required]);
       this.form.get('newVenueZipCode').setValidators([Validators.required, Validators.minLength(5), Validators.maxLength(5)]);
+      this.form.get('newVenueCity').setValidators([Validators.required]);
+
     }
     else {
       this.form.get('venue').setValidators([Validators.required]);
@@ -136,6 +138,8 @@ export class EventSubmissionFormComponent implements OnInit{
       this.form.get('newVenueStreet').clearValidators();
       this.form.get('newVenueStreetNo').clearValidators();
       this.form.get('newVenueZipCode').clearValidators();
+      this.form.get('newVenueCity').clearValidators();
+
     }
   }
 
@@ -175,7 +179,8 @@ export class EventSubmissionFormComponent implements OnInit{
           venueAddress: {
             street: formValue.newVenueStreet,
             streetNumber: formValue.newVenueStreetNo,
-            zipCode: formValue.newVenueZipCode
+            zipCode: formValue.newVenueZipCode,
+            city: formValue.newVenueCity
           }
         } : null,
         price: formValue.price,

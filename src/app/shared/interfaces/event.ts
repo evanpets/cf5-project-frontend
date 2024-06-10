@@ -2,6 +2,7 @@ export interface VenueAddress {
     street: string
     streetNumber: string
     zipCode: string
+    city: string
 }
 
 export interface Venue {
@@ -26,13 +27,18 @@ export interface Event {
 }
 
 export interface BackendEvent {
-  eventId: number;
-  title: string;
-  description?: string;
-  date: Date;
-  category?: string;
-  userId: number;
-  venueName: string;
-  performers: { name: string }[];
-  price: number;
+    eventId: number;
+    title: string;
+    description?: string;
+    date: Date;
+    category?: string;
+    userId: number;
+    venueName: string;
+    venueStreet: string;
+    venueStreetNumber: string;
+    venueZipCode: string;
+    venueCity: string;
+    //   performers: { name: string }[];
+    performers: { name: string }[];
+    price: number;
 }

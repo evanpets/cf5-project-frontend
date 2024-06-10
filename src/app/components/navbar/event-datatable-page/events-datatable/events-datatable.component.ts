@@ -25,6 +25,19 @@ export class EventsDatatableComponent {
     price: 'none',
   };
 
+  formatDate(date: Date): string {
+    return new Date(date).toLocaleDateString('el-GR');
+  }
+  
+  // formatDate(dateString: Date): string {
+  //   const date = new Date(dateString);
+  //   return date.toLocaleDateString('el-GR', {
+  //     year: 'numeric',
+  //     month: 'numeric',
+  //     day: 'numeric',
+  //   });
+  // }
+
   sortData(sortKey: string) {
     if (this.sortOrder[sortKey] === 'asc') {
       this.sortOrder[sortKey] = 'desc';

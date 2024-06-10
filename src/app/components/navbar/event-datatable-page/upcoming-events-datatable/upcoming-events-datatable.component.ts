@@ -25,10 +25,14 @@ export class UpcomingEventsDatatableComponent {
 
   ngOnInit(): void {
     this.eventService.getUpcomingEvents().subscribe(events => {
+      console.log("response", events);
+      
       const currentDate = new Date();
       this.upcomingEvents = events
         .filter(event => new Date(event.date) >= currentDate)
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        console.log("New upcoming events:", this.upcomingEvents);
+
     });
   }
   

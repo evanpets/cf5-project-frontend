@@ -74,6 +74,13 @@
                   </mat-error>
                 </mat-form-field>
             </div>
+            <mat-form-field class="mb-3">
+              <mat-label>City</mat-label>
+              <input matInput type="text" formControlName="newVenueCity" />
+              <mat-error *ngIf="form.get('newVenueCity').invalid && form.get('newVenueCity').touched">
+                The city is required
+              </mat-error>
+            </mat-form-field>
         </div>
       </div>
 
@@ -134,7 +141,7 @@
     @if (submissionStatus.success) {
         <div class="alert alert-success mt-2 d-flex flex-column align-items-center">
             <strong>Success:</strong> {{ submissionStatus.message}}
-            <a role="button" routerLink='./create'>Submit another event</a>
+            <a role="button" routerLink='../login'>Submit another event</a>
         </div>
     } @else { 
         <div class="alert alert-danger mt-2">

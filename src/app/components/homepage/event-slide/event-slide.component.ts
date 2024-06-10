@@ -11,4 +11,16 @@ import { Event } from 'src/app/shared/interfaces/event';
 export class EventSlideComponent {
   @Input() event: Event
 
+  formatDate(date: Date): string {
+    return new Date(date).toLocaleDateString('el-GR');
+  }
+
+  // formatDate(dateString: Date): string {
+  //   const date = new Date(dateString);
+  //   return date.toLocaleDateString('el-GR', {
+  //     year: 'numeric',
+  //     month: 'numeric',
+  //     day: 'numeric',
+  //   });
+  // }
 }

@@ -98,8 +98,8 @@ export class EventService {
    * @param event The event details as updated by the user.
    * @returns A message of the result, the updated event.
    */
-  updateEvent(eventId: number, event: Event): Observable<{ msg: string, event: Event }> {
-    return this.http.patch<{ msg: string, event: Event }>(`${API_URL}/update/${eventId}`, event);
+  updateEvent(eventId: number, event: BackendEvent): Observable<{ msg: string, event: BackendEvent }> {
+    return this.http.patch<{ msg: string, event: BackendEvent }>(`${API_URL}/update/${eventId}`, event);
   }
 
   //Delete functions

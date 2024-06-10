@@ -28,7 +28,7 @@
     <tbody>
       @for (row of data; track row) {
         <tr class="align-middle" (click)="onEventClicked(row)">
-            <td>{{ row.date || "TBA" }}</td>
+            <td>{{ formatDate(row.date) || "TBA" }}</td>
             <td>{{ row.title || "TBA" }}</td>
             <td>{{ row.venue?.name || "TBA"}}</td>
             <td class="d-none d-lg-table-cell">
@@ -38,7 +38,7 @@
                 </span>
               </div>
             </td>
-            <td class="d-none d-lg-table-cell">{{ row.price || "TBA"}}</td>
+            <td class="d-none d-lg-table-cell">{{ row.price || "TBA"}}€</td>
             <td *ngIf="actionsTemplate" class="d-flex justify-content-center align-content-center d-sm-table-cell">
               <ng-container *ngTemplateOutlet="actionsTemplate; context: {$implicit: row}"></ng-container>
             </td>
