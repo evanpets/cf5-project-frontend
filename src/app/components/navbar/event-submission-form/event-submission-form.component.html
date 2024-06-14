@@ -4,7 +4,7 @@
 
     @if (submissionStatus.message === 'Not submitted yet.') {
 
-    <form [formGroup]="form" class="d-flex flex-column" action="post">
+    <form [formGroup]="form" class="d-flex flex-column" action="post" [@slideInOut]="'in'">
       <mat-form-field [@slideInOut]="'in'">
         <mat-label>Event title</mat-label>
         <input matInput type="text" formControlName="title" />
@@ -13,7 +13,7 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field [@slideInOut]="'in'">
+      <mat-form-field >
         <mat-label>Description</mat-label>
         <input matInput type="text" formControlName="description" />
         <mat-error *ngIf="form.get('description').invalid && form.get('description').touched">
@@ -100,7 +100,7 @@
 
       <button mat-raised-button color="primary" type="button" (click)="addPerformer()">I want to add more performers</button>
 
-      <mat-form-field class="mt-4" [@slideInOut]="'in'">
+      <mat-form-field class="mt-4">
         <mat-label>Ticket price</mat-label>
         <input matInput type="text" formControlName="price" />
         <mat-error *ngIf="form.get('price').invalid && form.get('price').touched">
@@ -108,8 +108,9 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field [@slideInOut]="'in'">
+      <mat-form-field >
         <mat-label>Event date</mat-label>
+        <mat-hint>MM/DD/YYYY</mat-hint>
         <input matInput [matDatepicker]="picker" formControlName="date" />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
@@ -118,7 +119,7 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field class="mb-3" [@slideInOut]="'in'">
+      <mat-form-field>
         <mat-label>Event category</mat-label>
         <mat-select formControlName="category">
           <mat-option value="" disabled>Select category</mat-option>
@@ -131,13 +132,31 @@
         </mat-error>
       </mat-form-field>
 
+      <!-- <mat-form-field class="mt-4" appearance="fill">
+        <mat-label>Upload an image as banner for your event</mat-label>
+        <input matInput type="file" formControlName="eventImage" (change)="onFileSelect($event)"/>
+        <mat-error *ngIf="form.get('eventImage')?.invalid && form.get('eventImage')?.touched">
+          An image is required
+        </mat-error>
+      </mat-form-field> -->
+
+      <mat-form-field appearance="fill">
+        <mat-label>Upload File</mat-label>
+        <input matInput type="text" placeholder="Choose a file" [value]="selectedFile ? selectedFile.name : '' " readonly>
+        <button mat-icon-button matSuffix (click)="fileInput.click()">
+          <mat-icon>attach_file</mat-icon>
+        </button>
+      </mat-form-field>
+      <input type="file" #fileInput (change)="onFileSelect($event)" hidden>
+
       <div class="d-md-flex justify-content-lg-evenly mt-2 mb-4">
         <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
         <button mat-raised-button color="warn" type="button" routerLink="">Cancel</button>
       </div>
     </form>
 
-  } @else {
+  } 
+  @else {
     @if (submissionStatus.success) {
         <div class="alert alert-success mt-2 d-flex flex-column align-items-center">
             <strong>Success:</strong> {{ submissionStatus.message}}
@@ -147,7 +166,7 @@
         <div class="alert alert-danger mt-2">
             <strong>Error:</strong> {{ submissionStatus.message}}
         </div>
-    }
-}
+      }
+  }
   </div>
 </div>

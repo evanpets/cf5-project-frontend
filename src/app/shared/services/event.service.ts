@@ -21,12 +21,24 @@ export class EventService {
    * @param event The event details as input from a user.
    * @returns A message confirming the result of the insertion attempt.
    */
-  createEvent(event: any): Observable< {msg: string} > {
-    console.log("Service:" + JSON.stringify(event))
-    return this.http.post<{ msg: string }> ( `${API_URL}/create`, event )
+  // createEvent(event: any): Observable< {msg: string} > {
+  //   // console.log("Service:" + JSON.stringify(event))
+  //   return this.http.post<{ msg: string }> ( `${API_URL}/create`, event )
+  // }
+
+  createEvent(formData: FormData): Observable<{ msg: string }> {
+    console.log("service");
+    console.log("Service data: " + formData);
+    
+    return this.http.post<{ msg: string }>(`${API_URL}/create`, formData);
   }
 
   //Get functions
+  /**
+   * Fetches a single event using its ID.
+   * @param eventId The ID of the event to be fetched.
+   * @returns An event.
+   */
   getSingleEvent(eventId: number): Observable<Event> {
     return this.http.get<Event>(`${API_URL}/${eventId}`)
   }
@@ -98,8 +110,11 @@ export class EventService {
    * @param event The event details as updated by the user.
    * @returns A message of the result, the updated event.
    */
-  updateEvent(eventId: number, event: BackendEvent): Observable<{ msg: string, event: BackendEvent }> {
-    return this.http.patch<{ msg: string, event: BackendEvent }>(`${API_URL}/update/${eventId}`, event);
+  // updateEvent(eventId: number, event: BackendEvent): Observable<{ msg: string, event: BackendEvent }> {
+  //   return this.http.patch<{ msg: string, event: BackendEvent }>(`${API_URL}/update/${eventId}`, event);
+  // }
+  updateEvent(eventId: number, eventToUpdate: FormData): Observable<{ msg: string, event: BackendEvent }> {
+    return this.http.patch<{ msg: string, event: BackendEvent }>(`${API_URL}/update/${eventId}`, eventToUpdate);
   }
 
   //Delete functions

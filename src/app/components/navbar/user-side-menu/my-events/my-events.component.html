@@ -1,4 +1,4 @@
-<div class="m-3 container d-flex flex-column">
+<div class="my-3 container d-flex flex-column">
   <h2 class="text-center">My Events</h2>
   <div class="container d-flex flex-row">
     <div class="mt-lg-3 col-12 d-flex flex-column justify-content-between me-2 container">
@@ -122,9 +122,18 @@
         </mat-error>
       </mat-form-field>
 
+      <mat-form-field>
+        <mat-label>Upload File</mat-label>
+        <input matInput type="text" placeholder="Choose a file" [value]="selectedFile ? selectedFile.name : '' " readonly>
+        <button mat-icon-button matSuffix (click)="openFileInput($event)">
+          <mat-icon>attach_file</mat-icon>
+        </button>
+      </mat-form-field>
+      <input type="file" #fileInput (change)="onFileSelect($event)" hidden>
+
       <div class="d-md-flex justify-content-lg-evenly mt-2 mb-4">
         <button class="btn btn-primary me-2" type="submit">Save</button>
-        <button class="btn btn-danger" type="button"  (click)="isEditing = false">Cancel</button>
+        <button class="btn btn-danger" type="button"  (click)="isEditing = false"> Cancel</button>
       </div>
     </form>
 </div>

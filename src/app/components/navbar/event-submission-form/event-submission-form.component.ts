@@ -13,7 +13,7 @@ import { RouterLink } from "@angular/router";
 import { EventService } from "src/app/shared/services/event.service";
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { UserService } from "src/app/shared/services/user.service";
-import {LoggedInUser, User} from "src/app/shared/interfaces/user"
+import { LoggedInUser, User} from "src/app/shared/interfaces/user"
 
 
 @Component({
@@ -46,6 +46,7 @@ export class EventSubmissionFormComponent implements OnInit{
   newVenueNameInput = ''
   venues = []; 
   currentUser: User
+  selectedFile: File | null = null;
 
   constructor(private fb: FormBuilder, private eventService: EventService, private userService: UserService) {}
 
@@ -65,7 +66,7 @@ export class EventSubmissionFormComponent implements OnInit{
       price: [null, [Validators.required]],
       date: [null, [Validators.required]],
       category: [null, [Validators.required]],
-      performers: this.fb.array([this.createPerformer()])
+      performers: this.fb.array([this.createPerformer()]),
     });
     this.loadVenues()
     this.loadCurrentUser()
@@ -97,6 +98,13 @@ export class EventSubmissionFormComponent implements OnInit{
         console.error('Error fetching current user', error);
       }
     });
+  }
+
+  onFileSelect(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.selectedFile = input.files[0];
+    }
   }
 
   get performers() {
@@ -167,7 +175,6 @@ export class EventSubmissionFormComponent implements OnInit{
 
   onSubmit () {
     if (this.form.valid) {
-      // const eventToCreate = this.form.value as unknown as Event
       const formValue = this.form.value;
 
       const eventToCreate: any = {
@@ -185,15 +192,27 @@ export class EventSubmissionFormComponent implements OnInit{
         } : null,
         price: formValue.price,
         date: formValue.date.toISOString().split('T')[0],
-        // date: formValue.date,
         category: formValue.category,
         performerIds: [], 
         newPerformers: formValue.performers.map(p => ({ name: p.name })),
         userId: this.currentUser.userId
       };
-      console.log(eventToCreate)
+      console.log('Event to create:', eventToCreate);
+
+      const formData = new FormData();
+      formData.append('eventEntity', JSON.stringify(eventToCreate));
+      if (this.selectedFile) {
+        if (this.selectedFile.size > 5 * 1024 * 1024) { // 5 MB size limit
+          alert("File size should be less than 5 MB.");
+          return;
+        }
+        formData.append('eventImage', this.selectedFile, this.selectedFile.name);
+        console.log("File appended to FormData");
+      }
+
+      console.log("FormData content:", formData);
       
-      this.eventService.createEvent(eventToCreate).subscribe ({
+      this.eventService.createEvent(formData).subscribe ({
         next: (response) => {
           console.log("response" + response.msg)
           console.log("Event created", response.msg)

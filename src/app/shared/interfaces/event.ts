@@ -24,6 +24,7 @@ export interface Event {
     date: Date
     category: string
     userId: number
+    imageUrl: string;
 }
 
 export interface BackendEvent {
@@ -38,7 +39,7 @@ export interface BackendEvent {
     venueStreetNumber: string;
     venueZipCode: string;
     venueCity: string;
-    //   performers: { name: string }[];
     performers: { name: string }[];
     price: number;
+    imageUrl: string;
 }

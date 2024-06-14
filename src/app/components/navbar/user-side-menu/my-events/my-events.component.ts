@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { Event, BackendEvent } from 'src/app/shared/interfaces/event';
 import { EventService } from 'src/app/shared/services/event.service';
@@ -47,6 +47,8 @@ export class MyEventsComponent implements OnInit{
   currentEvent: Event | null = null;
   currentUser: User
   initialVenueName: string;
+  selectedFile: File | null = null
+  @ViewChild('fileInput') fileInput!: ElementRef;
 
   constructor(private eventService: EventService, private userService: UserService, private fb: FormBuilder) {
     this.editForm = this.fb.group({
@@ -61,6 +63,7 @@ export class MyEventsComponent implements OnInit{
       date: [null, [Validators.required]],
       performers: this.fb.array([]),
       category: [null, [Validators.required]],
+      eventImage: [''] // FormControl for event image
     });
   }
 
@@ -105,7 +108,8 @@ export class MyEventsComponent implements OnInit{
           }
         },
         performers: event.performers,
-        price: event.price
+        price: event.price,
+        imageUrl: event.imageUrl
       }));
       console.log("MyEvents list",this.myEvents);
       for (let event of this.myEvents) {
@@ -118,14 +122,13 @@ export class MyEventsComponent implements OnInit{
     this.eventService.getSingleEvent(event.eventId).subscribe({
       next: (response) => {
         console.log("Response",response);
-        const fetchedEvent = response
-
-        if (!fetchedEvent) {
-          console.error('Fetched event is undefined or null');
-          return;
-        }   
-
-        this.currentEvent = fetchedEvent;
+        // const fetchedEvent = response
+        // if (!fetchedEvent) {
+        //   console.error('Fetched event is undefined or null');
+        //   return;
+        // }   
+        // this.currentEvent = fetchedEvent;
+        this.currentEvent = response
         console.log("current event", this.currentEvent + ", category " + this.currentEvent.category);
         this.isEditing = true;
     
@@ -134,6 +137,7 @@ export class MyEventsComponent implements OnInit{
           this.performers.push(this.fb.group({
             name: [performer.name, Validators.required]
           }));
+
         });
         
         this.editForm.patchValue({
@@ -146,7 +150,8 @@ export class MyEventsComponent implements OnInit{
           venueZipCode: event.venue.venueAddress.zipCode,
           venueCity: event.venue.venueAddress.city,
           price: event.price,
-          category: event.category
+          category: event.category,
+          eventImage: event.imageUrl // Assuming imageUrl is the URL or name of the image
         });
       },
       error: (err) => {
@@ -159,7 +164,7 @@ export class MyEventsComponent implements OnInit{
     if (this.editForm.valid && this.currentEvent) {
       console.log("save beginning",this.currentEvent);
       
-      const eventToUpdate: BackendEvent = {
+      const eventToUpdate: any = {
         eventId: this.currentEvent.eventId,
         title: this.editForm.value.title,
         description: this.editForm.value.description,
@@ -170,15 +175,27 @@ export class MyEventsComponent implements OnInit{
         venueCity: this.editForm.value.venueCity,
         price: this.editForm.value.price,
         // date: new Date(this.editForm.value.date).toISOString().split('T')[0],
-        date: this.editForm.value.date.toISOString().split('T')[0],
+        date: this.editForm.value.date instanceof Date ? this.editForm.value.date.toISOString().split('T')[0] : this.editForm.value.date,
         category: this.editForm.value.category,
         performers: this.performers.controls.map(c => ({ name: c.value.name })),
-        userId: this.currentUser.userId
        };
+
+      const updateFormData = new FormData();
+      updateFormData.append('eventToUpdate', JSON.stringify(eventToUpdate))
+
+      if (this.selectedFile) {
+        if (this.selectedFile.size > 5 * 1024 * 1024) { // 5 MB size limit
+          alert("File size should be less than 5 MB.");
+          return;
+        }
+        updateFormData.append('eventImage', this.selectedFile, this.selectedFile.name);
+        console.log("File appended to FormData");
+      }
+
       console.log("Update info: ", eventToUpdate);
       console.log(this.currentEvent.eventId);
        
-      this.eventService.updateEvent(this.currentEvent.eventId, eventToUpdate).subscribe({
+      this.eventService.updateEvent(this.currentEvent.eventId, updateFormData).subscribe({
         next: (response) => {
           console.log("Response: ", response,  response.msg);
           this.loadUserEvents();
@@ -189,6 +206,21 @@ export class MyEventsComponent implements OnInit{
           console.error('Error updating event', error.msg);
         }
       });
+    }
+  }
+
+  openFileInput(event: any): void {
+    event.preventDefault();
+    event.stopPropagation();
+    // Trigger the hidden file input element
+    if (this.fileInput) {
+      this.fileInput.nativeElement.click();
+    }
+  }
+  onFileSelect(event: any): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.selectedFile = input.files[0];
     }
   }
 
