@@ -33,6 +33,14 @@ export class EventService {
     return this.http.post<{ msg: string }>(`${API_URL}/create`, formData);
   }
 
+  likeEvent(eventId: number, userId: number): Observable<{ msg: string }> {
+    return this.http.post<{ msg: string }>(`${API_URL}/like`, { eventId });
+  }
+
+  unlikeEvent(eventId: number, userId: number): Observable<{ msg: string }> {
+    return this.http.post<{ msg: string }>(`${API_URL}/unlike`, { eventId });
+  }
+
   //Get functions
   /**
    * Fetches a single event using its ID.
@@ -77,6 +85,10 @@ export class EventService {
     return this.http.get<BackendEvent[]>(`${API_URL}/user/${userId}`);
   }
 
+  getBookmarkedEvents(userId: number): Observable<{ msg: string, bookmarkedEventsList: BackendEvent[] }> {
+    return this.http.get<{ msg: string, bookmarkedEventsList: BackendEvent[] }>(`${API_URL}/bookmarked/${userId}`)
+  }
+
   /**
    * Fetches a list of all the inserted venues.
    * @returns A list of all the venues.
@@ -103,6 +115,9 @@ export class EventService {
     return this.http.get<{msg: string}> (`${API_URL}/check-duplicate-venue`, { params: {venueName} })
   }
 
+  isEventBookmarked(eventId: number, userId: number): Observable<{ isLiked: boolean }> {
+    return this.http.get<{ isLiked: boolean }>(`${API_URL}/is-bookmarked/${eventId}`, { params: { eventId, userId } });
+  }
   //Update functions
   /**
    * Updates an event.

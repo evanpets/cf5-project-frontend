@@ -9,7 +9,7 @@ import { AboutUsComponent } from "./components/navbar/about-us/about-us.componen
 import { authGuard } from "./shared/guards/auth.guard";
 import { EventSubmissionFormComponent } from "./components/navbar/event-submission-form/event-submission-form.component";
 import { MyEventsComponent } from "./components/navbar/user-side-menu/my-events/my-events.component";
-import { LikedEventsComponent } from "./components/navbar/user-side-menu/liked-events/liked-events.component";
+import { LikedEventsComponent } from "./components/navbar/user-side-menu/bookmarked-events/bookmarked-events.component";
 import { EditProfileComponent } from "./components/navbar/user-side-menu/edit-profile/edit-profile.component";
 import { UserSideMenuComponent } from "./components/navbar/user-side-menu/user-side-menu.component";
 
@@ -58,18 +58,21 @@ export const routes: Routes = [
         [
             {
                 path: "user-details",
-                component: EditProfileComponent
+                component: EditProfileComponent,
+                canActivate: [authGuard]
             },
             {
                 path: "events",
                 children: [
                     {
                         path: "submitted",
-                        component: MyEventsComponent
+                        component: MyEventsComponent,
+                        canActivate: [authGuard]
                     },
                     {
-                        path: "liked",
-                        component: LikedEventsComponent
+                        path: "bookmarked",
+                        component: LikedEventsComponent,
+                        canActivate: [authGuard]
                     }
                 ]
             }

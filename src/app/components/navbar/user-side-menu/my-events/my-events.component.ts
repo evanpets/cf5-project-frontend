@@ -15,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { LoggedInUser, User } from 'src/app/shared/interfaces/user';
+import { initial } from 'lodash-es';
 
 @Component({
   selector: 'app-my-events',
@@ -46,8 +47,9 @@ export class MyEventsComponent implements OnInit{
   isEditing: boolean = false;
   currentEvent: Event | null = null;
   currentUser: User
-  initialVenueName: string;
+  // initialVenueName: string;
   selectedFile: File | null = null
+  venues: any[] = [];
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   constructor(private eventService: EventService, private userService: UserService, private fb: FormBuilder) {
@@ -55,20 +57,21 @@ export class MyEventsComponent implements OnInit{
       title: ['', [Validators.required, Validators.maxLength(50)]],
       description: ['', [Validators.maxLength(250)]],
       venueName: ['', Validators.required],
-      venueStreet: ['', Validators.required],
-      venueStreetNumber: ['', Validators.required],
-      venueZipCode: ['', Validators.required],
-      venueCity: ['', Validators.required],
+      venueStreet: [{ value: '', disabled: true }, Validators.required],
+      venueStreetNumber: [{ value: '', disabled: true }, Validators.required],
+      venueZipCode: [{ value: '', disabled: true }, Validators.required],
+      venueCity: [{ value: '', disabled: true }, Validators.required],
       price: [null, [Validators.required]],
       date: [null, [Validators.required]],
       performers: this.fb.array([]),
       category: [null, [Validators.required]],
-      eventImage: [''] // FormControl for event image
+      eventImage: [''] 
     });
   }
 
   ngOnInit(): void {
     this.loadCurrentUser();
+    this.loadVenues();
   }
 
   loadCurrentUser() {
@@ -86,7 +89,19 @@ export class MyEventsComponent implements OnInit{
       }
     });
   }
-  
+
+  loadVenues() {
+    this.eventService.getVenues().subscribe({
+      next: (venues) => {
+        this.venues = venues;
+        console.log('Venues loaded:', this.venues);
+      },
+      error: (error) => {
+        console.error('Error fetching venues', error);
+      }
+    });
+  }
+
   loadUserEvents(): void {
     this.eventService.getUserEvents(this.currentUser.userId).subscribe((response: BackendEvent[]) => {
       console.log("Response: ",response);
@@ -109,7 +124,8 @@ export class MyEventsComponent implements OnInit{
         },
         performers: event.performers,
         price: event.price,
-        imageUrl: event.imageUrl
+        imageUrl: event.imageUrl,
+        isLiked: event.isLiked
       }));
       console.log("MyEvents list",this.myEvents);
       for (let event of this.myEvents) {
@@ -121,15 +137,8 @@ export class MyEventsComponent implements OnInit{
   editEvent(event: Event): void {
     this.eventService.getSingleEvent(event.eventId).subscribe({
       next: (response) => {
-        console.log("Response",response);
-        // const fetchedEvent = response
-        // if (!fetchedEvent) {
-        //   console.error('Fetched event is undefined or null');
-        //   return;
-        // }   
-        // this.currentEvent = fetchedEvent;
         this.currentEvent = response
-        console.log("current event", this.currentEvent + ", category " + this.currentEvent.category);
+        // console.log("current event", this.currentEvent + ", category " + this.currentEvent.category);
         this.isEditing = true;
     
         this.performers.clear();
@@ -151,7 +160,7 @@ export class MyEventsComponent implements OnInit{
           venueCity: event.venue.venueAddress.city,
           price: event.price,
           category: event.category,
-          eventImage: event.imageUrl // Assuming imageUrl is the URL or name of the image
+          eventImage: event.imageUrl
         });
       },
       error: (err) => {
@@ -159,6 +168,22 @@ export class MyEventsComponent implements OnInit{
       }
     })
   }
+
+  onVenueChange(venueName: string) {
+    const selectedVenue = this.venues.find(venue => venue.name === venueName);
+    if (selectedVenue) {
+      console.log('Selected Venue:', selectedVenue);
+      this.editForm.patchValue({
+        venueStreet: selectedVenue.venueAddress.street,
+        venueStreetNumber: selectedVenue.venueAddress.streetNumber,
+        venueZipCode: selectedVenue.venueAddress.zipCode,
+        venueCity: selectedVenue.venueAddress.city
+      });
+    } else {
+      console.error('Venue not found:', venueName);
+    }
+  }
+  
 
   saveEvent(): void {
     if (this.editForm.valid && this.currentEvent) {
@@ -174,7 +199,6 @@ export class MyEventsComponent implements OnInit{
         venueZipCode: this.editForm.value.venueZipCode,
         venueCity: this.editForm.value.venueCity,
         price: this.editForm.value.price,
-        // date: new Date(this.editForm.value.date).toISOString().split('T')[0],
         date: this.editForm.value.date instanceof Date ? this.editForm.value.date.toISOString().split('T')[0] : this.editForm.value.date,
         category: this.editForm.value.category,
         performers: this.performers.controls.map(c => ({ name: c.value.name })),
@@ -249,26 +273,5 @@ export class MyEventsComponent implements OnInit{
 
   removePerformer(index: number) {
     this.performers.removeAt(index);
-  }
-  checkDuplicateVenue() {
-    const venueName = this.editForm.get('venueName').value;
-    
-    this.eventService.checkDuplicateVenue(venueName).subscribe({
-      next: (response) => {
-        if (response && response.msg) {
-          console.log(response.msg);
-          if (response.msg === "Venue name not registered yet") {
-            this.editForm.get('venueName').setErrors(null);
-          } else {
-            this.editForm.get('venueName').setErrors({duplicateVenue: true});
-          }
-        }
-      },
-      error: (response) => {
-        const message = response.error.msg
-        console.log(message)
-        this.editForm.get('venueName').setErrors({duplicateVenue: true})
-      },
-    })
   }
 }

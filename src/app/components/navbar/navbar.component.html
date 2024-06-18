@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-body-secondary">
+<nav class="navbar navbar-expand-lg pb-3">
   <div class="container-fluid">
     <a class="navbar-brand px-4" routerLink="home">MusicHub</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +23,7 @@
           <a class="nav-link" routerLink="api/events/create">Submit an event</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Events
           </a>
 
@@ -41,14 +41,14 @@
         <li class="nav-item">
           @if(user()) {
             <div class="dropdown">
-              <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <button class="btn dropdown-toggle text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 
                 <i class="bi bi-person-circle"> {{user().username}}</i>
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" routerLink="api/user/user-details">Edit profile</a></li>
                 <li><a class="dropdown-item" routerLink="api/user/events/submitted">My events</a></li>
-                <li><a class="dropdown-item" routerLink="api/user/events/liked">Liked events</a></li>
+                <li><a class="dropdown-item" routerLink="api/user/events/bookmarked">Liked events</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item " (click)="logout()">Logout <i class="bi bi-box-arrow-left"></i></a></li>
               </ul>

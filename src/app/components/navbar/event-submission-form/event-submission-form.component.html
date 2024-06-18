@@ -101,7 +101,7 @@
       <button mat-raised-button color="primary" type="button" (click)="addPerformer()">I want to add more performers</button>
 
       <mat-form-field class="mt-4">
-        <mat-label>Ticket price</mat-label>
+        <mat-label>Ticket price(€)</mat-label>
         <input matInput type="text" formControlName="price" />
         <mat-error *ngIf="form.get('price').invalid && form.get('price').touched">
           A ticket price is required
@@ -132,14 +132,6 @@
         </mat-error>
       </mat-form-field>
 
-      <!-- <mat-form-field class="mt-4" appearance="fill">
-        <mat-label>Upload an image as banner for your event</mat-label>
-        <input matInput type="file" formControlName="eventImage" (change)="onFileSelect($event)"/>
-        <mat-error *ngIf="form.get('eventImage')?.invalid && form.get('eventImage')?.touched">
-          An image is required
-        </mat-error>
-      </mat-form-field> -->
-
       <mat-form-field appearance="fill">
         <mat-label>Upload File</mat-label>
         <input matInput type="text" placeholder="Choose a file" [value]="selectedFile ? selectedFile.name : '' " readonly>
@@ -160,8 +152,8 @@
     @if (submissionStatus.success) {
         <div class="alert alert-success mt-2 d-flex flex-column align-items-center">
             <strong>Success:</strong> {{ submissionStatus.message}}
-            <a role="button" routerLink='../login'>Submit another event</a>
-        </div>
+            <a role="button" class="text-decoration-underline text-black" (click)="reloadCurrentRoute()">Submit another event</a>
+          </div>
     } @else { 
         <div class="alert alert-danger mt-2">
             <strong>Error:</strong> {{ submissionStatus.message}}

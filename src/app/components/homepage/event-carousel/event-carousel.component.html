@@ -1,5 +1,5 @@
 <div class="carousel-wrapper">
-    <div id="carouselExample" class="carousel slide col-10 mx-auto pt-2">
+    <div id="carouselExample" class="carousel slide col-10 mx-auto pt-2 shadow">
         <div class="carousel-inner">
           <div *ngFor="let event of events; let i = index" [class.active]="i === 0" class="carousel-item">
               <app-event-slide [event]="event"></app-event-slide>

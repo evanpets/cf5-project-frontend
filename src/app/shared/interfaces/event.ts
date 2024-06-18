@@ -25,6 +25,7 @@ export interface Event {
     category: string
     userId: number
     imageUrl: string;
+    isLiked: boolean;
 }
 
 export interface BackendEvent {
@@ -42,4 +43,5 @@ export interface BackendEvent {
     performers: { name: string }[];
     price: number;
     imageUrl: string;
+    isLiked: boolean;
 }

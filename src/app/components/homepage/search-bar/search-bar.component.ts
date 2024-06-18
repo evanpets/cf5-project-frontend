@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatOptionModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -16,11 +15,13 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './search-bar.component.css'
 })
 export class SearchBarComponent implements OnInit{
-  constructor (private eventService: EventService) {}
+  @Output() searchCategoryChange = new EventEmitter<string>();
+  @Output() searchQueryChange = new EventEmitter<string>();
+  // @Output() searchOptionSelected = new EventEmitter<any>();
+
 
   sourcedResults: any[] = []
   filterableOptions: any[] = []
-
   searchCategory: string;
   searchQuery: string = ''
   searchOptions = [
@@ -30,13 +31,20 @@ export class SearchBarComponent implements OnInit{
     { value: 'date', viewValue: 'Date' }
   ];
 
+  constructor (private eventService: EventService) {}
+
   ngOnInit() {
     this.searchCategory = this.searchOptions[0].value;
+    this.searchCategoryChange.emit(this.searchCategory);
+
+    this.searchQueryChange.emit(this.searchCategory);
     this.filterEvents();
+
   }
 
   filterEvents() {
-    if (!this.searchCategory) {return;}
+    // this.searchCategoryChange.emit(this.searchCategory);
+    // if (!this.searchCategory) {return;}
 
     this.eventService.filterEvents(this.searchCategory).subscribe({
       next: (response: any[]) => {
@@ -49,8 +57,9 @@ export class SearchBarComponent implements OnInit{
     })
   }
 
-  onSearchChange(query: string) {
+  onQueryChange(query: string) {
     this.searchQuery = query;
+    this.searchQueryChange.emit(this.searchQuery);
     if (query.length >= 2) {
       console.log(query.toString())
       console.log(this.filterableOptions)
@@ -64,6 +73,12 @@ export class SearchBarComponent implements OnInit{
     }
   }
 
+  onSearchCategoryChange(category: string) {
+    this.searchCategory = category;
+    this.searchCategoryChange.emit(this.searchCategory);
+    this.filterEvents();
+  }
+  
   getDisplayValue(option: any): string {
     switch (this.searchCategory){
       case 'venue':

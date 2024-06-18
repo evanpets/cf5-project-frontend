@@ -21,8 +21,8 @@ export class UserSideMenuComponent {
       routerLink: "events/submitted"
     },
     {
-      text: "Liked Events",
-      routerLink: "events/liked"
+      text: "Bookmarked Events",
+      routerLink: "events/bookmarked"
     }
   ]
   

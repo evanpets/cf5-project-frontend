@@ -1,0 +1,14 @@
+.footer {
+  background: linear-gradient(135deg, #ADD8E6, #87CEEB, #4682B4);
+  color: #fff;
+  padding: 10px 20px;
+}
+
+.footer-link {
+  color: #fff;
+}
+
+.footer a:hover{
+  color: #b8e8f8;
+}
+

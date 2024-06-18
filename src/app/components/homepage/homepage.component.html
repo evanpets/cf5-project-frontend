@@ -3,13 +3,13 @@
     <app-event-carousel></app-event-carousel>
   </div>
 </div>
-<div class="container">
+<!-- <div class="container">
   <div class="d-flex flex-column gap-2">
     <app-search-bar></app-search-bar>
   </div>
-</div>
+</div> -->
 <div class="container">
   <div class="d-flex flex-column gap-2">
-    <app-events-list></app-events-list>
+    <app-events-list [currentUser]="currentUser"></app-events-list>
   </div>
 </div>

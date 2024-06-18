@@ -9,7 +9,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { EventService } from "src/app/shared/services/event.service";
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { UserService } from "src/app/shared/services/user.service";
@@ -48,7 +48,7 @@ export class EventSubmissionFormComponent implements OnInit{
   currentUser: User
   selectedFile: File | null = null;
 
-  constructor(private fb: FormBuilder, private eventService: EventService, private userService: UserService) {}
+  constructor(private fb: FormBuilder, private eventService: EventService, private userService: UserService, private router: Router) {}
 
   submissionStatus: {success: boolean, message: string} = 
   {success: false, message: "Not submitted yet." }
@@ -226,5 +226,12 @@ export class EventSubmissionFormComponent implements OnInit{
         }
       })
     }
+  }
+
+  reloadCurrentRoute() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
   }
 }
