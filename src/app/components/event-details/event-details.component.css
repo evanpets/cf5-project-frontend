@@ -1,0 +1,21 @@
+.event-details th,
+.event-details td {
+  text-align: left;
+  padding-right: 10px;
+  vertical-align: middle;
+}
+
+.event-details th {
+  width: 20%;
+}
+
+.event-details td {
+  width: 80%;
+}
+
+.event-details img {
+  height: 25rem;
+  width: 40rem;
+  max-height: 25rem;
+  max-width: 40rem;
+}

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Event } from 'src/app/shared/interfaces/event';
 import { User } from 'src/app/shared/interfaces/user';
 import { EventService } from 'src/app/shared/services/event.service';
@@ -7,7 +8,7 @@ import { EventService } from 'src/app/shared/services/event.service';
 @Component({
   selector: 'app-event-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './event-card.component.html',
   styleUrls: ['./event-card.component.css']
 })

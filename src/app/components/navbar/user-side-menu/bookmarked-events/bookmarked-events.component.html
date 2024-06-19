@@ -1,7 +1,12 @@
-<div>
-    <div class="d-flex flex-row justify-content-evenly flex-wrap my-3">
+<div class="my-3">
+    <h2 class="text-center">Saved Events</h2>
+
+    <div *ngIf="bookmarkedEvents.length > 0" class="d-flex flex-row justify-content-evenly flex-wrap my-3 bg-light-subtle border border-2 shadow mx-5">
         <div *ngFor="let event of bookmarkedEvents" class="gap-2">
             <app-event-card [event]="event" [currentUser]="currentUser" (toggleLike)="onToggleLike($event)"></app-event-card>
         </div>
+    </div>
+    <div *ngIf="bookmarkedEvents.length === 0" class="text-center">
+        No saved events.
     </div>
 </div>

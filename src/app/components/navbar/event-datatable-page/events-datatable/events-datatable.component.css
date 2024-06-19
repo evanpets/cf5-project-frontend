@@ -1,5 +1,6 @@
+
+
 .performers-list {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  white-space: normal;
+  word-wrap: break-word;
 }

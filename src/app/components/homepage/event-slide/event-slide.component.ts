@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Event } from 'src/app/shared/interfaces/event';
 
 @Component({
   selector: 'app-event-slide',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './event-slide.component.html',
   styleUrl: './event-slide.component.css'
 })

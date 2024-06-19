@@ -1,24 +1,24 @@
 <div class="card container text-center shadow my-2 mx-1" style="width: 16rem; height: 18rem; overflow:hidden;">
   <div class="position-relative">
     <img *ngIf="getFullImageUrl(event.imageUrl)" [src]="getFullImageUrl(event.imageUrl)" class="card-img-top mt-2" alt= {{event.title}} style="height: 8rem;">
+
     <div class="position-absolute bottom-0 end-0 mb-1 me-1 like-container d-flex align-items-center justify-content-center">
       <i *ngIf="!event.isLiked" class="bi bi-bookmark like-icon" (click)="onToggleLike($event)"></i>
       <i *ngIf="event.isLiked" class="bi bi-bookmark-check-fill like-icon " (click)="onToggleLike($event)"></i>
     </div>
   </div>
 
-    <div class="card-body mt-1">
-      <div class="pb-2">
+  <a [routerLink]="['/api/events', event.eventId]" class="btn card-info" data-bs-toggle="tooltip" data-bs-placement="top" title="More details">
+    <div class="card-body mt-1 overflow-y-auto">
+      <div class="pb-2 mt-2">
         <p class="card-text"> {{ formatDate(event.date) }}</p>
-
       </div>
       <div>
         <h5 class="card-text"> {{ event.title }}</h5>
-
       </div>
       <div>
         <p class="card-text mt-2"> {{ event.venue.name }}</p>
       </div>
-      <!-- <a href="#" class="btn btn-primary">Go somewhere</a> wrap around card, send to get event-->
     </div>
-  </div>
+  </a>
+</div>

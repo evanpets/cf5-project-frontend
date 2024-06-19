@@ -1,13 +1,13 @@
-<div class="card text-bg-light">
-    <!-- <div class="card-img-overlay"> -->
-        <img [src]="getFullImageUrl(event.imageUrl)" class="card-imgd-block w-100 h-100 rounded-2" [alt]="event.title">
-        <div class="gradient-overlay"></div>
-    <!-- </div> -->
-    <div class="carousel-caption d-none d-md-block">
+
+<div class="card btn" [routerLink]="['/api/events', event.eventId]" style="margin: 0; padding: 0;" data-bs-toggle="tooltip" data-bs-placement="top" title="More details">
+    <img [src]="getFullImageUrl(event.imageUrl)" class="card-imgd-block w-100 h-100 rounded-2" [alt]="event.title">
+    <div class="gradient-overlay"></div>
+
+    <div class="carousel-caption d-block">
         <h4 class="card-title"> {{event.title}}</h4>
         <div class="d-flex justify-content-between">
-        <p class="card-text"><small>{{ formatDate(event.date) }}</small></p>
-        <p class="card-text"><small>{{event.venue.name}}</small></p>
+            <p class="card-text"><small>{{ formatDate(event.date) }}</small></p>
+            <p class="card-text"><small>{{event.venue.name}}</small></p>
         </div>
     </div>
 </div>

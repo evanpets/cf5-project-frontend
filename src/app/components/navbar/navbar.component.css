@@ -1,5 +1,5 @@
 .navbar{
-  background: linear-gradient(135deg, #ADD8E6, #87CEEB, #4682B4);
+  background: linear-gradient(135deg, #4e93ca, #3c5d9b, #2e3e74);
   color: #fff;
   padding: 10px 20px;
 }
@@ -13,5 +13,5 @@
 }
 
 .dropdown-menu{
-    background-color: #87CEEB ;
+    background-color: #5c6d8d ;
 }

@@ -14,7 +14,7 @@
             routerLink="past" (click)="setActiveTab('past')">Past events</button>
         </div>
     </div>
-    <div>
+    <div class="mt-3">
         <app-upcoming-events-datatable *ngIf="activeTab === 'upcoming'"></app-upcoming-events-datatable>
         <app-past-events-datatable *ngIf="activeTab === 'past'"></app-past-events-datatable>
     </div>

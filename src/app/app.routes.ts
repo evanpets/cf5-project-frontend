@@ -12,6 +12,10 @@ import { MyEventsComponent } from "./components/navbar/user-side-menu/my-events/
 import { LikedEventsComponent } from "./components/navbar/user-side-menu/bookmarked-events/bookmarked-events.component";
 import { EditProfileComponent } from "./components/navbar/user-side-menu/edit-profile/edit-profile.component";
 import { UserSideMenuComponent } from "./components/navbar/user-side-menu/user-side-menu.component";
+import { EventDetailsComponent } from "./components/event-details/event-details.component";
+import { ContactUsComponent } from "./components/footer/contact-us/contact-us.component";
+import { TermsAndConditionsComponent } from "./components/footer/terms-and-conditions/terms-and-conditions.component";
+import { FaqComponent } from "./components/footer/faq/faq.component";
 
 
 export const routes: Routes = [
@@ -70,13 +74,30 @@ export const routes: Routes = [
                         canActivate: [authGuard]
                     },
                     {
-                        path: "bookmarked",
+                        path: "saved",
                         component: LikedEventsComponent,
                         canActivate: [authGuard]
                     }
                 ]
             }
         ]
+    },
+    {
+        path: "api/events/:eventId",
+        component: EventDetailsComponent,
+        
+    },
+    {
+        path: "contact",
+        component: ContactUsComponent
+    },
+    {
+        path: "terms",
+        component: TermsAndConditionsComponent
+    },
+    {
+        path: "faq",
+        component: FaqComponent
     },
     { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];

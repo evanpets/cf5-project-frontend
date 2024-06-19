@@ -48,7 +48,7 @@
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" routerLink="api/user/user-details">Edit profile</a></li>
                 <li><a class="dropdown-item" routerLink="api/user/events/submitted">My events</a></li>
-                <li><a class="dropdown-item" routerLink="api/user/events/bookmarked">Liked events</a></li>
+                <li><a class="dropdown-item" routerLink="api/user/events/saved">Liked events</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item " (click)="logout()">Logout <i class="bi bi-box-arrow-left"></i></a></li>
               </ul>
@@ -60,11 +60,6 @@
           }
         </li>
       </ul>
-
-            <!-- <span class="me-3 d-flex gap-2">
-                Welcome, {{ user().Username }}
-                <mat-icon role="button" (click)="logout()">logout</mat-icon>
-            </span> -->
     </div>
   </div>
 </nav>
