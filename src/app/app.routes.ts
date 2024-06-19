@@ -16,6 +16,23 @@ import { EventDetailsComponent } from "./components/event-details/event-details.
 import { ContactUsComponent } from "./components/footer/contact-us/contact-us.component";
 import { TermsAndConditionsComponent } from "./components/footer/terms-and-conditions/terms-and-conditions.component";
 import { FaqComponent } from "./components/footer/faq/faq.component";
+import { AdminMenuComponent } from "./components/admin-menu/admin-menu.component";
+import { EventsCrudComponent } from "./components/admin-menu/events-crud/events-crud.component";
+import { VenuesCrudComponent } from "./components/admin-menu/venues-crud/venues-crud.component";
+import { PerformersCrudComponent } from "./components/admin-menu/performers-crud/performers-crud.component";
+import { UsersCrudComponent } from "./components/admin-menu/users-crud/users-crud.component";
+import { AdminInsertUserComponent } from "./components/admin-menu/users-crud/admin-insert-user/admin-insert-user.component";
+import { AdminUserUpdateDeleteComponent } from "./components/admin-menu/users-crud/admin-user-update-delete/admin-user-update-delete.component";
+import { AdminGetUserComponent } from "./components/admin-menu/users-crud/admin-get-user/admin-get-user.component";
+import { AdminInsertEventComponent } from "./components/admin-menu/events-crud/admin-insert-event/admin-insert-event.component";
+import { AdminGetEventComponent } from "./components/admin-menu/events-crud/admin-get-event/admin-get-event.component";
+import { AdminEventUpdateDeleteComponent } from "./components/admin-menu/events-crud/admin-event-update-delete/admin-event-update-delete.component";
+import { AdminGetVenueComponent } from "./components/admin-menu/venues-crud/admin-get-venue/admin-get-venue.component";
+import { AdminInsertVenueComponent } from "./components/admin-menu/venues-crud/admin-insert-venue/admin-insert-venue.component";
+import { AdminVenueUpdateDeleteComponent } from "./components/admin-menu/venues-crud/admin-venue-update-delete/admin-venue-update-delete.component";
+import { AdminGetPerformerComponent } from "./components/admin-menu/performers-crud/admin-get-performer/admin-get-performer.component";
+import { AdminInsertPerformerComponent } from "./components/admin-menu/performers-crud/admin-insert-performer/admin-insert-performer.component";
+import { AdminPerformerUpdateDeleteComponent } from "./components/admin-menu/performers-crud/admin-performer-update-delete/admin-performer-update-delete.component";
 
 
 export const routes: Routes = [
@@ -98,6 +115,62 @@ export const routes: Routes = [
     {
         path: "faq",
         component: FaqComponent
+    },
+    {
+        path: "api/admin",
+        component: AdminMenuComponent
+    },
+
+    {
+        path: "api/admin/users", component: UsersCrudComponent
+    },
+    {
+        path: "api/admin/users/insert", component: AdminInsertUserComponent
+    },
+    {
+        path: "api/admin/users/update", component: AdminUserUpdateDeleteComponent
+    },
+    {
+        path: "api/admin/users/get", component: AdminGetUserComponent
+    },
+
+    {
+        path: "api/admin/events", component: EventsCrudComponent
+    },
+    {
+        path: "api/admin/events/insert", component: AdminInsertEventComponent
+    },
+    {
+        path: "api/admin/events/update", component: AdminEventUpdateDeleteComponent
+    },
+    {
+        path: "api/admin/events/get", component: AdminGetEventComponent
+    },
+    {
+        path: "api/admin/venues",
+        component: VenuesCrudComponent
+    },
+    {
+        path: "api/admin/venues/insert", component: AdminInsertVenueComponent
+    },
+    {
+        path: "api/admin/venues/update", component: AdminVenueUpdateDeleteComponent
+    },
+    {
+        path: "api/admin/venues/get", component: AdminGetVenueComponent
+    },
+    {
+        path: "api/admin/performers",
+        component: PerformersCrudComponent
+    },
+    {
+        path: "api/admin/performers/insert", component: AdminInsertPerformerComponent
+    },
+    {
+        path: "api/admin/performers/update", component: AdminPerformerUpdateDeleteComponent
+    },
+    {
+        path: "api/admin/performers/get", component: AdminGetPerformerComponent
     },
     { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];

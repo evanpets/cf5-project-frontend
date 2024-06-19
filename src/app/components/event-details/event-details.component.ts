@@ -54,8 +54,10 @@ export class EventDetailsComponent implements OnInit {
         category: response.category,
         userId: response.userId,
         venue: {
+          venueId: response.venueId,
           name: response.venueName,
           venueAddress: {
+            venueAddressId: response.venueAddressId,
             street: response.venueStreet, 
             streetNumber: response.venueStreetNumber,
             zipCode: response.venueZipCode,

@@ -18,7 +18,7 @@ export class EventCarouselComponent {
   events: Event[] = []
 
   ngOnInit(): void {
-    this.eventService.getEvents().subscribe({
+    this.eventService.getUpcomingEvents().subscribe({
       next: (response) => {
         console.log(response)
         this.events = response
@@ -27,7 +27,5 @@ export class EventCarouselComponent {
         console.error("Error in loading events", err)
       }
     })
-    // this.sortEventsByDate();
-    // this.loadTenMore();
   }
 }

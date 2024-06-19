@@ -1,4 +1,5 @@
 export interface VenueAddress {
+    venueAddressId: number
     street: string
     streetNumber: string
     zipCode: string
@@ -6,6 +7,7 @@ export interface VenueAddress {
 }
 
 export interface Venue {
+    venueId: number
     name: string
     venueAddress: VenueAddress
 }
@@ -35,7 +37,9 @@ export interface BackendEvent {
     date: Date;
     category?: string;
     userId: number;
+    venueId: number;
     venueName: string;
+    venueAddressId: number
     venueStreet: string;
     venueStreetNumber: string;
     venueZipCode: string;

@@ -51,8 +51,10 @@ export class LikedEventsComponent implements OnInit{
           category: event.category,
           userId: event.userId,
           venue: {
+            venueId: event.venueId,
             name: event.venueName,
             venueAddress: {
+              venueAddressId: event.venueAddressId,
               street: event.venueStreet,
               streetNumber: event.venueStreetNumber,
               zipCode: event.venueZipCode,

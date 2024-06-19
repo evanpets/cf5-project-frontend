@@ -35,6 +35,7 @@ export class UserLoginComponent {
 
     const claimName = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
     const claimEmail = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+    const claimRole = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
 
     this.userService.loginUser(credentials).subscribe({
       next: (response) => {
@@ -50,7 +51,8 @@ export class UserLoginComponent {
 
         const decodedTokenSubject: LoggedInUser = {
           username: decodedToken[claimName],
-          email: decodedToken[claimEmail]
+          email: decodedToken[claimEmail],
+          role: decodedToken[claimRole]
         };
 
         console.log('Decoded Token Subject:', decodedTokenSubject);
@@ -59,7 +61,8 @@ export class UserLoginComponent {
         
         this.userService.user.set({
           username: decodedTokenSubject.username,
-          email: decodedTokenSubject.email
+          email: decodedTokenSubject.email,
+          role: decodedTokenSubject.role
         })
 
 

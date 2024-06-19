@@ -1,0 +1,48 @@
+<div class="d-flex flex-column justify-content-center mt-3">
+    <button class="btn btn-secondary mt-3 col-1 ms-3" [routerLink]="['/api/admin/venues']">&lt; Back</button>
+
+    <h3 class="text-center mb-3"> Update/Delete Form</h3>
+    <form [formGroup]="editForm" class="d-flex flex-column col-12" action="patch">
+    <div class="container d-flex flex-row justify-content-evenly col-12">
+        <div class="d-flex flex-column col-5">
+
+              <mat-form-field>
+                <mat-label>Venue name</mat-label>
+                <input matInput type="text" formControlName="name"/>
+              </mat-form-field>
+          
+              <mat-form-field>
+                <mat-label>Street</mat-label>
+                <input matInput type="text" formControlName="street"  />
+              </mat-form-field>
+          
+              <mat-form-field>
+                <mat-label>Street no</mat-label>
+                <input matInput type="text" formControlName="streetNumber"  />
+              </mat-form-field>
+          
+              <mat-form-field>
+                <mat-label>ZIP Code</mat-label>
+                <input matInput type="text" formControlName="zipCode" />
+              </mat-form-field>
+          
+              <mat-form-field>
+                <mat-label>City</mat-label>
+                <input matInput type="text" formControlName="city" />
+              </mat-form-field>
+            </div>
+        </div>
+    </form>
+
+  
+      <div class="d-flex justify-content-evenly mt-2 mb-4">
+        <button class="btn btn-primary me-2" type="button" (click)="saveVenue()">Save</button>
+        <button class="btn btn-danger" type="button" (click)="deleteVenue(currentVenue.venueId)">Delete</button>
+      </div>
+  
+      <div class="d-flex justify-content-between mt-2 mb-4">
+        <button class="btn btn-secondary ms-3" type="button" (click)="navigateToPreviousVenue()" [disabled]="currentIndex <= 0">&lt; Previous Venue</button>
+        <button class="btn btn-secondary me-3" type="button" (click)="navigateToNextVenue()" [disabled]="currentIndex >= venues.length - 1">Next Venue &gt;</button>
+      </div>
+  </div>
+  

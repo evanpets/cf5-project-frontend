@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { BackendEvent, Event } from '../interfaces/event';
+import { BackendEvent, Event, Venue } from '../interfaces/event';
 import { environment } from 'src/environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -54,8 +54,8 @@ export class EventService {
     * Fetches a list of all the events.
     * @returns A list of all the events.
     */
-  getEvents(): Observable<Event[]> {
-    return this.http.get<Event[]>(`${API_URL}`);
+  getEvents(): Observable<Event[] | BackendEvent[]> {
+    return this.http.get<Event[] | BackendEvent[]>(`${API_URL}`);
   }
 
   /**
@@ -87,6 +87,17 @@ export class EventService {
 
   getBookmarkedEvents(userId: number): Observable<{ msg: string, bookmarkedEventsList: BackendEvent[] }> {
     return this.http.get<{ msg: string, bookmarkedEventsList: BackendEvent[] }>(`${API_URL}/bookmarked/${userId}`)
+  }
+
+  /**
+   * Returns a venue by its name.
+   * @param venueName The name of the venue.
+   * @returns The venue's details.
+   */
+  getVenueById(venueId: number): Observable<any> {
+    console.log("service venue id " +venueId);
+    
+    return this.http.get<any>(`${API_URL}/venues/${venueId}`)
   }
 
   /**
@@ -132,6 +143,10 @@ export class EventService {
     return this.http.patch<{ msg: string, event: BackendEvent }>(`${API_URL}/update/${eventId}`, eventToUpdate);
   }
 
+  updateVenue(venueId: number, venueToUpdate: any): Observable<{ msg: string, venue: Venue }> {
+    return this.http.patch<{ msg: string, venue: Venue }>(`${API_URL}/venues/update/${venueId}`, venueToUpdate);
+  }
+
   //Delete functions
   /**
    * Deletes an event.
@@ -140,6 +155,10 @@ export class EventService {
    */
   deleteEvent(eventId: number): Observable<{ msg: string }> {
     return this.http.delete<{ msg: string }>(`${API_URL}/delete/${eventId}`);
+  }
+
+  deleteVenue(venueId: number): Observable<{ msg: string }> {
+    return this.http.delete<{ msg: string }>(`${API_URL}/delete/${venueId}`);
   }
 
 

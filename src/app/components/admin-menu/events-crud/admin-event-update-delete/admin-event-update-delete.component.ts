@@ -1,11 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
-import { Event, BackendEvent } from 'src/app/shared/interfaces/event';
-import { EventService } from 'src/app/shared/services/event.service';
-import { EventsDatatableComponent } from '../../event-datatable-page/events-datatable/events-datatable.component';
-import { UserService } from 'src/app/shared/services/user.service';
-import { MatSelectModule } from '@angular/material/select';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatOptionModule, MatNativeDateModule } from '@angular/material/core';
@@ -13,43 +8,30 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { LoggedInUser, User } from 'src/app/shared/interfaces/user';
-import { initial } from 'lodash-es';
+import { MatSelectModule } from '@angular/material/select';
+import { RouterLink } from '@angular/router';
+import { BackendEvent, Event } from 'src/app/shared/interfaces/event';
+import { User, LoggedInUser } from 'src/app/shared/interfaces/user';
+import { EventService } from 'src/app/shared/services/event.service';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
-  selector: 'app-my-events',
+  selector: 'app-admin-event-update-delete',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, EventsDatatableComponent, MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCheckboxModule, MatSelectModule],
-  templateUrl: './my-events.component.html',
-  styleUrl: './my-events.component.css',
-  animations: [
-    trigger('slideInOut', [
-      state('in', style({
-        height: '*',
-        opacity: 1,
-        transform: 'translateY(0)'
-      })),
-      transition(':enter', [
-        style({ height: 0, opacity: 0, transform: 'translateY(-20px)' }),
-        animate('500ms ease-in')
-      ]),
-      transition(':leave', [
-        animate('200ms ease-out', style({ height: 0, opacity: 0, transform: 'translateY(-20px)' }))
-      ])
-    ])
-  ]
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCheckboxModule, MatSelectModule, RouterLink],
+  templateUrl: './admin-event-update-delete.component.html',
+  styleUrl: './admin-event-update-delete.component.css'
 })
 
-export class MyEventsComponent implements OnInit{
-  myEvents: Event[] = [];
+export class AdminEventUpdateDeleteComponent implements OnInit{
+  events: Event[] = [];
   editForm: FormGroup;
-  isEditing: boolean = false;
   currentEvent: Event | null = null;
   currentUser: User
-  // initialVenueName: string;
   selectedFile: File | null = null
   venues: any[] = [];
+  currentIndex: number = -1;
+
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   constructor(private eventService: EventService, private userService: UserService, private fb: FormBuilder) {
@@ -71,7 +53,6 @@ export class MyEventsComponent implements OnInit{
 
   ngOnInit(): void {
     this.loadCurrentUser();
-    this.loadVenues();
   }
 
   loadCurrentUser() {
@@ -80,9 +61,9 @@ export class MyEventsComponent implements OnInit{
     this.userService.getUser(username).subscribe({
       next: (response) => {
         this.currentUser = response;
+        this.loadVenues();
         console.log('Current user ID: ', this.currentUser.userId)
         console.log('Current user:', this.currentUser);
-        this.loadUserEvents()
       },
       error: (error) => {
         console.error('Error fetching current user', error);
@@ -95,6 +76,7 @@ export class MyEventsComponent implements OnInit{
       next: (venues) => {
         this.venues = venues;
         console.log('Venues loaded:', this.venues);
+        this.loadAllEvents();
       },
       error: (error) => {
         console.error('Error fetching venues', error);
@@ -102,47 +84,38 @@ export class MyEventsComponent implements OnInit{
     });
   }
 
-  loadUserEvents(): void {
-    this.eventService.getUserEvents(this.currentUser.userId).subscribe((response: BackendEvent[]) => {
-      console.log("Response: ",response);
-      
-      this.myEvents = response.map(event => ({
-        eventId: event.eventId,
-        title: event.title,
-        description: event.description,
-        date: event.date,
-        category: event.category,
-        userId: event.userId,
-        venue: {
-          venueId: event.venueId,
-          name: event.venueName,
-          venueAddress: {
-            venueAddressId: event.venueAddressId,
-            street: event.venueStreet, 
-            streetNumber: event.venueStreetNumber,
-            zipCode: event.venueZipCode,
-            city: event.venueCity
-          }
-        },
-        performers: event.performers,
-        price: event.price,
-        imageUrl: event.imageUrl,
-        isLiked: event.isLiked
-      }));
-      console.log("MyEvents list",this.myEvents);
-      for (let event of this.myEvents) {
-        console.log("Event: ",JSON.stringify(event));
-      }
+  loadAllEvents(): void {
+    this.eventService.getEvents().subscribe((response: Event[]) => {
+      console.log("Response: ", response);
+      this.events = response
+      console.log("Events list", this.events);
+
+      this.events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      this.setClosestEventIndex();
     });
+  }
+
+  setClosestEventIndex(): void {
+    const now = new Date().getTime();
+    let closestIndex = 0;
+    let closestDiff = Math.abs(new Date(this.events[0].date).getTime() - now);
+
+    for (let i = 1; i < this.events.length; i++) {
+      const diff = Math.abs(new Date(this.events[i].date).getTime() - now);
+      if (diff < closestDiff) {
+        closestDiff = diff;
+        closestIndex = i;
+      }
+    }
+    this.currentIndex = closestIndex;
+    this.editEvent(this.events[this.currentIndex]);
   }
   
   editEvent(event: Event): void {
     this.eventService.getSingleEvent(event.eventId).subscribe({
       next: (response) => {
         this.currentEvent = response
-        // console.log("current event", this.currentEvent + ", category " + this.currentEvent.category);
-        this.isEditing = true;
-    
+        
         this.performers.clear();
         event.performers.forEach(performer => {
           this.performers.push(this.fb.group({
@@ -188,6 +161,8 @@ export class MyEventsComponent implements OnInit{
   
 
   saveEvent(): void {
+    console.log('Form Submitted');
+
     if (this.editForm.valid && this.currentEvent) {
       console.log("save beginning",this.currentEvent);
       
@@ -224,14 +199,15 @@ export class MyEventsComponent implements OnInit{
       this.eventService.updateEvent(this.currentEvent.eventId, updateFormData).subscribe({
         next: (response) => {
           console.log("Response: ", response,  response.msg);
-          this.loadUserEvents();
-          this.isEditing = false;
-          this.currentEvent = null;
+          this.loadAllEvents();
         },
         error: (error) => {
           console.error('Error updating event', error.msg);
         }
       });
+    } else {
+      console.log("Couldn't save");
+      
     }
   }
 
@@ -243,6 +219,7 @@ export class MyEventsComponent implements OnInit{
       this.fileInput.nativeElement.click();
     }
   }
+
   onFileSelect(event: any): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
@@ -256,13 +233,14 @@ export class MyEventsComponent implements OnInit{
       return;
     } 
     this.eventService.deleteEvent(eventId).subscribe(response => {
-      this.loadUserEvents();
+      this.loadAllEvents();
     });
   }
 
   get performers() {
     return this.editForm.get('performers') as FormArray;
   }
+
   createPerformer(): FormGroup {
     return this.fb.group({
       name: ['', [Validators.required], ]
@@ -276,4 +254,19 @@ export class MyEventsComponent implements OnInit{
   removePerformer(index: number) {
     this.performers.removeAt(index);
   }
+
+  navigateToPreviousEvent() {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+      this.editEvent(this.events[this.currentIndex]);
+    }
+  }
+
+  navigateToNextEvent() {
+    if (this.currentIndex < this.events.length - 1) {
+      this.currentIndex++;
+      this.editEvent(this.events[this.currentIndex]);
+    }
+  }
 }
+

@@ -19,6 +19,8 @@ export class UserService {
   user = signal<LoggedInUser | User | null>(null) 
   claimName = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
   claimEmail = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+  claimRole = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
+
 
   constructor() {
     const access_token = localStorage.getItem('access_token')
@@ -29,12 +31,14 @@ export class UserService {
 
       const decodedTokenSubject: LoggedInUser = {
         username: decodedToken[this.claimName],
-        email: decodedToken[this.claimEmail]
+        email: decodedToken[this.claimEmail],
+        role: decodedToken[this.claimRole]
       };
 
       this.user.set({
         username: decodedTokenSubject.username,
-        email: decodedTokenSubject.email
+        email: decodedTokenSubject.email,
+        role: decodedTokenSubject.role
       })
     }
     
