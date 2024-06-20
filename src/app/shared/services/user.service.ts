@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
 
-const API_URL = `${environment.apiURL}/api/user`;
+const API_URL = `${environment.apiURL}/api/users`;
 
 @Injectable({
   providedIn: 'root',
@@ -55,13 +55,21 @@ export class UserService {
     return this.http.post<{ msg: string }>(`${API_URL}/register`, user);
   }
 
-  getUser(username: string): Observable<User> {
-    return this.http.get<User>(`${API_URL}/get/username`, {params: {username}});
+  getUserByUsername(username: string): Observable<User> {
+    return this.http.get<User>(`${API_URL}/username/${username}`);
+  }
+
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${API_URL}`);
   }
 
   updateUser(user: User): Observable<{ msg: string }> {
     console.log("Service: ", user.userId, user.username)
     return this.http.patch<{ msg: string, user: User }>(`${API_URL}/update/${user.userId}`, user);
+  }
+
+  deleteUser(userId: number): Observable<{ msg: string }> {
+    return this.http.delete<{ msg: string }>(`${API_URL}/delete/${userId}`);
   }
 
    check_duplicate_email(email: string) : Observable<{ msg: string }>{

@@ -32,7 +32,7 @@
     ngOnInit(): void {
       const loggedInUser = this.userService.user();
       if (loggedInUser) {
-        this.userService.getUser(loggedInUser.username).subscribe({
+        this.userService.getUserByUsername(loggedInUser.username).subscribe({
           next: (response) => {
             this.user = response;
             this.originalUser = { ...response };

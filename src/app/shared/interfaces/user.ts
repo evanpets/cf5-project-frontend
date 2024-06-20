@@ -26,7 +26,6 @@ export interface DecodedTokenSubject {
     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": string;
     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": string;
     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/role": string;
-
     nbf: number;
     exp: number;
   }

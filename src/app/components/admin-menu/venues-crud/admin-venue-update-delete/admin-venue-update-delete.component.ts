@@ -30,6 +30,7 @@ export class AdminVenueUpdateDeleteComponent implements OnInit{
 
   constructor(private eventService: EventService, private userService: UserService, private fb: FormBuilder) {
     this.editForm = this.fb.group({
+      venueId: [''],
       name: [''],
       street: [''],
       streetNumber: [''],
@@ -45,7 +46,7 @@ export class AdminVenueUpdateDeleteComponent implements OnInit{
   loadCurrentUser() {
     const username = (this.userService.user() as LoggedInUser).username
     console.log(username)
-    this.userService.getUser(username).subscribe({
+    this.userService.getUserByUsername(username).subscribe({
       next: (response) => {
         this.currentUser = response;
         this.loadVenues();

@@ -26,7 +26,7 @@ export class LikedEventsComponent implements OnInit{
   loadCurrentUser() {
     const username = (this.userService.user() as LoggedInUser).username;
     console.log(username);
-    this.userService.getUser(username).subscribe({
+    this.userService.getUserByUsername(username).subscribe({
       next: (response) => {
         this.currentUser = response;
         this.currentUser.userId = response.userId;

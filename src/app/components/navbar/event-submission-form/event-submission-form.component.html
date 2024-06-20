@@ -37,9 +37,9 @@
 
       <div *ngIf="showNewVenueFields" class="border border-2 border-dark-subtle px-4 pt-4 mb-4 rounded-2" aria-expanded="true" [@slideInOut]="'in'">
         <h5 class="text-center">Please fill in the information for your venue:</h5>
-        <div class="d-flex flex-column align-items-center mt-3">
-          <div >
-              <mat-form-field class="mb-3 me-3">
+        <div class="d-flex flex-column  align-items-center mt-3 overflow-x-auto">
+          <div class="d-flex flex-row justify-content-evenly">
+              <mat-form-field class="mb-3 me-3 col-4 col-xl-6">
                   <mat-label>Venue name</mat-label>
                   <input matInput type="text" formControlName="newVenueName" (blur)="checkDuplicateVenue()"/>
                   <mat-error *ngIf="form.get('newVenueName').invalid && form.get('newVenueName').touched">
@@ -48,7 +48,7 @@
                   </mat-error>
                 </mat-form-field>
         
-                <mat-form-field class="mb-3">
+                <mat-form-field class="mb-3 col-4 col-xl-6">
                   <mat-label>Street</mat-label>
                   <input matInput type="text" formControlName="newVenueStreet" />
                   <mat-error *ngIf="form.get('newVenueStreet').invalid && form.get('newVenueStreet').touched">
@@ -57,8 +57,8 @@
                 </mat-form-field>
             </div>
   
-            <div >
-              <mat-form-field class="mb-3 me-3">
+            <div class="d-flex flex-row justify-content-evenly">
+              <mat-form-field class="mb-3 me-3 col-4 col-xl-6">
                   <mat-label>Street no</mat-label>
                   <input matInput type="text" formControlName="newVenueStreetNo" />
                   <mat-error *ngIf="form.get('newVenueStreetNo').invalid && form.get('newVenueStreetNo').touched">
@@ -66,7 +66,7 @@
                   </mat-error>
                 </mat-form-field>
         
-                <mat-form-field class="mb-3">
+                <mat-form-field class="mb-3 col-4 col-xl-6">
                   <mat-label>ZIP Code</mat-label>
                   <input matInput type="text" formControlName="newVenueZipCode" />
                   <mat-error *ngIf="form.get('newVenueZipCode').invalid && form.get('newVenueZipCode').touched">
@@ -74,7 +74,7 @@
                   </mat-error>
                 </mat-form-field>
             </div>
-            <mat-form-field class="mb-3">
+            <mat-form-field class="mb-3 col-4 col-xl-6">
               <mat-label>City</mat-label>
               <input matInput type="text" formControlName="newVenueCity" />
               <mat-error *ngIf="form.get('newVenueCity').invalid && form.get('newVenueCity').touched">

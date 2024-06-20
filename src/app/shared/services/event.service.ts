@@ -48,7 +48,11 @@ export class EventService {
    * @returns An event.
    */
   getSingleEvent(eventId: number): Observable<any> {
-    return this.http.get<any>(`${API_URL}/${eventId}`)
+    return this.http.get<any>(`${API_URL}/id/${eventId}`)
+  }
+
+  getEventsWithTitle(title: string): Observable<BackendEvent[]> {
+    return this.http.get<BackendEvent[]>(`${API_URL}/title/${title}`)
   }
    /**
     * Fetches a list of all the events.

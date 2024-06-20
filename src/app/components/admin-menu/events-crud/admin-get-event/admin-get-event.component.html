@@ -1,1 +1,79 @@
-<p>admin-get-event works!</p>
+<button class="btn btn-secondary mt-4 col-1 ms-3" [routerLink]="['/api/admin/events']">&lt; Back</button>
+<div class="d-flex flex-column justify-content-center container">
+    <h3 class="text-center mb-2">Find an event </h3>
+        <div class="d-flex flex-row justify-content-center">
+            <form role="search" (ngSubmit)="searchById()">
+                <div class="d-flex flex-column align-items-center">
+                    <mat-form-field class="me-5">
+                        <input matInput placeholder="Search by ID" aria-label="Search"
+                        name="IdSearchQuery" [(ngModel)]="idSearchQuery">
+                    </mat-form-field>
+                    <div class="me-3">
+                        <button type="button" class="btn btn-secondary" (click)="searchById()">Search by ID</button>
+                    </div>
+                </div>
+            </form>
+
+            <form role="search" (ngSubmit)="searchByTitle()">
+            <div class="d-flex flex-column align-items-center">
+                <mat-form-field>
+                    <input matInput placeholder="Search by title" aria-label="Search" name="titleSearchQuery" [(ngModel)]="titleSearchQuery">
+                </mat-form-field>
+                <div>
+                    <button type="button" class="btn btn-secondary" (click)="searchByTitle()">Search by Title</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div *ngIf="hasResult" class="container event-details d-flex flex-column justify-content-center">
+    <div *ngIf="events[currentIndex].imageUrl" class="d-flex justify-content-center w-25">
+      <img [src]="getFullImageUrl(events[currentIndex].imageUrl)" alt="{{ events[currentIndex].title }}" class="img-fluid my-3 mx-auto">
+    </div>
+    <table class="table table-striped mt-3">
+      <tbody>
+        <tr>
+            <th>Title:</th>
+            <td>{{ events[currentIndex].title }}</td>
+          </tr>
+        <tr>
+          <th>Date:</th>
+          <td>{{ formatDate(events[currentIndex].date) }}</td>
+        </tr>
+        <tr>
+          <th>Venue:</th>
+          <td><span>{{ events[currentIndex].venue.name }} ({{ events[currentIndex].venue.venueAddress.streetNumber }} {{ events[currentIndex].venue.venueAddress.street }}, {{ events[currentIndex].venue.venueAddress.zipCode }}, {{ events[currentIndex].venue.venueAddress.city }})</span></td>
+        </tr>
+        <tr>
+          <th>City:</th>
+          <td>{{ events[currentIndex].venue.venueAddress.city }}</td>
+        </tr>
+        <tr>
+          <th>Description:</th>
+          <td>{{ events[currentIndex].description }}</td>
+        </tr>
+        <tr>
+          <th>Performers:</th>
+          <td><span *ngFor="let performer of events[currentIndex].performers; let i = index">{{ performer?.name || "TBA" }} <span *ngIf="i < events[currentIndex].performers.length - 1">, </span></span></td>
+        </tr>
+        <tr>
+          <th>Price:</th>
+          <td>{{ events[currentIndex].price }}€</td>
+        </tr>
+        <tr>
+          <th>Category:</th>
+          <td>{{ events[currentIndex].category }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="events.length > 1" class="navigation-buttons d-flex justify-content-between mt-2 mb-4">
+        <button *ngIf="currentIndex > 0" class="btn btn-secondary" (click)="navigateToEvent(currentIndex - 1)">
+          &lt; {{ events[currentIndex - 1].title }}
+        </button>
+        <button *ngIf="currentIndex < events.length - 1" class="btn btn-secondary ms-auto" (click)="navigateToEvent(currentIndex + 1)">
+          {{ events[currentIndex + 1].title }} &gt;
+        </button>
+    </div>
+</div>
