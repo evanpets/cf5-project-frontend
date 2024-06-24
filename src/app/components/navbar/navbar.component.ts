@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UserService } from 'src/app/shared/services/user.service';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { User } from 'src/app/shared/interfaces/user';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { CommonModule } from '@angular/common';
 export class NavbarComponent {
   userService = inject(UserService)
   user = this.userService.user
-  
+
   logout() {
     this.userService.logoutUser();
   }

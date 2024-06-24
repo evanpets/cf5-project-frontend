@@ -61,29 +61,29 @@ export class EventCardComponent implements OnInit, OnChanges {
 
   onToggleLike(eventClick: MouseEvent): void {
     eventClick.stopPropagation();
-
-    if (this.event.isLiked) {
-      this.eventService.unlikeEvent(this.event.eventId, this.currentUser.userId).subscribe({
-        next: (response) => {
-          this.event.isLiked = false;
-          this.toggleLike.emit(this.event);
-          console.log(response);
-        },
-        error: (error) => {
-          console.error('Error unliking the event:', error);
-        }
-      });
-    } else {
-      this.eventService.likeEvent(this.event.eventId, this.currentUser.userId).subscribe({
-        next: (response) => {
-          this.event.isLiked = true;
-          this.toggleLike.emit(this.event);
-          console.log(response);
-        },
-        error: (error) => {
-          console.error('Error liking the event:', error);
-        }
-      });
-    }
+    this.toggleLike.emit(this.event)
+    // if (this.event.isLiked) {
+    //   this.eventService.unlikeEvent(this.event.eventId, this.currentUser.userId).subscribe({
+    //     next: (response) => {
+    //       this.event.isLiked = false;
+    //       this.toggleLike.emit(this.event);
+    //       console.log(response);
+    //     },
+    //     error: (error) => {
+    //       console.error('Error unliking the event:', error);
+    //     }
+    //   });
+    // } else {
+    //   this.eventService.likeEvent(this.event.eventId, this.currentUser.userId).subscribe({
+    //     next: (response) => {
+    //       this.event.isLiked = true;
+    //       this.toggleLike.emit(this.event);
+    //       console.log(response);
+    //     },
+    //     error: (error) => {
+    //       console.error('Error liking the event:', error);
+    //     }
+    //   });
+    // }
   }
 }

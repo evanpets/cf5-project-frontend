@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LoggedInUser, User } from 'src/app/shared/interfaces/user';
 import { EventService } from 'src/app/shared/services/event.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { Venue } from 'src/app/shared/interfaces/event';
 import { CommonModule } from '@angular/common';
+import { DialogRef, DIALOG_DATA, Dialog } from '@angular/cdk/dialog';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class AdminVenueUpdateDeleteComponent implements OnInit{
   venues: any[] = [];
   currentIndex: number = -1;
 
-  constructor(private eventService: EventService, private userService: UserService, private fb: FormBuilder) {
+  constructor(private eventService: EventService, private userService: UserService, private fb: FormBuilder, public dialog: Dialog) {
     this.editForm = this.fb.group({
       venueId: [''],
       name: [''],
@@ -137,13 +138,9 @@ export class AdminVenueUpdateDeleteComponent implements OnInit{
     }
   }
 
-  deleteVenue(venueId: number): void {
-    if (!venueId) {
-      console.error('Venue is undefined or null');
-      return;
-    } 
-    this.eventService.deleteVenue(venueId).subscribe(response => {
-      this.loadVenues();
+  openConfirmDeleteDialog(venue: Venue) {
+    this.dialog.open(VenueConfirmDeleteDialogComponent, {
+      data: venue
     });
   }
 
@@ -159,5 +156,62 @@ export class AdminVenueUpdateDeleteComponent implements OnInit{
       this.currentIndex++;
       this.editVenue(this.venues[this.currentIndex]);
     }
+  }
+}
+@Component({
+  selector: 'app-confirm-delete',
+  template: `
+    <div>
+      <h4>Are you sure you want to delete this venue?</h4>
+      <p class="text-center">{{ venue.name }}</p>
+      <div class="d-flex justify-content-around">
+        <button class="btn btn-primary" mat-button (click)="confirmDelete(venue.venueId)">Confirm</button>
+        <button class="btn btn-danger" mat-button (click)="closeDialog()">Cancel</button>
+      </div>
+
+    </div>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        background: #fff;
+        border-radius: 8px;
+        padding: 16px;
+        max-width: 500px;
+      }
+    `,
+  ]
+})
+export class VenueConfirmDeleteDialogComponent {
+
+  constructor(private dialogRef: DialogRef, private router: Router, private eventService: EventService, @Inject(DIALOG_DATA) public venue: any) {}
+
+  confirmDelete(venueId: number) {
+    if (!venueId) {
+      console.error('Venue is undefined or null');
+      return;
+    } 
+    this.eventService.deleteVenue(venueId).subscribe({
+      next: (response) => {
+        console.log("Delete complete", response);
+        this.reloadCurrentRoute()
+      },
+      error: (err) => {
+        console.log("Error during deletion ", err);
+      }
+    });
+        this.dialogRef.close();
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
+  reloadCurrentRoute() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
   }
 }

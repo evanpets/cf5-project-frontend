@@ -1,5 +1,6 @@
+import { Dialog, DialogRef, DIALOG_DATA, DialogModule } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -9,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { BackendEvent, Event } from 'src/app/shared/interfaces/event';
 import { User, LoggedInUser } from 'src/app/shared/interfaces/user';
 import { EventService } from 'src/app/shared/services/event.service';
@@ -18,7 +19,7 @@ import { UserService } from 'src/app/shared/services/user.service';
 @Component({
   selector: 'app-admin-event-update-delete',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCheckboxModule, MatSelectModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCheckboxModule, MatSelectModule, RouterLink, DialogModule],
   templateUrl: './admin-event-update-delete.component.html',
   styleUrl: './admin-event-update-delete.component.css'
 })
@@ -34,15 +35,15 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
 
   @ViewChild('fileInput') fileInput!: ElementRef;
 
-  constructor(private eventService: EventService, private userService: UserService, private fb: FormBuilder) {
+  constructor(private eventService: EventService, private userService: UserService, private fb: FormBuilder, public dialog: Dialog) {
     this.editForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(50)]],
       description: ['', [Validators.maxLength(250)]],
-      venueName: ['', Validators.required],
-      venueStreet: [{ value: '', disabled: true }, Validators.required],
-      venueStreetNumber: [{ value: '', disabled: true }, Validators.required],
-      venueZipCode: [{ value: '', disabled: true }, Validators.required],
-      venueCity: [{ value: '', disabled: true }, Validators.required],
+      name: ['', Validators.required],
+      street: [{ value: '', disabled: true }, Validators.required],
+      streetNumber: [{ value: '', disabled: true }, Validators.required],
+      zipCode: [{ value: '', disabled: true }, Validators.required],
+      city: [{ value: '', disabled: true }, Validators.required],
       price: [null, [Validators.required]],
       date: [null, [Validators.required]],
       performers: this.fb.array([]),
@@ -112,7 +113,7 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
   }
   
   editEvent(event: Event): void {
-    this.eventService.getSingleEvent(event.eventId).subscribe({
+    this.eventService.getSingleEventById(event.eventId).subscribe({
       next: (response) => {
         this.currentEvent = response
         
@@ -123,16 +124,18 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
           }));
 
         });
-        
+
+        const selectedVenue = this.venues.find(venue => venue.venueId === event.venue.venueId);
+
         this.editForm.patchValue({
           title: event.title,
           description: event.description,
           date: event.date,
-          venueName: event.venue.name,
-          venueStreet: event.venue.venueAddress.street,
-          venueStreetNumber: event.venue.venueAddress.streetNumber,
-          venueZipCode: event.venue.venueAddress.zipCode,
-          venueCity: event.venue.venueAddress.city,
+          name: selectedVenue ? selectedVenue.name : '',
+          street: selectedVenue ? selectedVenue.venueAddress.street : '',
+          streetNumber: selectedVenue ? selectedVenue.venueAddress.streetNumber : '',
+          zipCode: selectedVenue ? selectedVenue.venueAddress.zipCode : '',
+          city: selectedVenue ? selectedVenue.venueAddress.city : '',
           price: event.price,
           category: event.category,
           eventImage: event.imageUrl
@@ -149,10 +152,10 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
     if (selectedVenue) {
       console.log('Selected Venue:', selectedVenue);
       this.editForm.patchValue({
-        venueStreet: selectedVenue.venueAddress.street,
-        venueStreetNumber: selectedVenue.venueAddress.streetNumber,
-        venueZipCode: selectedVenue.venueAddress.zipCode,
-        venueCity: selectedVenue.venueAddress.city
+        street: selectedVenue.venueAddress.street,
+        streetNumber: selectedVenue.venueAddress.streetNumber,
+        zipCode: selectedVenue.venueAddress.zipCode,
+        city: selectedVenue.venueAddress.city
       });
     } else {
       console.error('Venue not found:', venueName);
@@ -166,21 +169,42 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
     if (this.editForm.valid && this.currentEvent) {
       console.log("save beginning",this.currentEvent);
       
-      const eventToUpdate: any = {
-        eventId: this.currentEvent.eventId,
-        title: this.editForm.value.title,
-        description: this.editForm.value.description,
-        venueName: this.editForm.value.venueName,
-        venueStreet: this.editForm.value.venueStreet,
-        venueStreetNumber: this.editForm.value.venueStreetNumber,
-        venueZipCode: this.editForm.value.venueZipCode,
-        venueCity: this.editForm.value.venueCity,
-        price: this.editForm.value.price,
-        date: this.editForm.value.date instanceof Date ? this.editForm.value.date.toISOString().split('T')[0] : this.editForm.value.date,
-        category: this.editForm.value.category,
-        performers: this.performers.controls.map(c => ({ name: c.value.name })),
-       };
+      const selectedVenue = this.venues.find(venue => venue.name === this.editForm.value.name);
 
+      if (!selectedVenue) {
+        console.error('Selected venue is invalid');
+        return;
+      }
+
+        const eventToUpdate: BackendEvent = {
+          eventId: this.currentEvent.eventId,
+          title: this.editForm.value.title,
+          description: this.editForm.value.description,
+          venueId: selectedVenue.venueId,
+          venueName: selectedVenue.name,
+          venueAddressId: selectedVenue.venueAddress.venueAddressId,
+          venueStreet: selectedVenue.venueAddress.street,
+          venueStreetNumber: selectedVenue.venueAddress.streetNumber,
+          venueZipCode: selectedVenue.venueAddress.zipCode,
+          venueCity: selectedVenue.venueAddress.city,
+          price: this.editForm.value.price,
+          date: this.editForm.value.date instanceof Date ? this.editForm.value.date.toISOString().split('T')[0] : this.editForm.value.date,
+          category: this.editForm.value.category,
+          performers: this.performers.controls.map(c => ({ name: c.value.name })),
+          imageUrl: this.editForm.value.eventImage,
+          isLiked: this.currentEvent.isLiked,  // Assuming isLiked remains unchanged
+          userId: this.currentEvent.userId   // Assuming userId remains unchanged
+        };
+
+        console.log(
+          "Venue ID:" + eventToUpdate.venueId +
+          "\nVenue name:" + eventToUpdate.venueName +
+          "\nVenue addr ID:" + eventToUpdate.venueAddressId +
+          "\nVenue addr str:" + eventToUpdate.venueStreet +
+          "\nVenue addr strno:" + eventToUpdate.venueStreetNumber +
+          "\nVenue addr zip:" + eventToUpdate.venueZipCode +
+          "\nVenue addr city:" + eventToUpdate.venueCity 
+         );
       const updateFormData = new FormData();
       updateFormData.append('eventToUpdate', JSON.stringify(eventToUpdate))
 
@@ -227,13 +251,9 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
     }
   }
 
-  deleteEvent(eventId: number): void {
-    if (!eventId) {
-      console.error('Event is undefined or null');
-      return;
-    } 
-    this.eventService.deleteEvent(eventId).subscribe(response => {
-      this.loadAllEvents();
+  openConfirmDeleteDialog(event: Event) {
+    this.dialog.open(EventConfirmDeleteDialogComponent, {
+      data: event
     });
   }
 
@@ -267,6 +287,64 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
       this.currentIndex++;
       this.editEvent(this.events[this.currentIndex]);
     }
+  }
+}
+
+@Component({
+  selector: 'app-confirm-delete',
+  template: `
+    <div>
+      <h4>Are you sure you want to delete this event?</h4>
+      <p class="text-center">{{ event.title }}</p>
+      <div class="d-flex justify-content-around">
+        <button class="btn btn-primary" mat-button (click)="confirmDelete(event.eventId)">Confirm</button>
+        <button class="btn btn-danger" mat-button (click)="closeDialog()">Cancel</button>
+      </div>
+
+    </div>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        background: #fff;
+        border-radius: 8px;
+        padding: 16px;
+        max-width: 500px;
+      }
+    `,
+  ]
+})
+export class EventConfirmDeleteDialogComponent {
+
+  constructor(private dialogRef: DialogRef, private router: Router, private eventService: EventService, @Inject(DIALOG_DATA) public event: any) {}
+
+  confirmDelete(eventId: number) {
+    if (!eventId) {
+      console.error('Event is undefined or null');
+      return;
+    } 
+    this.eventService.deleteEvent(eventId).subscribe({
+      next: (response) => {
+        console.log("Delete complete", response);
+        this.reloadCurrentRoute()
+      },
+      error: (err) => {
+        console.log("Error during deletion ", err);
+      }
+    });
+        this.dialogRef.close();
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
+  reloadCurrentRoute() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
   }
 }
 

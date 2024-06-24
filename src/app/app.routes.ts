@@ -33,18 +33,19 @@ import { AdminVenueUpdateDeleteComponent } from "./components/admin-menu/venues-
 import { AdminGetPerformerComponent } from "./components/admin-menu/performers-crud/admin-get-performer/admin-get-performer.component";
 import { AdminInsertPerformerComponent } from "./components/admin-menu/performers-crud/admin-insert-performer/admin-insert-performer.component";
 import { AdminPerformerUpdateDeleteComponent } from "./components/admin-menu/performers-crud/admin-performer-update-delete/admin-performer-update-delete.component";
+import { adminGuard } from "./shared/guards/admin.guard";
 
 
 export const routes: Routes = [
     { 
-        path: "api/events/create",
+        path: "api/events/new-event",
         component: EventSubmissionFormComponent,
         canActivate: [authGuard]
     },
     {path: "api",
         children: [
             {
-                path: "user",
+                path: "users",
         children: [
             {
                 path: "login",
@@ -118,59 +119,72 @@ export const routes: Routes = [
     },
     {
         path: "api/admin",
-        component: AdminMenuComponent
+        component: AdminMenuComponent,
+        canActivate: [adminGuard]
     },
 
     {
-        path: "api/admin/users", component: UsersCrudComponent
+        path: "api/admin/users", component: UsersCrudComponent,
+        canActivate: [adminGuard]
     },
     {
-        path: "api/admin/users/insert", component: AdminInsertUserComponent
+        path: "api/admin/users/insert", component: AdminInsertUserComponent,
+        canActivate: [adminGuard]
     },
     {
-        path: "api/admin/users/update", component: AdminUserUpdateDeleteComponent
+        path: "api/admin/users/update", component: AdminUserUpdateDeleteComponent,
+        canActivate: [adminGuard]
     },
     {
-        path: "api/admin/users/get", component: AdminGetUserComponent
+        path: "api/admin/users/get", component: AdminGetUserComponent,
+        canActivate: [adminGuard]
     },
 
     {
-        path: "api/admin/events", component: EventsCrudComponent
+        path: "api/admin/events", component: EventsCrudComponent,
+        canActivate: [adminGuard]
     },
     {
-        path: "api/admin/events/insert", component: AdminInsertEventComponent
+        path: "api/admin/events/insert", component: AdminInsertEventComponent,
+        canActivate: [adminGuard]
     },
     {
-        path: "api/admin/events/update", component: AdminEventUpdateDeleteComponent
+        path: "api/admin/events/update", component: AdminEventUpdateDeleteComponent,
+        canActivate: [adminGuard]
     },
     {
-        path: "api/admin/events/get", component: AdminGetEventComponent
+        path: "api/admin/events/get", component: AdminGetEventComponent,
+        canActivate: [adminGuard]
     },
     {
         path: "api/admin/venues",
-        component: VenuesCrudComponent
+        component: VenuesCrudComponent,
+        canActivate: [adminGuard]
     },
     {
-        path: "api/admin/venues/insert", component: AdminInsertVenueComponent
+        path: "api/admin/venues/insert", component: AdminInsertVenueComponent,
+        canActivate: [adminGuard]
     },
     {
-        path: "api/admin/venues/update", component: AdminVenueUpdateDeleteComponent
+        path: "api/admin/venues/update", component: AdminVenueUpdateDeleteComponent,
+        canActivate: [adminGuard]
     },
     {
-        path: "api/admin/venues/get", component: AdminGetVenueComponent
+        path: "api/admin/venues/get", component: AdminGetVenueComponent,
+        canActivate: [adminGuard]
     },
-    {
-        path: "api/admin/performers",
-        component: PerformersCrudComponent
-    },
-    {
-        path: "api/admin/performers/insert", component: AdminInsertPerformerComponent
-    },
-    {
-        path: "api/admin/performers/update", component: AdminPerformerUpdateDeleteComponent
-    },
-    {
-        path: "api/admin/performers/get", component: AdminGetPerformerComponent
-    },
+    // {
+    //     path: "api/admin/performers",
+    //     component: PerformersCrudComponent
+    // },
+    // {
+    //     path: "api/admin/performers/insert", component: AdminInsertPerformerComponent
+    // },
+    // {
+    //     path: "api/admin/performers/update", component: AdminPerformerUpdateDeleteComponent
+    // },
+    // {
+    //     path: "api/admin/performers/get", component: AdminGetPerformerComponent
+    // },
     { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];

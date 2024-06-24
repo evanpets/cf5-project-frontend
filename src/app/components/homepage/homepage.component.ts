@@ -28,6 +28,7 @@ export class HomepageComponent implements OnInit{
       next: (response) => {
         console.log('Current user ID: ', response.userId)
         console.log('Current user:', response);
+
         // this.currentUser.emit(response);
         this.currentUser = response
       },

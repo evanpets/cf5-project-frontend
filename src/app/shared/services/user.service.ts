@@ -51,12 +51,16 @@ export class UserService {
     })
   }
 
-  registerUser(user: User) {
-    return this.http.post<{ msg: string }>(`${API_URL}/register`, user);
+  registerUser(user: User): Observable<{ msg: string, user: User }> {
+    return this.http.post<{ msg: string, user: User }>(`${API_URL}/registration`, user);
+  }  
+
+  getUserById(userId: number): Observable<User> {
+    return this.http.get<User>(`${API_URL}/${userId}`);
   }
 
   getUserByUsername(username: string): Observable<User> {
-    return this.http.get<User>(`${API_URL}/username/${username}`);
+    return this.http.get<User>(`${API_URL}/by-username?username=${username}`);
   }
 
   getAllUsers(): Observable<User[]> {
@@ -65,19 +69,19 @@ export class UserService {
 
   updateUser(user: User): Observable<{ msg: string }> {
     console.log("Service: ", user.userId, user.username)
-    return this.http.patch<{ msg: string, user: User }>(`${API_URL}/update/${user.userId}`, user);
+    return this.http.patch<{ msg: string, user: User }>(`${API_URL}/${user.userId}`, user);
   }
 
-  deleteUser(userId: number): Observable<{ msg: string }> {
-    return this.http.delete<{ msg: string }>(`${API_URL}/delete/${userId}`);
+  deleteUser(userId: number) {
+    return this.http.delete(`${API_URL}/${userId}`);
   }
 
    check_duplicate_email(email: string) : Observable<{ msg: string }>{
-    return this.http.get<{msg: string}> (`${API_URL}/check-duplicate-email`, {params: {email} })
+    return this.http.get<{msg: string}> (`${API_URL}/duplicate-email`, {params: {email} })
    }
 
    check_duplicate_username(username: string) : Observable<{ msg: string }> {
-    return this.http.get<{msg: string}> (`${API_URL}/check-duplicate-username`, {params: {username}})
+    return this.http.get<{msg: string}> (`${API_URL}/duplicate-username`, {params: {username}})
    }
 
    loginUser(credentials: Credentials) {
@@ -86,8 +90,8 @@ export class UserService {
 
    logoutUser() {
     this.user.set(null)
-    localStorage.removeItem('access-token')
-    this.router.navigate([`api/user/login`])
+    localStorage.removeItem('access_token')
+    this.router.navigate([`api/users/login`])
    }
 
 }

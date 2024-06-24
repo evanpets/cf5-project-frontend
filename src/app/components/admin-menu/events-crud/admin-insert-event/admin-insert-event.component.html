@@ -1,8 +1,8 @@
 <button class="btn btn-secondary mt-4 col-1 ms-3" [routerLink]="['/api/admin/events']">&lt; Back</button>
-<div class="container col-8 border border-2 rounded-5 my-4 submission-form">
-    <h3 class="text-center my-4">Event submission form</h3>
+<div class="container col-8 my-4 submission-form">
+    <h3 class="text-center my-4">Event insert form</h3>
     <div class="container-fluid w-75 mt-3 d-flex flex-column">  
-      <form [formGroup]="form" class="d-flex flex-column" action="post" [@slideInOut]="'in'">
+      <form [formGroup]="form" class="d-flex flex-column" action="post">
         <mat-form-field>
           <mat-label>Event title</mat-label>
           <input matInput type="text" formControlName="title" />
@@ -83,7 +83,7 @@
         </div>
   
         <div formArrayName="performers" *ngFor="let performer of performers.controls; let i = index" class="d-flex align-items-center">
-          <mat-form-field [formGroupName]="i" class="flex-fill" [@slideInOut]="'in'">
+          <mat-form-field [formGroupName]="i" class="flex-fill">
             <mat-label>Performer</mat-label>
             <input matInput type="text" formControlName="name"/>
             <mat-error *ngIf="performer.get('name').invalid && performer.get('name').touched">
@@ -141,7 +141,9 @@
   
         <div class="d-md-flex justify-content-lg-evenly mt-2 mb-4">
           <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
-          <button mat-raised-button color="warn" type="button" routerLink="">Cancel</button>
+        </div>
+        <div *ngIf="submissionStatus.success" class="alert alert-success text-center">
+          <span>Event insertion successful</span>
         </div>
       </form>
     </div>

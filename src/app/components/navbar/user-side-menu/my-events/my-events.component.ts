@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { Event, BackendEvent } from 'src/app/shared/interfaces/event';
 import { EventService } from 'src/app/shared/services/event.service';
@@ -15,12 +15,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { LoggedInUser, User } from 'src/app/shared/interfaces/user';
-import { initial } from 'lodash-es';
+import { Dialog, DialogModule, DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-events',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, EventsDatatableComponent, MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCheckboxModule, MatSelectModule],
+  imports: [CommonModule, ReactiveFormsModule, EventsDatatableComponent, MatFormFieldModule, MatInputModule, MatButtonModule, MatOptionModule, MatIconModule, MatNativeDateModule, MatDatepickerModule, MatCheckboxModule, MatSelectModule, DialogModule],
   templateUrl: './my-events.component.html',
   styleUrl: './my-events.component.css',
   animations: [
@@ -52,7 +53,7 @@ export class MyEventsComponent implements OnInit{
   venues: any[] = [];
   @ViewChild('fileInput') fileInput!: ElementRef;
 
-  constructor(private eventService: EventService, private userService: UserService, private fb: FormBuilder) {
+  constructor(private eventService: EventService, private userService: UserService, private fb: FormBuilder, public dialog: Dialog) {
     this.editForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(50)]],
       description: ['', [Validators.maxLength(250)]],
@@ -103,44 +104,50 @@ export class MyEventsComponent implements OnInit{
   }
 
   loadUserEvents(): void {
-    this.eventService.getUserEvents(this.currentUser.userId).subscribe((response: BackendEvent[]) => {
-      console.log("Response: ",response);
-      
-      this.myEvents = response.map(event => ({
-        eventId: event.eventId,
-        title: event.title,
-        description: event.description,
-        date: event.date,
-        category: event.category,
-        userId: event.userId,
-        venue: {
-          venueId: event.venueId,
-          name: event.venueName,
-          venueAddress: {
-            venueAddressId: event.venueAddressId,
-            street: event.venueStreet, 
-            streetNumber: event.venueStreetNumber,
-            zipCode: event.venueZipCode,
-            city: event.venueCity
-          }
-        },
-        performers: event.performers,
-        price: event.price,
-        imageUrl: event.imageUrl,
-        isLiked: event.isLiked
-      }));
-      console.log("MyEvents list",this.myEvents);
-      for (let event of this.myEvents) {
-        console.log("Event: ",JSON.stringify(event));
+    this.eventService.getUserEvents(this.currentUser.userId).subscribe({
+      next: (response: BackendEvent[]) => {
+        console.log("Response: ",response);
+        this.myEvents = response.map(event => ({
+          eventId: event.eventId,
+          title: event.title,
+          description: event.description,
+          date: event.date,
+          category: event.category,
+          userId: event.userId,
+          venue: {
+            venueId: event.venueId,
+            name: event.venueName,
+            venueAddress: {
+              venueAddressId: event.venueAddressId,
+              street: event.venueStreet, 
+              streetNumber: event.venueStreetNumber,
+              zipCode: event.venueZipCode,
+              city: event.venueCity
+            }
+          },
+          performers: event.performers,
+          price: event.price,
+          imageUrl: event.imageUrl,
+          isLiked: event.isLiked
+        }));
+        console.log("MyEvents list",this.myEvents);
+        for (let event of this.myEvents) {
+          console.log("Event: ",JSON.stringify(event));
+        }
+      },
+      error: (err) => {
+        console.log("Couldn't load any events");
       }
+
     });
   }
   
   editEvent(event: Event): void {
-    this.eventService.getSingleEvent(event.eventId).subscribe({
+    this.eventService.getSingleEventById(event.eventId).subscribe({
       next: (response) => {
+        console.log("Response: " + JSON.stringify(response));
+        
         this.currentEvent = response
-        // console.log("current event", this.currentEvent + ", category " + this.currentEvent.category);
         this.isEditing = true;
     
         this.performers.clear();
@@ -148,18 +155,31 @@ export class MyEventsComponent implements OnInit{
           this.performers.push(this.fb.group({
             name: [performer.name, Validators.required]
           }));
-
         });
         
+        const selectedVenue = this.venues.find(venue => venue.name === event.venue.name);
+        // const selectedVenue = response.venue;
+
+        //at this point the ids are undefined
+        console.log(
+          "Venue ID:" + selectedVenue.venueId +
+          "\nVenue name:" + selectedVenue.name +
+          "\nVenue addr ID:" + selectedVenue.venueAddressId +
+          "\nVenue addr str:" + selectedVenue.venueAddress.street +
+          "\nVenue addr strno:" + selectedVenue.venueAddress.streetNumber +
+          "\nVenue addr zip:" + selectedVenue.venueAddress.zipCode +
+          "\nVenue addr city:" + selectedVenue.venueAddress.city
+         );
+
         this.editForm.patchValue({
           title: event.title,
           description: event.description,
           date: event.date,
-          venueName: event.venue.name,
-          venueStreet: event.venue.venueAddress.street,
-          venueStreetNumber: event.venue.venueAddress.streetNumber,
-          venueZipCode: event.venue.venueAddress.zipCode,
-          venueCity: event.venue.venueAddress.city,
+          venueName: selectedVenue ? selectedVenue.name : '',
+          venueStreet: selectedVenue ? selectedVenue.venueAddress.street : '',
+          venueStreetNumber: selectedVenue ? selectedVenue.venueAddress.streetNumber : '',
+          venueZipCode: selectedVenue ? selectedVenue.venueAddress.zipCode : '',
+          venueCity: selectedVenue ? selectedVenue.venueAddress.city : '',
           price: event.price,
           category: event.category,
           eventImage: event.imageUrl
@@ -181,6 +201,15 @@ export class MyEventsComponent implements OnInit{
         venueZipCode: selectedVenue.venueAddress.zipCode,
         venueCity: selectedVenue.venueAddress.city
       });
+      console.log(
+        "Venue ID:" + selectedVenue.venueId +
+        "\nVenue name:" + selectedVenue.name +
+        "\nVenue addr ID:" + selectedVenue.venueAddressId +
+        "\nVenue addr str:" + selectedVenue.venueAddress.street +
+        "\nVenue addr strno:" + selectedVenue.venueAddress.streetNumber +
+        "\nVenue addr zip:" + selectedVenue.venueAddress.zipCode +
+        "\nVenue addr city:" + selectedVenue.venueAddress.city
+       );
     } else {
       console.error('Venue not found:', venueName);
     }
@@ -191,20 +220,37 @@ export class MyEventsComponent implements OnInit{
     if (this.editForm.valid && this.currentEvent) {
       console.log("save beginning",this.currentEvent);
       
-      const eventToUpdate: any = {
+      const selectedVenue = this.venues.find(venue => venue.name === this.editForm.value.venueName);
+
+      const eventToUpdate: BackendEvent = {
         eventId: this.currentEvent.eventId,
         title: this.editForm.value.title,
         description: this.editForm.value.description,
-        venueName: this.editForm.value.venueName,
-        venueStreet: this.editForm.value.venueStreet,
-        venueStreetNumber: this.editForm.value.venueStreetNumber,
-        venueZipCode: this.editForm.value.venueZipCode,
-        venueCity: this.editForm.value.venueCity,
+        venueId: selectedVenue.venueId,
+        venueName: selectedVenue.name,
+        venueAddressId: selectedVenue.venueAddress.venueAddressId,
+        venueStreet: selectedVenue.venueAddress.street,
+        venueStreetNumber: selectedVenue.venueAddress.streetNumber,
+        venueZipCode: selectedVenue.venueAddress.zipCode,
+        venueCity: selectedVenue.venueAddress.city,
         price: this.editForm.value.price,
         date: this.editForm.value.date instanceof Date ? this.editForm.value.date.toISOString().split('T')[0] : this.editForm.value.date,
         category: this.editForm.value.category,
         performers: this.performers.controls.map(c => ({ name: c.value.name })),
+        imageUrl: this.editForm.value.eventImage,
+        isLiked: this.currentEvent.isLiked,  // Assuming isLiked remains unchanged
+        userId: this.currentEvent.userId   // Assuming userId remains unchanged
        };
+
+       console.log(
+        "Venue ID:" + eventToUpdate.venueId +
+        "\nVenue name:" + eventToUpdate.venueName +
+        "\nVenue addr ID:" + eventToUpdate.venueAddressId +
+        "\nVenue addr str:" + eventToUpdate.venueStreet +
+        "\nVenue addr strno:" + eventToUpdate.venueStreetNumber +
+        "\nVenue addr zip:" + eventToUpdate.venueZipCode +
+        "\nVenue addr city:" + eventToUpdate.venueCity 
+       );
 
       const updateFormData = new FormData();
       updateFormData.append('eventToUpdate', JSON.stringify(eventToUpdate))
@@ -250,13 +296,9 @@ export class MyEventsComponent implements OnInit{
     }
   }
 
-  deleteEvent(eventId: number): void {
-    if (!eventId) {
-      console.error('Event is undefined or null');
-      return;
-    } 
-    this.eventService.deleteEvent(eventId).subscribe(response => {
-      this.loadUserEvents();
+  openConfirmDeleteDialog(event: Event) {
+    this.dialog.open(UserEventConfirmDeleteDialogComponent, {
+      data: event
     });
   }
 
@@ -275,5 +317,66 @@ export class MyEventsComponent implements OnInit{
 
   removePerformer(index: number) {
     this.performers.removeAt(index);
+  }
+}
+
+@Component({
+  selector: 'app-confirm-delete',
+  template: `
+    <div>
+      <h4>Are you sure you want to delete this event?</h4>
+      <p class="text-center">{{ event.title }}</p>
+      <div class="d-flex justify-content-around">
+        <button class="btn btn-primary" mat-button (click)="confirmDelete(event.eventId)">Confirm</button>
+        <button class="btn btn-danger" mat-button (click)="closeDialog()">Cancel</button>
+      </div>
+
+    </div>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        background: #fff;
+        border-radius: 8px;
+        padding: 16px;
+        max-width: 500px;
+      }
+    `,
+  ]
+})
+export class UserEventConfirmDeleteDialogComponent {
+
+  constructor(private dialogRef: DialogRef, private router: Router, private eventService: EventService, @Inject(DIALOG_DATA) public event: any) {}
+
+  confirmDelete(eventId: number) {
+    if (!eventId) {
+      console.error('Event is undefined or null');
+      return;
+    } 
+    this.eventService.deleteEvent(eventId).subscribe({
+      next: (response) => {
+        console.log("Delete complete", response);
+        this.reloadCurrentRoute()
+      },
+      error: (err) => {
+        console.log("Error during deletion ", err);
+        
+      }
+
+
+    });
+        this.dialogRef.close();
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
+  reloadCurrentRoute() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
   }
 }

@@ -121,7 +121,7 @@
   
         <mat-form-field>
           <mat-label>Upload File</mat-label>
-          <input matInput type="text" placeholder="Choose a file" [value]="selectedFile ? selectedFile.name : '' " readonly>
+          <input matInput type="text" formControlName="eventImage" placeholder="Choose a file" [value]="selectedFile ? selectedFile.name : '' " readonly>
           <button mat-icon-button matSuffix (click)="openFileInput($event)">
             <mat-icon>attach_file</mat-icon>
           </button>
@@ -139,7 +139,7 @@
   <ng-template #actionsTemplate let-event>
     <div class="d-flex justify-content-center">
       <button class="btn btn-primary me-2" (click)="editEvent(event)">Edit</button>
-      <button class="btn btn-danger" (click)="deleteEvent(event.eventId)">Delete</button>
+      <button class="btn btn-danger" (click)="openConfirmDeleteDialog(event)">Delete</button>
     </div>
   </ng-template>
 

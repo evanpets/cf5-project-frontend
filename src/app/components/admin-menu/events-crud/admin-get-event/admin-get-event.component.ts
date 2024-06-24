@@ -21,7 +21,7 @@ export class AdminGetEventComponent {
   currentIndex: number = -1;
 
 
-  constructor(private router: Router, private route: ActivatedRoute, private eventService: EventService) {}
+  constructor(private eventService: EventService) {}
 
   searchById(): void {
     if (this.idSearchQuery) {
@@ -36,20 +36,35 @@ export class AdminGetEventComponent {
   }
 
   getEventById(eventId: number): void {
-    this.eventService.getSingleEvent(eventId).subscribe((response: BackendEvent) => {
-      console.log("Response: " + JSON.stringify(response));
-      this.events = [this.mapEvent(response)];
-      this.currentIndex = 0;
-      this.hasResult = true;
+    this.eventService.getSingleEventById(eventId).subscribe({
+      next: (response: BackendEvent) => {
+        console.log("Response: " + JSON.stringify(response));
+        this.events = [this.mapEvent(response)];
+        this.currentIndex = 0;
+        this.hasResult = true;
+      }, 
+      error: (error) => { 
+        console.error("Error fetching event by ID:", error);
+        this.events = [];
+        this.hasResult = true;
+      }
     });
   }
 
   getEventsWithTitle(title: string): void {
-    this.eventService.getEventsWithTitle(title).subscribe((responses: BackendEvent[]) => {
-      console.log(responses);
-      this.events = responses.map(response => this.mapEvent(response));
-      this.currentIndex = 0;
-      this.hasResult = true;
+    this.eventService.getEventsWithTitle(title).subscribe({
+      next: (responses: BackendEvent[]) => {
+        console.log(responses);
+        this.events = responses.map(response => this.mapEvent(response));
+        this.currentIndex = 0;
+        this.hasResult = true;
+      },
+      error: (error) => {
+        console.error("Error fetching event by title:", error);
+        this.events = [];
+        this.hasResult = true;
+      }
+
     });
   }
 

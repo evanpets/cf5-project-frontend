@@ -30,7 +30,14 @@ export class EventService {
     console.log("service");
     console.log("Service data: " + formData);
     
-    return this.http.post<{ msg: string }>(`${API_URL}/create`, formData);
+    return this.http.post<{ msg: string }>(`${API_URL}/new`, formData);
+  }
+
+  insertVenue(venue: Venue): Observable<{ msg: string }> {
+    console.log("service");
+    console.log("Service data: " + venue);
+    
+    return this.http.post<{ msg: string }>(`${API_URL}/venues/new`, venue);
   }
 
   likeEvent(eventId: number, userId: number): Observable<{ msg: string }> {
@@ -47,12 +54,12 @@ export class EventService {
    * @param eventId The ID of the event to be fetched.
    * @returns An event.
    */
-  getSingleEvent(eventId: number): Observable<any> {
+  getSingleEventById(eventId: number): Observable<any> {
     return this.http.get<any>(`${API_URL}/id/${eventId}`)
   }
 
   getEventsWithTitle(title: string): Observable<BackendEvent[]> {
-    return this.http.get<BackendEvent[]>(`${API_URL}/title/${title}`)
+    return this.http.get<BackendEvent[]>(`${API_URL}/by-title/${title}`)
   }
    /**
     * Fetches a list of all the events.
@@ -98,18 +105,23 @@ export class EventService {
    * @param venueName The name of the venue.
    * @returns The venue's details.
    */
-  getVenueById(venueId: number): Observable<any> {
+  getVenueById(venueId: number): Observable<Venue> {
     console.log("service venue id " +venueId);
+    return this.http.get<Venue>(`${API_URL}/venues/${venueId}`)
+  }
+
+  getVenueByName(venueName: string): Observable<Venue> {
+    console.log("service venue name " + venueName);
     
-    return this.http.get<any>(`${API_URL}/venues/${venueId}`)
+    return this.http.get<Venue>(`${API_URL}/venues?name=${venueName}`)
   }
 
   /**
-   * Fetches a list of all the inserted venues.
-   * @returns A list of all the venues.
+   * Fetches a list of all the registered venues.
+   * @returns A list of all the already registered venues.
    */
-  getVenues(): Observable<any> {
-    return this.http.get(`${API_URL}/venues`);
+  getVenues(): Observable<Venue[]> {
+    return this.http.get<Venue[]>(`${API_URL}/venues/registered`);
   }
 
   /**
@@ -143,12 +155,12 @@ export class EventService {
   // updateEvent(eventId: number, event: BackendEvent): Observable<{ msg: string, event: BackendEvent }> {
   //   return this.http.patch<{ msg: string, event: BackendEvent }>(`${API_URL}/update/${eventId}`, event);
   // }
-  updateEvent(eventId: number, eventToUpdate: FormData): Observable<{ msg: string, event: BackendEvent }> {
-    return this.http.patch<{ msg: string, event: BackendEvent }>(`${API_URL}/update/${eventId}`, eventToUpdate);
+  updateEvent(eventId: number, eventToUpdate: FormData): Observable<{ msg: string, event: Event }> {
+    return this.http.patch<{ msg: string, event: Event }>(`${API_URL}/${eventId}`, eventToUpdate);
   }
 
   updateVenue(venueId: number, venueToUpdate: any): Observable<{ msg: string, venue: Venue }> {
-    return this.http.patch<{ msg: string, venue: Venue }>(`${API_URL}/venues/update/${venueId}`, venueToUpdate);
+    return this.http.patch<{ msg: string, venue: Venue }>(`${API_URL}/venues/${venueId}`, venueToUpdate);
   }
 
   //Delete functions
@@ -158,12 +170,10 @@ export class EventService {
    * @returns A message confirming the result of the deletion attempt.
    */
   deleteEvent(eventId: number): Observable<{ msg: string }> {
-    return this.http.delete<{ msg: string }>(`${API_URL}/delete/${eventId}`);
+    return this.http.delete<{ msg: string }>(`${API_URL}/${eventId}`);
   }
 
-  deleteVenue(venueId: number): Observable<{ msg: string }> {
-    return this.http.delete<{ msg: string }>(`${API_URL}/delete/${venueId}`);
+  deleteVenue(venueId: number) {
+    return this.http.delete(`${API_URL}/venues/${venueId}`);
   }
-
-
 }

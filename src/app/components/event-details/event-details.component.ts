@@ -43,7 +43,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   getEventDetails(eventId: number): void {
-    this.eventService.getSingleEvent(eventId).subscribe((response: BackendEvent) => {
+    this.eventService.getSingleEventById(eventId).subscribe((response: BackendEvent) => {
       console.log(response);
       
       this.event = {

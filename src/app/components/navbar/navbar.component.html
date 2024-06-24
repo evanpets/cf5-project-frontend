@@ -20,7 +20,7 @@
           <a class="nav-link" routerLink="home">Theater</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="api/events/create">Submit an event</a>
+          <a class="nav-link" routerLink="api/events/new-event">Submit an event</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -35,10 +35,11 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="about-us">About us</a>
         </li>
-        <!-- *ngIf="user()?.role === 'Admin'" -->
-        <li  class="nav-item">
+         <!-- @if (activeUser.role === 'Admin') { -->
+        <li class="nav-item">
           <a class="nav-link" routerLink="api/admin">Admin menu</a>
         </li>
+      <!-- } -->
       </ul>
 
       <ul class="navbar-nav">
@@ -59,7 +60,7 @@
             </div>
           } @else {
             <span class="me-3 d-flex gap-2 align-items-center"> Login
-            <mat-icon role="button" class="icon-link-hover" routerLink="api/user/login">login</mat-icon>
+            <mat-icon role="button" class="icon-link-hover" routerLink="api/users/login">login</mat-icon>
             </span>
           }
         </li>

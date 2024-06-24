@@ -81,4 +81,27 @@ export class EventsListComponent {
     const nextEvents = this.events.slice(this.visibleEvents.length, this.visibleEvents.length + this.loadCount);
     this.visibleEvents = [...this.visibleEvents, ...nextEvents];
   }
+  onToggleLike(event: Event): void {
+    if (event.isLiked) {
+      this.eventService.unlikeEvent(event.eventId, this.currentUser.userId).subscribe({
+        next: (response) => {
+          event.isLiked = false;
+          console.log(response);
+        },
+        error: (error) => {
+          console.error('Error unliking the event:', error);
+        }
+      });
+    } else {
+      this.eventService.likeEvent(event.eventId, this.currentUser.userId).subscribe({
+        next: (response) => {
+          event.isLiked = true;
+          console.log(response);
+        },
+        error: (error) => {
+          console.error('Error liking the event:', error);
+        }
+      });
+    }
+  }
 }

@@ -1,1 +1,48 @@
-<p>admin-get-venue works!</p>
+<button class="btn btn-secondary mt-4 col-1 ms-3" [routerLink]="['/api/admin/venues']">&lt; Back</button>
+<div class="d-flex flex-column justify-content-center container">
+    <h3 class="text-center mb-3">Find a venue </h3>
+        <div class="d-flex flex-row justify-content-center">
+            <form role="search" (ngSubmit)="searchByVenueName()">
+            <div class="d-flex flex-column align-items-center">
+                <mat-form-field>
+                    <input matInput placeholder="Search by venue name" aria-label="Search" name="searchQuery" [(ngModel)]="searchQuery">
+                </mat-form-field>
+                <div>
+                    <button type="button" class="btn btn-primary" (click)="searchByVenueName()">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div *ngIf="hasResult && venue === null" class="container event-details d-flex flex-column justify-content-center">
+  <h5 class="text-center mt-4 text-danger">No venue with the given name found.</h5>
+</div>
+
+<div *ngIf="hasResult && venue !== null" class="container event-details d-flex flex-column justify-content-center">
+    <table class="table table-striped mt-3">
+      <tbody>
+        <tr>
+            <th>Venue Name:</th>
+            <td>{{ venue.name }}</td>
+        </tr>
+        <tr>
+          <th>Street:</th>
+          <td>{{ venue.venueAddress.street }}</td>
+        </tr>
+
+        <tr>
+          <th>Street number:</th>
+          <td>{{ venue.venueAddress.streetNumber }}</td>
+        </tr>
+        <tr>
+          <th>ZIP Code:</th>
+          <td>{{ venue.venueAddress.zipCode }}</td>
+        </tr>
+        <tr>
+          <th>City:</th>
+          <td>{{ venue.venueAddress.city }}</td>
+        </tr>
+      </tbody>
+    </table>
+</div>

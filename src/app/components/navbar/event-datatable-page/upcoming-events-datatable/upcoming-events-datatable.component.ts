@@ -9,6 +9,7 @@ import { EventsDatatableComponent } from '../events-datatable/events-datatable.c
 import { Event } from 'src/app/shared/interfaces/event';
 import { EventTableComponent } from '../event-table/event-table.component';
 import { EventService } from 'src/app/shared/services/event.service';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-upcoming-events-datatable',
@@ -37,36 +38,26 @@ export class UpcomingEventsDatatableComponent {
   }
   
   onEventClicked(event: Event) {
-    this.dialog.open(EventDialogComponent, {
+    this.dialog.open(UpcomingEventDialogComponent, {
       data: event
     })
-  }
-
-  eventTemplate(event: Event) {
-    return `
-    Event Details:
-  
-    Title: ${event.title}
-    Date: ${event.date}
-    Venue: ${event.venue.name}
-    Address: ${event.venue.venueAddress.streetNumber, " ", event.venue.venueAddress.street}
-    Performers: ${event.performers[0].name}
-    Price: ${event.price}
-    Category: ${event.category}
-    Description: ${event.description}
-
-    `;
   }
 }
 
 @Component({
-imports: [EventTableComponent],
+imports: [EventTableComponent, RouterLink],
 standalone: true,
 template: `
   <app-event-table [event]="event"></app-event-table>
-  <button class="btn btn-primary btn-sm" (click)="dialogRef.close()">
-    Close
-  </button>
+  <div class="d-flex justify-content-between">
+    <button class="btn btn-primary btn-sm" (click)="dialogRef.close()">
+      Close
+    </button>
+    <button class="btn btn-primary btn-sm" (click)="redirectToDetails()">
+    Details
+    </button>
+  </div>
+
 `,
 styles: [
   `
@@ -81,9 +72,15 @@ styles: [
 ],
 })
 
-class EventDialogComponent {
-constructor(
-  public dialogRef: DialogRef,
-  @Inject(DIALOG_DATA) public event: Event,
-) {}
+class UpcomingEventDialogComponent {
+  constructor(
+    public dialogRef: DialogRef,
+    @Inject(DIALOG_DATA) public event: Event, private router: Router
+  ) {}
+
+  redirectToDetails() {
+    this.router.navigate(['/api/events', this.event.eventId]).then(() => {
+      this.dialogRef.close();
+    });
+  }
 }

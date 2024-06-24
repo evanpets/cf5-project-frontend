@@ -1,6 +1,6 @@
 <button class="btn btn-secondary mt-4 col-1 ms-3" [routerLink]="['/api/admin/events']">&lt; Back</button>
 <div class="d-flex flex-column justify-content-center container">
-    <h3 class="text-center mb-2">Find an event </h3>
+    <h3 class="text-center mb-3">Find an event </h3>
         <div class="d-flex flex-row justify-content-center">
             <form role="search" (ngSubmit)="searchById()">
                 <div class="d-flex flex-column align-items-center">
@@ -9,7 +9,7 @@
                         name="IdSearchQuery" [(ngModel)]="idSearchQuery">
                     </mat-form-field>
                     <div class="me-3">
-                        <button type="button" class="btn btn-secondary" (click)="searchById()">Search by ID</button>
+                        <button type="button" class="btn btn-primary" (click)="searchById()">Search by ID</button>
                     </div>
                 </div>
             </form>
@@ -20,14 +20,18 @@
                     <input matInput placeholder="Search by title" aria-label="Search" name="titleSearchQuery" [(ngModel)]="titleSearchQuery">
                 </mat-form-field>
                 <div>
-                    <button type="button" class="btn btn-secondary" (click)="searchByTitle()">Search by Title</button>
+                    <button type="button" class="btn btn-primary" (click)="searchByTitle()">Search by Title</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
 
-<div *ngIf="hasResult" class="container event-details d-flex flex-column justify-content-center">
+<div *ngIf="hasResult && events.length === 0" class="container event-details d-flex flex-column justify-content-center">
+  <h5 class="text-center mt-4 text-danger">No events found for the given search criteria.</h5>
+</div>
+
+<div *ngIf="hasResult && events.length > 0" class="container event-details d-flex flex-column justify-content-center">
     <div *ngIf="events[currentIndex].imageUrl" class="d-flex justify-content-center w-25">
       <img [src]="getFullImageUrl(events[currentIndex].imageUrl)" alt="{{ events[currentIndex].title }}" class="img-fluid my-3 mx-auto">
     </div>

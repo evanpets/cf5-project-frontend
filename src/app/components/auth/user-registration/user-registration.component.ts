@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { RouterLink } from '@angular/router';
 import { set } from 'lodash-es';
 import { User } from 'src/app/shared/interfaces/user';
 import { UserService } from 'src/app/shared/services/user.service';
@@ -11,9 +12,7 @@ import { UserService } from 'src/app/shared/services/user.service';
 @Component({
   selector: 'app-user-registration',
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule,
-    MatInputModule, MatButtonModule, CommonModule
-  ],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, CommonModule, RouterLink],
   templateUrl: './user-registration.component.html',
   styleUrl: './user-registration.component.css'
 })
@@ -31,8 +30,9 @@ export class UserRegistrationComponent {
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.email, Validators.required]),
-    password: new FormControl('', [Validators.required, Validators.minLength(4)]),
-    //Validators.pattern("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\]).{8,}$")
+    password: new FormControl('', [Validators.required, Validators.minLength(4),
+      Validators.pattern("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[\\]\\:;<>,.?/~_+-=|]).{8,}$")
+    ]),
     phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10)]),
     confirmPassword: new FormControl('', [Validators.required, Validators.minLength(4)])
   },
@@ -48,15 +48,14 @@ export class UserRegistrationComponent {
   }
 
   onSubmit (value:any) {
-
     const user = this.form.value as User
     delete user['confirmPassword']
-    set (user, user.role, 'User')
+    user.role = 'User'
 
     this.userService.registerUser(user).subscribe ({
       next: (response) => {
-        console.log("User registered", response.msg)
-        this.registrationStatus = {success: true, message: response.msg}
+        console.log("User registered" + response)
+        this.registrationStatus = {success: true, message: "Registration successful"}
       }, 
       error: (response) => {
         const message = response.error.msg
@@ -64,11 +63,10 @@ export class UserRegistrationComponent {
         this.registrationStatus = { success: false, message }
       }
     })
-
   }
 
   check_duplicate_email() {
-    const email = this.form.get('Email').value
+    const email = this.form.get('email').value
     console.log(`Checking email: ${email}`);
 
     this.userService.check_duplicate_email(email).subscribe({

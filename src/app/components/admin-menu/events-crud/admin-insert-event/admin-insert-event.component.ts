@@ -23,7 +23,7 @@ import { UserService } from 'src/app/shared/services/user.service';
   styleUrl: './admin-insert-event.component.css'
 })
 
-export class AdminInsertEventComponent  implements OnInit{
+export class AdminInsertEventComponent implements OnInit{
   form: FormGroup;
   showNewVenueFields = false;
   newVenueNameInput = ''

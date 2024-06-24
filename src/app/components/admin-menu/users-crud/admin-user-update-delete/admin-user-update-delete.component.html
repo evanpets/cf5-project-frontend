@@ -1,8 +1,12 @@
 <div class="d-flex flex-column justify-content-center mt-3">
     <button class="btn btn-secondary mt-3 col-1 ms-3" [routerLink]="['/api/admin/users']">&lt; Back</button>
 
-    <h3 class="text-center mb-3"> Update/Delete Form</h3>
-    <form [formGroup]="editForm" class="d-flex flex-column col-12" action="patch">
+    <div *ngIf="users.length === 0" class="container event-details d-flex flex-column justify-content-center">
+      <h5 class="text-center mt-4 text-danger">No events found.</h5>
+    </div>
+
+    <form *ngIf="users.length > 0" [formGroup]="editForm" class="d-flex flex-column col-12" action="patch">
+      <h3 class="text-center mb-3"> Update/Delete Form</h3>
       <div class="container d-flex flex-row justify-content-evenly col-12">
         <div class="d-flex flex-column col-5">
 
@@ -18,7 +22,7 @@
       
           <mat-form-field>
             <mat-label>Password</mat-label>
-            <input matInput type="text" formControlName="password"  />
+            <input matInput type="password" formControlName="password"  />
           </mat-form-field>
       
           <mat-form-field>
@@ -49,17 +53,15 @@
           </mat-form-field>
         </div>
       </div>
-    </form>
-
-  
       <div class="d-flex justify-content-evenly mt-2 mb-4">
         <button class="btn btn-primary me-2" type="button" (click)="saveUser()">Save</button>
-        <button class="btn btn-danger" type="button" (click)="deleteUser(displayedUser.userId)">Delete</button>
+        <button class="btn btn-danger" type="button" (click)="openConfirmDeleteDialog(displayedUser)">Delete</button>
       </div>
   
       <div class="d-flex justify-content-between mt-2 mb-4">
         <button class="btn btn-secondary ms-3" type="button" (click)="navigateToPreviousUser()" [disabled]="currentIndex <= 0">&lt; Previous User</button>
         <button class="btn btn-secondary me-3" type="button" (click)="navigateToNextUser()" [disabled]="currentIndex >= users.length - 1">Next User &gt;</button>
       </div>
+    </form>
   </div>
   

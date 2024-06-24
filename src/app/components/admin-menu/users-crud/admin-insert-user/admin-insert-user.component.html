@@ -1,1 +1,69 @@
-<p>admin-insert-user works!</p>
+<button class="btn btn-secondary mt-4 col-1 ms-3" [routerLink]="['/api/admin/users']">&lt; Back</button>
+
+<div class="container col-4 p-3 mb-4 ">
+    <h4 class="text-center">User Insert Form</h4>    
+    <form [formGroup]="form" class="d-flex flex-column mt-4 px-5" action="post">
+        <mat-form-field>
+            <mat-label>Username </mat-label>
+
+            <input matInput type="text" formControlName= "username" (blur)="check_duplicate_username()"/>
+            <mat-error *ngIf="form.get('username').invalid && form.get('username').touched">
+                <span *ngIf="form.get('username').hasError('takenUsername')">This username is already taken</span>
+                <span *ngIf="form.get('username').hasError('required')">Username is required</span>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label> Password </mat-label>
+            <input matInput type="password" formControlName= "password" />
+            <mat-error *ngIf="form.get('password').invalid && form.get('password').touched">
+                Password is missing or invalid
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label> Email </mat-label>
+            <input matInput type="email" formControlName= "email"/>
+            <mat-error *ngIf="form.get('email')?.invalid && form.get('email').touched">
+                <span *ngIf="form.get('email')?.hasError('required')">Email is missing or invalid</span>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label> First name </mat-label>
+            <input matInput type="text" formControlName= "firstName" />
+            <mat-error *ngIf="form.get('firstName')?.invalid && form.get('firstName').touched">
+                First name is required
+            </mat-error>
+        </mat-form-field>
+    
+        <mat-form-field>
+            <mat-label> Last name </mat-label>
+            <input matInput type="text" formControlName= "lastName" />
+            <mat-error *ngIf="form.get('lastName')?.invalid && form.get('lastName').touched">
+                Last name is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label> Phone Number </mat-label>
+            <input matInput type="text" formControlName= "phoneNumber" />
+            <mat-error *ngIf="form.get('phoneNumber')?.invalid && form.get('phoneNumber').touched">
+                Phone number is required
+            </mat-error>
+        </mat-form-field>
+    
+        <mat-form-field>
+            <mat-label>Role</mat-label>
+            <mat-select formControlName="role">
+              <mat-option value="User">User</mat-option>
+              <mat-option value="Admin">Admin</mat-option>
+            </mat-select>
+          </mat-form-field>
+        <button mat-flat-button color="primary" class="my-2" [disabled]="form.invalid" (click)="onSubmit(form.value)" >Submit</button>
+        <div *ngIf="insertionSuccess" class="alert alert-success text-center mt-2">
+            <span>User insertion successful</span>
+        </div>
+    </form>
+</div>
+

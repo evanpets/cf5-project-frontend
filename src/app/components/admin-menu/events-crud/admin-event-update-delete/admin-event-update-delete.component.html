@@ -1,8 +1,11 @@
 <div class="d-flex flex-column justify-content-center mt-3">
     <button class="btn btn-secondary mt-3 col-1 ms-3" [routerLink]="['/api/admin/events']">&lt; Back</button>
 
-    <h3 class="text-center mb-3"> Update/Delete Form</h3>
-    <form [formGroup]="editForm" class="d-flex flex-column col-12" action="patch">
+    <div *ngIf="events.length === 0" class="container event-details d-flex flex-column justify-content-center">
+        <h5 class="text-center mt-4 text-danger">No events found.</h5>
+    </div>
+    <form *ngIf="events.length > 0" [formGroup]="editForm" class="d-flex flex-column col-12" action="patch">
+      <h3 class="text-center mb-3"> Update/Delete Form</h3>
     <div class="container d-flex flex-row justify-content-center col-12">
         <div class="d-flex flex-column col-6 px-4">
             <mat-form-field>
@@ -23,42 +26,42 @@
           
               <mat-form-field>
                 <mat-label>Venue name</mat-label>
-                <mat-select formControlName="venueName" (selectionChange)="onVenueChange($event.value)">
+                <mat-select formControlName="name" (selectionChange)="onVenueChange($event.value)">
                   <mat-option *ngFor="let venue of venues" [value]="venue.name">{{ venue.name }}</mat-option>
                 </mat-select>
-                <mat-error *ngIf="editForm.get('venueName').invalid && editForm.get('venueName').touched">
+                <mat-error *ngIf="editForm.get('name').invalid && editForm.get('name').touched">
                   A venue name is required
                 </mat-error>
               </mat-form-field>
           
               <mat-form-field>
                 <mat-label>Street</mat-label>
-                <input matInput type="text" formControlName="venueStreet" readonly />
-                <mat-error *ngIf="editForm.get('venueStreet').invalid && editForm.get('venueStreet').touched">
+                <input matInput type="text" formControlName="street" readonly />
+                <mat-error *ngIf="editForm.get('street').invalid && editForm.get('street').touched">
                   A street name is required
                 </mat-error>
               </mat-form-field>
           
               <mat-form-field>
                 <mat-label>Street no</mat-label>
-                <input matInput type="text" formControlName="venueStreetNumber" readonly />
-                <mat-error *ngIf="editForm.get('venueStreetNumber').invalid && editForm.get('venueStreetNumber').touched">
+                <input matInput type="text" formControlName="streetNumber" readonly />
+                <mat-error *ngIf="editForm.get('streetNumber').invalid && editForm.get('streetNumber').touched">
                   A street number is required
                 </mat-error>
               </mat-form-field>
           
               <mat-form-field>
                 <mat-label>ZIP Code</mat-label>
-                <input matInput type="text" formControlName="venueZipCode" readonly />
-                <mat-error *ngIf="editForm.get('venueZipCode').invalid && editForm.get('venueZipCode').touched">
+                <input matInput type="text" formControlName="zipCode" readonly />
+                <mat-error *ngIf="editForm.get('zipCode').invalid && editForm.get('zipCode').touched">
                   The ZIP code is required
                 </mat-error>
               </mat-form-field>
           
               <mat-form-field>
                 <mat-label>City</mat-label>
-                <input matInput type="text" formControlName="venueCity" readonly />
-                <mat-error *ngIf="editForm.get('venueCity').invalid && editForm.get('venueCity').touched">
+                <input matInput type="text" formControlName="city" readonly />
+                <mat-error *ngIf="editForm.get('city').invalid && editForm.get('city').touched">
                   The city is required
                 </mat-error>
               </mat-form-field>
@@ -121,17 +124,15 @@
               <input type="file" #fileInput (change)="onFileSelect($event)" hidden />
             </div>
         </div>
+        <div class="d-flex justify-content-evenly mt-2 mb-4">
+          <button class="btn btn-primary me-2" type="button" (click)="saveEvent()">Save</button>
+          <button class="btn btn-danger" type="button" (click)="openConfirmDeleteDialog(currentEvent)">Delete</button>
+        </div>
+    
+        <div class="d-flex justify-content-between mt-2 mb-4">
+          <button class="btn btn-secondary ms-3" type="button" (click)="navigateToPreviousEvent()" [disabled]="currentIndex <= 0">&lt; Previous Event</button>
+          <button class="btn btn-secondary me-3" type="button" (click)="navigateToNextEvent()" [disabled]="currentIndex >= events.length - 1">Next Event &gt;</button>
+        </div>
     </form>
-
-  
-      <div class="d-flex justify-content-evenly mt-2 mb-4">
-        <button class="btn btn-primary me-2" type="button" (click)="saveEvent()">Save</button>
-        <button class="btn btn-danger" type="button" (click)="deleteEvent(currentEvent.eventId)">Delete</button>
-      </div>
-  
-      <div class="d-flex justify-content-between mt-2 mb-4">
-        <button class="btn btn-secondary ms-3" type="button" (click)="navigateToPreviousEvent()" [disabled]="currentIndex <= 0">&lt; Previous Event</button>
-        <button class="btn btn-secondary me-3" type="button" (click)="navigateToNextEvent()" [disabled]="currentIndex >= events.length - 1">Next Event &gt;</button>
-      </div>
   </div>
   

@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { EventCardComponent } from 'src/app/components/homepage/event-card/event-card.component';
 import { BackendEvent, Event } from 'src/app/shared/interfaces/event';
 import { LoggedInUser, User } from 'src/app/shared/interfaces/user';
 import { EventService } from 'src/app/shared/services/event.service';
 import { UserService } from 'src/app/shared/services/user.service';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-liked-events',
@@ -17,7 +19,7 @@ export class LikedEventsComponent implements OnInit{
   bookmarkedEvents: Event[] = []
   currentUser: User;
 
-  constructor(private eventService: EventService, private userService: UserService) {}
+  constructor(private eventService: EventService, private userService: UserService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.loadCurrentUser()
@@ -75,9 +77,64 @@ export class LikedEventsComponent implements OnInit{
   }
 
     onToggleLike(event: Event) {
-    if (!event.isLiked) {
-      // If the event is unliked, remove it from the list of bookmarked events
-      this.bookmarkedEvents = this.bookmarkedEvents.filter(e => e.eventId !== event.eventId);
-    }
+      this.openConfirmUnlikeDialog(event, this.currentUser);
+
+  }
+
+  openConfirmUnlikeDialog(event: Event, user: User) {
+    const dialogRef = this.dialog.open(ConfirmUnlikeDialogComponent, {
+      data: { event, user }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'confirmed') {
+        this.eventService.unlikeEvent(event.eventId, this.currentUser.userId).subscribe({
+          next: (response) => {
+            console.log("Unliked", response);
+            this.bookmarkedEvents = this.bookmarkedEvents.filter(e => e.eventId !== event.eventId);
+          },
+          error: (err) => {
+            console.log("Couldn't unlike ", err);
+          }
+        });
+      }
+    });
+  }
+}
+
+@Component({
+  selector: 'app-confirm-unlike',
+  template: `
+    <div>
+      <h5 class="text-center">Are you sure you want to unlike this venue?<br>(It will be removed from this page)</h5>
+      <p class="text-center">{{ data.event.title }}</p>
+      <div class="d-flex justify-content-around">
+        <button class="btn btn-primary" mat-button (click)="confirm()">Confirm</button>
+        <button class="btn btn-danger" mat-button (click)="closeDialog()">Cancel</button>
+      </div>
+
+    </div>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        background: #fff;
+        border-radius: 8px;
+        padding: 16px;
+        max-width: 500px;
+      }
+    `,
+  ]
+})
+export class ConfirmUnlikeDialogComponent {
+
+  constructor(private dialogRef: MatDialogRef<ConfirmUnlikeDialogComponent>, private eventService: EventService, @Inject(MAT_DIALOG_DATA) public data: any) {}
+
+  confirm() {
+    this.dialogRef.close('confirmed');
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
   }
 }

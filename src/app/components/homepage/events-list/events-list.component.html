@@ -7,7 +7,7 @@
   <div *ngIf="visibleEvents.length > 0">
     <div class="d-flex flex-row justify-content-evenly flex-wrap my-3">
       <div *ngFor="let event of visibleEvents" class="gap-2">
-        <app-event-card [event]="event" [currentUser]="currentUser"></app-event-card>
+        <app-event-card [event]="event" [currentUser]="currentUser" (toggleLike)="onToggleLike($event)"></app-event-card>
       </div>
     </div>
   

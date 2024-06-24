@@ -19,6 +19,9 @@
       </mat-form-field>
 
       <button mat-raised-button class="bg-primary text-white" (click)="onSubmit()">Log in</button>
+      <div *ngIf="invalidLogin" class="mt-2 text-danger">
+        Invalid username or password.
+      </div>
     </form>
     <div class="mb-3 mt-4">
       <span>Not a user? Register </span><a role="button" routerLink='../register'>here</a><span>!</span>

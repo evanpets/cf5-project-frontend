@@ -1,1 +1,53 @@
-<p>admin-insert-venue works!</p>
+<button class="btn btn-secondary mt-4 col-1 ms-3" [routerLink]="['/api/admin/venues']">&lt; Back</button>
+
+<div class="container col-4 p-3 mb-4 ">
+    <h4 class="text-center">Venue Insert Form</h4>    
+    <form [formGroup]="form" class="d-flex flex-column mt-4 px-5" action="post">
+        <mat-form-field>
+            <mat-label>Venue Name </mat-label>
+            <input matInput type="text" formControlName="name" (blur)="checkDuplicateVenue()"/>
+            <mat-error *ngIf="form.get('name').invalid && form.get('name').touched">
+                <span *ngIf="form.get('name').hasError('duplicateVenue')">The venue is already registered</span>
+                <span *ngIf="form.get('name').hasError('required')">Username is required</span>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label> Street </mat-label>
+            <input matInput type="text" formControlName="street"/>
+            <mat-error *ngIf="form.get('street')?.invalid && form.get('street').touched">
+                <span *ngIf="form.get('street')?.hasError('required')">Street is required</span>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label> Street number </mat-label>
+            <input matInput type="text" formControlName="streetNumber" />
+            <mat-error *ngIf="form.get('streetNumber')?.invalid && form.get('streetNumber').touched">
+                Street number is required
+            </mat-error>
+        </mat-form-field>
+    
+        <mat-form-field>
+            <mat-label> ZIP Code </mat-label>
+            <input matInput type="text" formControlName="zipCode" />
+            <mat-error *ngIf="form.get('zipCode')?.invalid && form.get('zipCode').touched">
+                ZIP Code is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label> City </mat-label>
+            <input matInput type="text" formControlName="city" />
+            <mat-error *ngIf="form.get('city')?.invalid && form.get('city').touched">
+                City is required
+            </mat-error>
+        </mat-form-field>
+    
+        <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+        <div *ngIf="insertionSuccess" class="alert alert-success text-center mt-2">
+            <span>Venue insertion successful</span>
+        </div>
+    </form>
+</div>
+

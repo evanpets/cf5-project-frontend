@@ -1,12 +1,13 @@
+import { DialogRef, DIALOG_DATA, Dialog } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LoggedInUser, User } from 'src/app/shared/interfaces/user';
 import { UserService } from 'src/app/shared/services/user.service';
 
@@ -24,7 +25,7 @@ export class AdminUserUpdateDeleteComponent {
   users: User[] = []
   currentIndex: number = -1;
 
-  constructor(private userService: UserService, private fb: FormBuilder) {
+  constructor(private userService: UserService, private fb: FormBuilder, public dialog: Dialog) {
     this.editForm = this.fb.group({
       userId: [''],
       username: [''],
@@ -133,13 +134,9 @@ export class AdminUserUpdateDeleteComponent {
     }
   }
 
-  deleteUser(userId: number): void {
-    if (!userId) {
-      console.error('User is undefined or null');
-      return;
-    } 
-    this.userService.deleteUser(userId).subscribe(response => {
-      this.loadUsers();
+  openConfirmDeleteDialog(user: User) {
+    this.dialog.open(UserConfirmDeleteDialogComponent, {
+      data: user
     });
   }
 
@@ -155,5 +152,63 @@ export class AdminUserUpdateDeleteComponent {
       this.currentIndex++;
       this.editUser(this.users[this.currentIndex]);
     }
+  }
+}
+
+@Component({
+  selector: 'app-confirm-delete',
+  template: `
+    <div>
+      <h4>Are you sure you want to delete this user?</h4>
+      <p class="text-center">{{ user.username }}</p>
+      <div class="d-flex justify-content-around">
+        <button class="btn btn-primary" mat-button (click)="confirmDelete(user.userId)">Confirm</button>
+        <button class="btn btn-danger" mat-button (click)="closeDialog()">Cancel</button>
+      </div>
+
+    </div>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+        background: #fff;
+        border-radius: 8px;
+        padding: 16px;
+        max-width: 500px;
+      }
+    `,
+  ]
+})
+export class UserConfirmDeleteDialogComponent {
+
+  constructor(private dialogRef: DialogRef, private router: Router, private userService: UserService, @Inject(DIALOG_DATA) public user: any) {}
+
+  confirmDelete(userId: number) {
+    if (!userId) {
+      console.error('User is undefined or null');
+      return;
+    } 
+    this.userService.deleteUser(userId).subscribe({
+      next: (response) => {
+        console.log("Delete complete", response);
+        this.reloadCurrentRoute()
+      },
+      error: (err) => {
+        console.log("Error during deletion ", err);
+      }
+    });
+        this.dialogRef.close();
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
+  reloadCurrentRoute() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
+    });
   }
 }
