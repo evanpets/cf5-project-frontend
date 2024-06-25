@@ -9,14 +9,14 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dial
 
 
 @Component({
-  selector: 'app-liked-events',
+  selector: 'app-saved-events',
   standalone: true,
   imports: [EventCardComponent, CommonModule],
-  templateUrl: './bookmarked-events.component.html',
-  styleUrl: './bookmarked-events.component.css'
+  templateUrl: './saved-events.component.html',
+  styleUrl: './saved-events.component.css'
 })
-export class LikedEventsComponent implements OnInit{
-  bookmarkedEvents: Event[] = []
+export class SavedEventsComponent implements OnInit{
+  savedEvents: Event[] = []
   currentUser: User;
 
   constructor(private eventService: EventService, private userService: UserService, private dialog: MatDialog) {}
@@ -32,7 +32,7 @@ export class LikedEventsComponent implements OnInit{
       next: (response) => {
         this.currentUser = response;
         this.currentUser.userId = response.userId;
-        this.loadBookmarkedEvents();
+        this.loadSavedEvents();
       },
       error: (error) => {
         console.error('Error fetching current user', error);
@@ -40,12 +40,12 @@ export class LikedEventsComponent implements OnInit{
     });
   }
 
-  loadBookmarkedEvents() {
-    this.eventService.getBookmarkedEvents(this.currentUser.userId).subscribe({
+  loadSavedEvents() {
+    this.eventService.getSavedEvents(this.currentUser.userId).subscribe({
       next: (response) => {
         console.log(response.msg);
-        console.log('Bookmarked events:', response.bookmarkedEventsList);
-        this.bookmarkedEvents = response.bookmarkedEventsList.map(event => ({
+        console.log('Saved events:', response.savedEventsList);
+        this.savedEvents = response.savedEventsList.map(event => ({
           eventId: event.eventId,
           title: event.title,
           description: event.description,
@@ -66,7 +66,7 @@ export class LikedEventsComponent implements OnInit{
           performers: event.performers,
           price: event.price,
           imageUrl: event.imageUrl,
-          isLiked: event.isLiked
+          isSaved: event.isSaved
         }));
         
       },
@@ -76,24 +76,24 @@ export class LikedEventsComponent implements OnInit{
     });
   }
 
-    onToggleLike(event: Event) {
-      this.openConfirmUnlikeDialog(event, this.currentUser);
+    onToggleSave(event: Event) {
+      this.openConfirmUnsaveDialog(event, this.currentUser);
 
   }
 
-  openConfirmUnlikeDialog(event: Event, user: User) {
-    const dialogRef = this.dialog.open(ConfirmUnlikeDialogComponent, {
+  openConfirmUnsaveDialog(event: Event, user: User) {
+    const dialogRef = this.dialog.open(ConfirmUnsaveDialogComponent, {
       data: { event, user }
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'confirmed') {
-        this.eventService.unlikeEvent(event.eventId, this.currentUser.userId).subscribe({
+        this.eventService.unsaveEvent(event.eventId, this.currentUser.userId).subscribe({
           next: (response) => {
-            console.log("Unliked", response);
-            this.bookmarkedEvents = this.bookmarkedEvents.filter(e => e.eventId !== event.eventId);
+            console.log("Unsaved", response);
+            this.savedEvents = this.savedEvents.filter(e => e.eventId !== event.eventId);
           },
           error: (err) => {
-            console.log("Couldn't unlike ", err);
+            console.log("Couldn't unsave ", err);
           }
         });
       }
@@ -102,10 +102,10 @@ export class LikedEventsComponent implements OnInit{
 }
 
 @Component({
-  selector: 'app-confirm-unlike',
+  selector: 'app-confirm-unsave',
   template: `
     <div>
-      <h5 class="text-center">Are you sure you want to unlike this venue?<br>(It will be removed from this page)</h5>
+      <h5 class="text-center">Are you sure you want to unsave this venue?<br>(It will be removed from this page)</h5>
       <p class="text-center">{{ data.event.title }}</p>
       <div class="d-flex justify-content-around">
         <button class="btn btn-primary" mat-button (click)="confirm()">Confirm</button>
@@ -126,9 +126,9 @@ export class LikedEventsComponent implements OnInit{
     `,
   ]
 })
-export class ConfirmUnlikeDialogComponent {
+export class ConfirmUnsaveDialogComponent {
 
-  constructor(private dialogRef: MatDialogRef<ConfirmUnlikeDialogComponent>, private eventService: EventService, @Inject(MAT_DIALOG_DATA) public data: any) {}
+  constructor(private dialogRef: MatDialogRef<ConfirmUnsaveDialogComponent>, private eventService: EventService, @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   confirm() {
     this.dialogRef.close('confirmed');

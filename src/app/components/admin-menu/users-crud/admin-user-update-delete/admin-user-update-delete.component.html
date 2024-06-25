@@ -2,7 +2,7 @@
     <button class="btn btn-secondary mt-3 col-1 ms-3" [routerLink]="['/api/admin/users']">&lt; Back</button>
 
     <div *ngIf="users.length === 0" class="container event-details d-flex flex-column justify-content-center">
-      <h5 class="text-center mt-4 text-danger">No events found.</h5>
+      <h5 class="text-center mt-4 text-danger">No users found.</h5>
     </div>
 
     <form *ngIf="users.length > 0" [formGroup]="editForm" class="d-flex flex-column col-12" action="patch">

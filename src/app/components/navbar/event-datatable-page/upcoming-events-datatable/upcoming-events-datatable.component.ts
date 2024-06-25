@@ -47,6 +47,7 @@ export class UpcomingEventsDatatableComponent {
 @Component({
 imports: [EventTableComponent, RouterLink],
 standalone: true,
+selector: 'app-upcoming-events-dialog',
 template: `
   <app-event-table [event]="event"></app-event-table>
   <div class="d-flex justify-content-between">

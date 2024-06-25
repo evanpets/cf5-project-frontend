@@ -25,12 +25,16 @@
             <label for="password" class="form-label">Password</label>
             <input type="password" class="form-control" id="password" formControlName="password" [readonly]="!isEditing">
           </div>
-          <div class="mb-3" *ngIf="isEditing">
+
+          <div class="mb-3" *ngIf="isEditing && profileForm.get('password')?.value !== originalUser.password">
             <label for="confirmPassword" class="form-label">Confirm New Password</label>
+            
             <input type="password" class="form-control" id="confirmPassword" formControlName="confirmPassword">
+
             <div *ngIf="profileForm.get('confirmPassword')?.hasError('passwordMismatch') && profileForm.get('confirmPassword')?.touched" class="text-danger">
               Passwords do not match.
             </div>
+            
           </div>
           <div class="mb-3">
             <label for="phoneNumber" class="form-label">Phone Number</label>

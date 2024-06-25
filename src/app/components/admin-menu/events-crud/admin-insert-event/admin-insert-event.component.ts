@@ -10,7 +10,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Router, RouterLink } from '@angular/router';
-import { EventsDatatableComponent } from 'src/app/components/navbar/event-datatable-page/events-datatable/events-datatable.component';
 import { User, LoggedInUser } from 'src/app/shared/interfaces/user';
 import { EventService } from 'src/app/shared/services/event.service';
 import { UserService } from 'src/app/shared/services/user.service';
@@ -38,8 +37,8 @@ export class AdminInsertEventComponent implements OnInit{
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      title: ['', [Validators.required, Validators.maxLength(50)]],
-      description: ['', [Validators.maxLength(250)]],
+      title: ['', [Validators.required, Validators.maxLength(100)]],
+      description: ['', [Validators.maxLength(500)]],
       venue: [''],
       newVenueName: [''],
       newVenueStreet: [''],
@@ -197,9 +196,8 @@ export class AdminInsertEventComponent implements OnInit{
       
       this.eventService.createEvent(formData).subscribe ({
         next: (response) => {
-          console.log("response" + response.msg)
-          console.log("Event created", response.msg)
-          this.submissionStatus = {success: true, message: response.msg}
+          console.log("Event created", response)
+          this.submissionStatus = {success: true, message: "Creation success"}
         }, 
         error: (response) => {
           const message = response.error.msg

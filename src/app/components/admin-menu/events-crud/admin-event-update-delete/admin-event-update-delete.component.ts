@@ -37,8 +37,8 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
 
   constructor(private eventService: EventService, private userService: UserService, private fb: FormBuilder, public dialog: Dialog) {
     this.editForm = this.fb.group({
-      title: ['', [Validators.required, Validators.maxLength(50)]],
-      description: ['', [Validators.maxLength(250)]],
+      title: ['', [Validators.required, Validators.maxLength(100)]],
+      description: ['', [Validators.maxLength(500)]],
       name: ['', Validators.required],
       street: [{ value: '', disabled: true }, Validators.required],
       streetNumber: [{ value: '', disabled: true }, Validators.required],
@@ -192,8 +192,8 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
           category: this.editForm.value.category,
           performers: this.performers.controls.map(c => ({ name: c.value.name })),
           imageUrl: this.editForm.value.eventImage,
-          isLiked: this.currentEvent.isLiked,  // Assuming isLiked remains unchanged
-          userId: this.currentEvent.userId   // Assuming userId remains unchanged
+          isSaved: this.currentEvent.isSaved,
+          userId: this.currentEvent.userId
         };
 
         console.log(
@@ -291,7 +291,7 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
 }
 
 @Component({
-  selector: 'app-confirm-delete',
+  selector: 'app-event-confirm-delete',
   template: `
     <div>
       <h4>Are you sure you want to delete this event?</h4>

@@ -67,7 +67,7 @@ export class EventDetailsComponent implements OnInit {
         performers: response.performers,
         price: response.price,
         imageUrl: response.imageUrl,
-        isLiked: response.isLiked
+        isSaved: response.isSaved
       };
       this.updatePreviousNextEvents();
     });

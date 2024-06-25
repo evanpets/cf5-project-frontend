@@ -1,0 +1,12 @@
+<div class="my-3">
+    <h2 class="text-center">Saved Events</h2>
+
+    <div *ngIf="savedEvents.length > 0" class="d-flex flex-row justify-content-evenly flex-wrap my-3 bg-light-subtle border border-2 shadow mx-5">
+        <div *ngFor="let event of savedEvents" class="gap-2">
+            <app-event-card [event]="event" [currentUser]="currentUser" (toggleSave)="onToggleSave($event)"></app-event-card>
+        </div>
+    </div>
+    <div *ngIf="savedEvents.length === 0" class="text-center">
+        No saved events.
+    </div>
+</div>

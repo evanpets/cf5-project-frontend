@@ -55,8 +55,8 @@ export class EventSubmissionFormComponent implements OnInit{
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      title: ['', [Validators.required, Validators.maxLength(50)]],
-      description: ['', [Validators.maxLength(250)]],
+      title: ['', [Validators.required, Validators.maxLength(100)]],
+      description: ['', [Validators.maxLength(500)]],
       venue: [''],
       newVenueName: [''],
       newVenueStreet: [''],
@@ -214,9 +214,8 @@ export class EventSubmissionFormComponent implements OnInit{
       
       this.eventService.createEvent(formData).subscribe ({
         next: (response) => {
-          console.log("response" + response.msg)
-          console.log("Event created", response.msg)
-          this.submissionStatus = {success: true, message: response.msg}
+          console.log("Event created", response)
+          this.submissionStatus = {success: true, message: "Creation success"}
         }, 
         error: (response) => {
           const message = response.error.msg

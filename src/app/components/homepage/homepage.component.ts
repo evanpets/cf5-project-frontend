@@ -13,8 +13,7 @@ import { UserService } from 'src/app/shared/services/user.service';
   styleUrl: './homepage.component.css'
 })
 export class HomepageComponent implements OnInit{
-  // @Output() currentUser = new EventEmitter<User>();
-  currentUser: User
+  currentUser: User | null
   constructor (private userService: UserService) {}
 
   ngOnInit() {
@@ -22,19 +21,19 @@ export class HomepageComponent implements OnInit{
   }
 
   loadCurrentUser() {
-    const username = (this.userService.user() as LoggedInUser).username
-    console.log(username)
-    this.userService.getUserByUsername(username).subscribe({
-      next: (response) => {
-        console.log('Current user ID: ', response.userId)
-        console.log('Current user:', response);
-
-        // this.currentUser.emit(response);
-        this.currentUser = response
-      },
-      error: (error) => {
-        console.error('Error fetching current user', error);
-      }
-    });
+    const user = this.userService.user();
+    if (user) {
+      const username = (user as LoggedInUser).username;
+      this.userService.getUserByUsername(username).subscribe({
+        next: (response) => {
+          console.log('Current user ID: ', response.userId)
+          console.log('Current user:', response);
+            this.currentUser = response
+        },
+        error: (error) => {
+          console.error('Error fetching current user', error);
+        }
+      });
+    }
   }
 }

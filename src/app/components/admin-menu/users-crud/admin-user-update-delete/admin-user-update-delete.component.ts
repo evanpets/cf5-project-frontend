@@ -156,7 +156,7 @@ export class AdminUserUpdateDeleteComponent {
 }
 
 @Component({
-  selector: 'app-confirm-delete',
+  selector: 'app-user-confirm-delete',
   template: `
     <div>
       <h4>Are you sure you want to delete this user?</h4>

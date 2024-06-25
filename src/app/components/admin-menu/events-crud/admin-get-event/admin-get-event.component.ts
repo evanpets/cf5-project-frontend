@@ -90,7 +90,7 @@ export class AdminGetEventComponent {
       performers: response.performers,
       price: response.price,
       imageUrl: response.imageUrl,
-      isLiked: response.isLiked
+      isSaved: response.isSaved
     };
   }
 

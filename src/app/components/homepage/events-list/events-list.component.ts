@@ -57,7 +57,6 @@ export class EventsListComponent {
       default:
         this.filteredEvents = this.events.filter(event => event.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
     }
-    // this.visibleEvents = this.filteredEvents;
     this.loadVisibleEvents();
   }
 
@@ -81,11 +80,11 @@ export class EventsListComponent {
     const nextEvents = this.events.slice(this.visibleEvents.length, this.visibleEvents.length + this.loadCount);
     this.visibleEvents = [...this.visibleEvents, ...nextEvents];
   }
-  onToggleLike(event: Event): void {
-    if (event.isLiked) {
-      this.eventService.unlikeEvent(event.eventId, this.currentUser.userId).subscribe({
+  onToggleSave(event: Event): void {
+    if (event.isSaved) {
+      this.eventService.unsaveEvent(event.eventId, this.currentUser.userId).subscribe({
         next: (response) => {
-          event.isLiked = false;
+          event.isSaved = false;
           console.log(response);
         },
         error: (error) => {
@@ -93,9 +92,9 @@ export class EventsListComponent {
         }
       });
     } else {
-      this.eventService.likeEvent(event.eventId, this.currentUser.userId).subscribe({
+      this.eventService.saveEvent(event.eventId, this.currentUser.userId).subscribe({
         next: (response) => {
-          event.isLiked = true;
+          event.isSaved = true;
           console.log(response);
         },
         error: (error) => {

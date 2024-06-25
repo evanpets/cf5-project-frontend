@@ -14,7 +14,7 @@ export class EventSlideComponent {
   @Input() event: Event
 
   formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('el-GR');
+    return new Date(date).toLocaleDateString();
   }
 
   getFullImageUrl(imageUrl: string): string | null {
@@ -23,13 +23,4 @@ export class EventSlideComponent {
     }
     return null
   }
-
-  // formatDate(dateString: Date): string {
-  //   const date = new Date(dateString);
-  //   return date.toLocaleDateString('el-GR', {
-  //     year: 'numeric',
-  //     month: 'numeric',
-  //     day: 'numeric',
-  //   });
-  // }
 }

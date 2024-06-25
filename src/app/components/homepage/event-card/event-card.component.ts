@@ -15,20 +15,20 @@ import { EventService } from 'src/app/shared/services/event.service';
 export class EventCardComponent implements OnInit, OnChanges {
   @Input() event: Event;
   @Input() currentUser: User;
-  @Output() toggleLike = new EventEmitter<Event>();
+  @Output() toggleSave = new EventEmitter<Event>();
 
   constructor(private eventService: EventService) {}
 
   ngOnInit() {
     if (this.currentUser) {
       console.log("Init user: " + this.currentUser.username);
-      this.retrieveBookmarkStatus();
+      this.retrieveSavedStatus();
     }
   }
 
   ngOnChanges() {
     if (this.currentUser) {
-      this.retrieveBookmarkStatus();
+      this.retrieveSavedStatus();
     }
   }
 
@@ -43,47 +43,25 @@ export class EventCardComponent implements OnInit, OnChanges {
     return null;
   }
 
-  retrieveBookmarkStatus() {
+  retrieveSavedStatus() {
     if (!this.currentUser) {
       console.error('Current user is not defined.');
       return;
     }
-    this.eventService.isEventBookmarked(this.event.eventId, this.currentUser.userId).subscribe({
+    this.eventService.isEventSaved(this.event.eventId, this.currentUser.userId).subscribe({
       next: (response) => {
-        this.event.isLiked = response.isLiked;
-        console.log("Bookmark status retrieved");
+        this.event.isSaved = response.isSaved;
+        console.log("Saved status retrieved");
       },
       error: (error) => {
-        console.error('Error checking if event is liked:', error);
+        console.error('Error checking if event is saved:', error);
       }
     });
   }
 
-  onToggleLike(eventClick: MouseEvent): void {
+  onToggleSave(eventClick: MouseEvent): void {
     eventClick.stopPropagation();
-    this.toggleLike.emit(this.event)
-    // if (this.event.isLiked) {
-    //   this.eventService.unlikeEvent(this.event.eventId, this.currentUser.userId).subscribe({
-    //     next: (response) => {
-    //       this.event.isLiked = false;
-    //       this.toggleLike.emit(this.event);
-    //       console.log(response);
-    //     },
-    //     error: (error) => {
-    //       console.error('Error unliking the event:', error);
-    //     }
-    //   });
-    // } else {
-    //   this.eventService.likeEvent(this.event.eventId, this.currentUser.userId).subscribe({
-    //     next: (response) => {
-    //       this.event.isLiked = true;
-    //       this.toggleLike.emit(this.event);
-    //       console.log(response);
-    //     },
-    //     error: (error) => {
-    //       console.error('Error liking the event:', error);
-    //     }
-    //   });
-    // }
+    this.toggleSave.emit(this.event)
+
   }
 }

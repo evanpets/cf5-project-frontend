@@ -26,11 +26,11 @@ export class EventService {
   //   return this.http.post<{ msg: string }> ( `${API_URL}/create`, event )
   // }
 
-  createEvent(formData: FormData): Observable<{ msg: string }> {
+  createEvent(formData: FormData): Observable<Event> {
     console.log("service");
     console.log("Service data: " + formData);
     
-    return this.http.post<{ msg: string }>(`${API_URL}/new`, formData);
+    return this.http.post<Event>(`${API_URL}/new`, formData);
   }
 
   insertVenue(venue: Venue): Observable<{ msg: string }> {
@@ -40,12 +40,12 @@ export class EventService {
     return this.http.post<{ msg: string }>(`${API_URL}/venues/new`, venue);
   }
 
-  likeEvent(eventId: number, userId: number): Observable<{ msg: string }> {
-    return this.http.post<{ msg: string }>(`${API_URL}/like`, { eventId });
+  saveEvent(eventId: number, userId: number): Observable<{ msg: string }> {
+    return this.http.post<{ msg: string }>(`${API_URL}/save`, { eventId });
   }
 
-  unlikeEvent(eventId: number, userId: number): Observable<{ msg: string }> {
-    return this.http.post<{ msg: string }>(`${API_URL}/unlike`, { eventId });
+  unsaveEvent(eventId: number, userId: number): Observable<{ msg: string }> {
+    return this.http.post<{ msg: string }>(`${API_URL}/unsave`, { eventId });
   }
 
   //Get functions
@@ -96,8 +96,8 @@ export class EventService {
     return this.http.get<BackendEvent[]>(`${API_URL}/user/${userId}`);
   }
 
-  getBookmarkedEvents(userId: number): Observable<{ msg: string, bookmarkedEventsList: BackendEvent[] }> {
-    return this.http.get<{ msg: string, bookmarkedEventsList: BackendEvent[] }>(`${API_URL}/bookmarked/${userId}`)
+  getSavedEvents(userId: number): Observable<{ msg: string, savedEventsList: BackendEvent[] }> {
+    return this.http.get<{ msg: string, savedEventsList: BackendEvent[] }>(`${API_URL}/saved/${userId}`)
   }
 
   /**
@@ -142,8 +142,8 @@ export class EventService {
     return this.http.get<{msg: string}> (`${API_URL}/check-duplicate-venue`, { params: {venueName} })
   }
 
-  isEventBookmarked(eventId: number, userId: number): Observable<{ isLiked: boolean }> {
-    return this.http.get<{ isLiked: boolean }>(`${API_URL}/is-bookmarked/${eventId}`, { params: { eventId, userId } });
+  isEventSaved(eventId: number, userId: number): Observable<{ isSaved: boolean }> {
+    return this.http.get<{ isSaved: boolean }>(`${API_URL}/is-saved/${eventId}`, { params: { eventId, userId } });
   }
   //Update functions
   /**

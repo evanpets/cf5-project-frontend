@@ -159,7 +159,7 @@ export class AdminVenueUpdateDeleteComponent implements OnInit{
   }
 }
 @Component({
-  selector: 'app-confirm-delete',
+  selector: 'app-venue-confirm-delete',
   template: `
     <div>
       <h4>Are you sure you want to delete this venue?</h4>

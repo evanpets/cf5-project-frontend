@@ -54,7 +54,7 @@ export class UserRegistrationComponent {
 
     this.userService.registerUser(user).subscribe ({
       next: (response) => {
-        console.log("User registered" + response)
+        console.log("User registered: " + response.user.username)
         this.registrationStatus = {success: true, message: "Registration successful"}
       }, 
       error: (response) => {

@@ -1,6 +1,6 @@
   import { CommonModule } from '@angular/common';
   import { Component, OnInit } from '@angular/core';
-  import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+  import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
   import { User } from 'src/app/shared/interfaces/user';
   import { UserService } from 'src/app/shared/services/user.service';
   
@@ -23,10 +23,10 @@
         firstName: [{ value: '', disabled: true }, Validators.required],
         lastName: [{ value: '', disabled: true }, Validators.required],
         email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
-        password: [{ value: '', disabled: true }, Validators.required],
-        confirmPassword: [{ value: '', disabled: true }],
+        password: [{ value: '' , disabled: true}],
+        confirmPassword: [''],
         phoneNumber: [{ value: '', disabled: true }, Validators.required]
-      }, { validator: this.passwordConfirmValidator });
+      });
     }
   
     ngOnInit(): void {
@@ -45,12 +45,21 @@
       }
     }
 
-    passwordConfirmValidator(form: FormGroup) {
-      if (form.get('password')?.value !== form.get('confirmPassword')?.value) {
-        form.get('confirmPassword')?.setErrors({ passwordMismatch: true });
+    passwordConfirmValidator() {
+      const password = this.profileForm.get('password')?.value;
+      const confirmPassword = this.profileForm.get('confirmPassword')?.value;
+      // console.log("pw:", password, "confirmpw: ", confirmPassword);
+      
+  
+      if (password !== confirmPassword) {
+        this.profileForm.get('confirmPassword')?.setErrors({ passwordMismatch: true });
         return { passwordMismatch: true };
+      } else {
+        this.profileForm.get('confirmPassword')?.setErrors(null);
+        console.log("No conflict");
+        
+        return null;
       }
-      return null;
     }
   
     enableEdit(): void {
@@ -61,15 +70,36 @@
       this.profileForm.get('password')?.enable();
       this.profileForm.get('confirmPassword')?.enable();
       this.profileForm.get('phoneNumber')?.enable();
+
+      // console.log(this.profileForm);
+      
+      this.profileForm.get('password')?.valueChanges.subscribe(value => {
+        this.passwordConfirmValidator();
+      });
+    
+      this.profileForm.get('confirmPassword')?.valueChanges.subscribe(value => {
+        this.passwordConfirmValidator();
+      });
     }
   
     saveChanges(): void {
+      console.log("confirmPassword", this.profileForm.get('confirmPassword').value);
+      console.log("confirmPassword errors", this.profileForm.get('confirmPassword').errors);
+
+      console.log(this.profileForm.get('password').value);
+      console.log(this.profileForm.get('username').value);
+
+      
       if (this.user && this.profileForm.valid) {
         const updatedUser = { ...this.user, ...this.profileForm.value };
         updatedUser.id = this.user.userId; 
 
         console.log(updatedUser)
-        delete updatedUser.confirmPassword; // Ensure confirmPassword is not sent to the backend
+
+        if (!updatedUser.password) {
+          delete updatedUser.password;
+        }
+        delete updatedUser.confirmPassword;
   
         this.userService.updateUser(updatedUser).subscribe({
           next: (response) => {
@@ -84,6 +114,13 @@
             console.log(message);
           }
         });
+      }
+      else {
+        if (this.profileForm.get('confirmPassword').invalid) {
+          console.log("confirm password invalid");
+        }
+        console.log("Invalid form");
+        
       }
     }
 

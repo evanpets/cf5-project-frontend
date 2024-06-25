@@ -42,6 +42,7 @@ export class PastEventsDatatableComponent {
 @Component({
 imports: [EventTableComponent, RouterLink],
 standalone: true,
+selector: 'app-past-events-dialog',
 template: `
   <app-event-table [event]="event"></app-event-table>
   <div class="d-flex justify-content-between">

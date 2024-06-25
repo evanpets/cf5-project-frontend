@@ -3,8 +3,8 @@
     <img *ngIf="getFullImageUrl(event.imageUrl)" [src]="getFullImageUrl(event.imageUrl)" class="card-img-top mt-2" alt= {{event.title}} style="height: 8rem;">
 
     <div class="position-absolute bottom-0 end-0 mb-1 me-1 like-container d-flex align-items-center justify-content-center">
-      <i *ngIf="!event.isLiked" class="bi bi-bookmark like-icon" (click)="onToggleLike($event)"></i>
-      <i *ngIf="event.isLiked" class="bi bi-bookmark-check-fill like-icon " (click)="onToggleLike($event)"></i>
+      <i *ngIf="!event.isSaved" class="bi bi-bookmark like-icon" (click)="onToggleSave($event)"></i>
+      <i *ngIf="event.isSaved" class="bi bi-bookmark-check-fill like-icon " (click)="onToggleSave($event)"></i>
     </div>
   </div>
 

@@ -35,11 +35,13 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="about-us">About us</a>
         </li>
-         <!-- @if (activeUser.role === 'Admin') { -->
-        <li class="nav-item">
-          <a class="nav-link" routerLink="api/admin">Admin menu</a>
-        </li>
-      <!-- } -->
+        @if(user()){
+          @if (user().role === 'Admin') {
+            <li class="nav-item">
+              <a class="nav-link" routerLink="api/admin">Admin menu</a>
+            </li>
+          }
+        }
       </ul>
 
       <ul class="navbar-nav">
@@ -53,7 +55,7 @@
               <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" routerLink="api/user/user-details">Edit profile</a></li>
                 <li><a class="dropdown-item" routerLink="api/user/events/submitted">My events</a></li>
-                <li><a class="dropdown-item" routerLink="api/user/events/saved">Liked events</a></li>
+                <li><a class="dropdown-item" routerLink="api/user/events/saved">Saved events</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item " (click)="logout()">Logout <i class="bi bi-box-arrow-left"></i></a></li>
               </ul>

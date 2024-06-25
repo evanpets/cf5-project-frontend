@@ -9,7 +9,6 @@ import { AboutUsComponent } from "./components/navbar/about-us/about-us.componen
 import { authGuard } from "./shared/guards/auth.guard";
 import { EventSubmissionFormComponent } from "./components/navbar/event-submission-form/event-submission-form.component";
 import { MyEventsComponent } from "./components/navbar/user-side-menu/my-events/my-events.component";
-import { LikedEventsComponent } from "./components/navbar/user-side-menu/bookmarked-events/bookmarked-events.component";
 import { EditProfileComponent } from "./components/navbar/user-side-menu/edit-profile/edit-profile.component";
 import { UserSideMenuComponent } from "./components/navbar/user-side-menu/user-side-menu.component";
 import { EventDetailsComponent } from "./components/event-details/event-details.component";
@@ -34,6 +33,7 @@ import { AdminGetPerformerComponent } from "./components/admin-menu/performers-c
 import { AdminInsertPerformerComponent } from "./components/admin-menu/performers-crud/admin-insert-performer/admin-insert-performer.component";
 import { AdminPerformerUpdateDeleteComponent } from "./components/admin-menu/performers-crud/admin-performer-update-delete/admin-performer-update-delete.component";
 import { adminGuard } from "./shared/guards/admin.guard";
+import { SavedEventsComponent } from "./components/navbar/user-side-menu/saved-events/saved-events.component";
 
 
 export const routes: Routes = [
@@ -93,7 +93,7 @@ export const routes: Routes = [
                     },
                     {
                         path: "saved",
-                        component: LikedEventsComponent,
+                        component: SavedEventsComponent,
                         canActivate: [authGuard]
                     }
                 ]
