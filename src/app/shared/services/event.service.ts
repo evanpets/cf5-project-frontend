@@ -49,7 +49,6 @@ saveEvent(eventId: number): Observable<{ msg: string }> {
   return this.http.post<{ msg: string }>(`${API_URL}/save`, { eventId }, { headers });
 }
 
-
   /**
  * Removes the saved (bookmarked) status from an event for a specific user.
  * @param eventId   The ID of the event.
@@ -64,8 +63,8 @@ saveEvent(eventId: number): Observable<{ msg: string }> {
 
   //Get functions
   /**
-   * Fetches a single event using its ID.
-  * @param eventId     The ID of the event to be fetched.
+   * Retrieves a single event using its ID.
+  * @param eventId     The ID of the event to be retrieved.
   * @returns           An event.
    */
   getSingleEventById(eventId: number): Observable<any> {
@@ -73,7 +72,7 @@ saveEvent(eventId: number): Observable<{ msg: string }> {
   }
 
   /**
-   * Fetches a list of events containing a user-input string in their title.
+   * Retrieves a list of events containing a user-input string in their title.
    * @param title     The string input.
    * @returns         The list of events with the given string in their title.
    */
@@ -82,7 +81,7 @@ saveEvent(eventId: number): Observable<{ msg: string }> {
   }
 
    /**
-    * Fetches a list of all the events.
+    * Retrieves a list of all the events.
   * @returns        A list of all the events.
     */
   getAllEvents(): Observable<Event[] | BackendEvent[]> {
@@ -90,7 +89,7 @@ saveEvent(eventId: number): Observable<{ msg: string }> {
   }
 
   /**
-   * Fetches a list of all upcoming events (current or future date).
+   * Retrieves a list of all upcoming events (current or future date).
   * @returns         A list of all the future events.
    */
   getAllUpcomingEvents(): Observable<Event[]> {
@@ -98,19 +97,24 @@ saveEvent(eventId: number): Observable<{ msg: string }> {
   }
 
   /**
-   * Fetches a list of all past events (date before current one).
+   * Retrieves a list of all past events (date before current one).
   * @returns         A list of all the past events.
    */
   getAllPastEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(`${API_URL}/past`);
   }
 
-  getAllEventsInCategory(category: string): Observable<{msg: string, eventsList:Event[]}> {
+  /**
+   * Retrieves all the upcoming events in a certain event category.
+   * @param category  The event category.
+   * @returns         A list of events.
+   */
+  getAllUpcomingEventsInCategory(category: string): Observable<{msg: string, eventsList:Event[]}> {
     return this.http.get<{msg: string, eventsList: Event[]}>(`${API_URL}/${category.toLowerCase()}`)
   }
 
   /**
-   * Fetches a list of all the events inserted by the active user.
+   * Retrieves a list of all the events inserted by the active user.
    * @param userId The ID of the user.
    * @returns A list of events the user specified has inserted.
    */
@@ -119,7 +123,7 @@ saveEvent(eventId: number): Observable<{ msg: string }> {
   }
 
   /**
-   * Fetches a list of the events a specific user has added to their saved (bookmarked) list.
+   * Retrieves a list of the events a specific user has added to their saved (bookmarked) list.
    * @param userId    The ID of the requesting user.
    * @returns         A list of all saved events.
    */
@@ -141,7 +145,7 @@ saveEvent(eventId: number): Observable<{ msg: string }> {
   }
 
   /**
-   * Fetches a list of all the registered venues.
+   * Retrieves a list of all the registered venues.
    * @returns   A list of all the already registered venues.
    */
   getRegisteredVenues(): Observable<Venue[]> {
@@ -149,8 +153,8 @@ saveEvent(eventId: number): Observable<{ msg: string }> {
   }
 
   /**
-   * Fetches a list of information whose category is specified by the user.
-   * @param searchCategory  The category by which to fetch results (event, venue, performer, date)
+   * Retrieves a list of information whose category is specified by the user.
+   * @param searchCategory  The category by which to retrieve results (event, venue, performer, date)
    * @returns               The list of items corresponding to the category.
    */
   filterEvents(searchCategory: string): Observable<any[]> {

@@ -22,7 +22,7 @@ export class MusicComponent implements OnInit{
   constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
-    this.eventService.getAllEventsInCategory(this.eventCategory).subscribe({
+    this.eventService.getAllUpcomingEventsInCategory(this.eventCategory).subscribe({
       next: (response) => {
         this.events = response.eventsList
         
