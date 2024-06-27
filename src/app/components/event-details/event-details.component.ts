@@ -28,14 +28,14 @@ export class EventDetailsComponent implements OnInit {
   }
 
   loadAllEvents(): void {
-    this.eventService.getEvents().subscribe((events: Event[]) => {
+    this.eventService.getAllEvents().subscribe((events: Event[]) => {
       this.events = events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
       this.updatePreviousNextEvents();
     });
   }
 
   updatePreviousNextEvents(): void {
-    if (this.event && this.events.length > 0) {
+    if (this.event && this.events?.length > 0) {
       const currentIndex = this.events.findIndex(e => e.eventId === this.event.eventId);
       this.previousEvent = this.events[currentIndex - 1];
       this.nextEvent = this.events[currentIndex + 1];

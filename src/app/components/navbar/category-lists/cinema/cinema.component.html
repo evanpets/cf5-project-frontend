@@ -1,0 +1,19 @@
+<div class="mt-3 mb-5">
+    <h2 class="text-center">Cinema Events</h2>
+    <div *ngIf="visibleEvents.length > 0">
+        <div class="d-flex flex-row justify-content-evenly flex-wrap my-3">
+            <div *ngFor="let event of visibleEvents" class="gap-2">
+            <app-event-card [event]="event" (toggleSave)="onToggleSave($event)"></app-event-card>
+        </div>
+    </div>
+      
+        <div class="text-center my-3" *ngIf="visibleEvents.length < filteredEvents.length">
+          <button (click)="loadTenMore()" class="btn btn-primary">More Events</button>
+        </div>
+    </div>
+      
+    <div class="text-center my-3" *ngIf="visibleEvents.length === 0">
+        <p>No related upcoming events found</p>
+    </div>
+</div>
+

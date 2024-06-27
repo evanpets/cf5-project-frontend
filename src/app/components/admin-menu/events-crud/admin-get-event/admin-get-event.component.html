@@ -63,7 +63,7 @@
         </tr>
         <tr>
           <th>Price:</th>
-          <td>{{ events[currentIndex].price }}€</td>
+          <td>{{ events[currentIndex].price == 0 ? "Free" : events[currentIndex].price + "€"}}</td>
         </tr>
         <tr>
           <th>Category:</th>

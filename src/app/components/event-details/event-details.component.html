@@ -1,42 +1,42 @@
 <div class="container event-details d-flex flex-column justify-content-center">
   <button class="btn btn-secondary mt-3 col-1" [routerLink]="['']">&lt; Home</button>
 
-    <h2 class="text-center">{{ event.title }}</h2>
+    <h2 class="text-center">{{ event?.title }}</h2>
     
-    <div *ngIf="event.imageUrl" class="d-flex justify-content-center w-100">
-        <img [src]="getFullImageUrl(event.imageUrl)" alt="{{ event.title }}" class="img-fluid my-3 mx-auto">
+    <div *ngIf="event?.imageUrl" class="d-flex justify-content-center w-100">
+        <img [src]="getFullImageUrl(event?.imageUrl)" alt="{{ event?.title }}" class="img-fluid my-3 mx-auto">
     </div>
     <table class="table table-striped mt-3">
       <tbody>
         <tr>
           <th>Date:</th>
-          <td>{{ formatDate( event.date ) }}</td>
+          <td>{{ formatDate( event?.date ) }}</td>
         </tr>
         <tr>
           <th>Venue:</th>
-          <td><span>{{ event.venue.name }} ({{ event.venue.venueAddress.streetNumber }} {{ event.venue.venueAddress.street }}, {{ event.venue.venueAddress.zipCode }}, {{ event.venue.venueAddress.city }})</span></td>
+          <td><span>{{ event?.venue.name }} ({{ event?.venue.venueAddress.streetNumber }} {{ event?.venue.venueAddress.street }}, {{ event?.venue.venueAddress.zipCode }}, {{ event?.venue.venueAddress.city }})</span></td>
         </tr>
         <tr>
           <th>City:</th>
-          <td>{{ event.venue.venueAddress.city }}</td>
+          <td>{{ event?.venue.venueAddress.city }}</td>
         </tr>
         <tr>
           <th>Description:</th>
-          <td>{{ event.description }}</td>
+          <td>{{ event?.description }}</td>
         </tr>
         <tr>
             <th>Performers:</th>
-            <td><span *ngFor="let performer of event.performers; let i = index">
+            <td><span *ngFor="let performer of event?.performers; let i = index">
                 {{ performer?.name || "TBA" }} <span *ngIf="i < event.performers.length - 1">, </span>
               </span></td>
         </tr>
         <tr>
           <th>Price:</th>
-          <td>{{ event.price }}€</td>
+          <td>{{ event?.price == 0 ? "Free" : event?.price + "€"}}</td>
         </tr>
         <tr>
             <th>Category:</th>
-            <td>{{ event.category }}</td>
+            <td>{{ event?.category }}</td>
           </tr>
       </tbody>
     </table>

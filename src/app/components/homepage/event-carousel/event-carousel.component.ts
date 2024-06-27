@@ -18,7 +18,7 @@ export class EventCarouselComponent {
   events: Event[] = []
 
   ngOnInit(): void {
-    this.eventService.getUpcomingEvents().subscribe({
+    this.eventService.getAllUpcomingEvents().subscribe({
       next: (response) => {
         console.log(response)
         this.events = response

@@ -37,7 +37,7 @@
                 </span>
               </div>
             </td>
-            <td>{{ row.price || "TBA"}}€</td>
+            <td>{{ row.price == 0 ? "Free" : row.price + "€" || "TBA"}}</td>
             <td *ngIf="actionsTemplate" class="d-flex justify-content-center align-content-center d-sm-table-cell">
               <ng-container *ngTemplateOutlet="actionsTemplate; context: {$implicit: row}"></ng-container>
             </td>

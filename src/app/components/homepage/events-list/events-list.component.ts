@@ -25,7 +25,7 @@ export class EventsListComponent {
   constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
-    this.eventService.getUpcomingEvents().subscribe({
+    this.eventService.getAllUpcomingEvents().subscribe({
       next: (response) => {
         console.log(response)
         this.events = response
@@ -80,9 +80,10 @@ export class EventsListComponent {
     const nextEvents = this.events.slice(this.visibleEvents.length, this.visibleEvents.length + this.loadCount);
     this.visibleEvents = [...this.visibleEvents, ...nextEvents];
   }
+  
   onToggleSave(event: Event): void {
     if (event.isSaved) {
-      this.eventService.unsaveEvent(event.eventId, this.currentUser.userId).subscribe({
+      this.eventService.unsaveEvent(event.eventId).subscribe({
         next: (response) => {
           event.isSaved = false;
           console.log(response);
@@ -92,7 +93,7 @@ export class EventsListComponent {
         }
       });
     } else {
-      this.eventService.saveEvent(event.eventId, this.currentUser.userId).subscribe({
+      this.eventService.saveEvent(event.eventId).subscribe({
         next: (response) => {
           event.isSaved = true;
           console.log(response);

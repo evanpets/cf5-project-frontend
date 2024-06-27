@@ -39,7 +39,7 @@ export class AdminInsertUserComponent {
 
     this.userService.registerUser(user).subscribe ({
       next: (response) => {
-        console.log("User registered" + response)
+        console.log("User registered: " + response.username)
         this.insertionSuccess = true;
       }, 
       error: (response) => {

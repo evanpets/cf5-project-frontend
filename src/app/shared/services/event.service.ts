@@ -2,8 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { BackendEvent, Event, Venue } from '../interfaces/event';
 import { environment } from 'src/environments/environment.development';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { isEmpty, values } from 'lodash-es';
 
 const API_URL = `${environment.apiURL}/api/events`;
 
@@ -18,14 +19,9 @@ export class EventService {
   //Insert functions
   /**
    * Inserts an event into the database.
-   * @param event The event details as input from a user.
-   * @returns A message confirming the result of the insertion attempt.
+   * @param event   The event details as input from a user.
+   * @returns       A message confirming the result of the insertion attempt.
    */
-  // createEvent(event: any): Observable< {msg: string} > {
-  //   // console.log("Service:" + JSON.stringify(event))
-  //   return this.http.post<{ msg: string }> ( `${API_URL}/create`, event )
-  // }
-
   createEvent(formData: FormData): Observable<Event> {
     console.log("service");
     console.log("Service data: " + formData);
@@ -33,58 +29,89 @@ export class EventService {
     return this.http.post<Event>(`${API_URL}/new`, formData);
   }
 
-  insertVenue(venue: Venue): Observable<{ msg: string }> {
-    console.log("service");
-    console.log("Service data: " + venue);
-    
-    return this.http.post<{ msg: string }>(`${API_URL}/venues/new`, venue);
+  /**
+   * Inserts an event into the database
+   * @param venue   The venue to be inserted.
+   * @returns       The inserted venue.
+   */
+  insertVenue(venue: Venue): Observable<{ msg: string, venue: Venue }> {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<{ msg: string, venue: Venue }>(`${environment.apiURL}/api/admin/venues/new`, venue, { headers });
   }
 
-  saveEvent(eventId: number, userId: number): Observable<{ msg: string }> {
-    return this.http.post<{ msg: string }>(`${API_URL}/save`, { eventId });
-  }
+/**
+ * Adds the saved (bookmarked) status to an event for a specific user.
+ * @param eventId   The ID of the event.
+ * @param userId    The ID of the requesting user.
+ * @returns         The new saved status.
+ */
+saveEvent(eventId: number): Observable<{ msg: string }> {
+  const token = localStorage.getItem('access_token');
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  return this.http.post<{ msg: string }>(`${API_URL}/save`, { eventId }, { headers });
+}
 
-  unsaveEvent(eventId: number, userId: number): Observable<{ msg: string }> {
-    return this.http.post<{ msg: string }>(`${API_URL}/unsave`, { eventId });
+
+  /**
+ * Removes the saved (bookmarked) status from an event for a specific user.
+ * @param eventId   The ID of the event.
+ * @param userId    The ID of the requesting user.
+ * @returns         The new saved status.
+ */
+  unsaveEvent(eventId: number): Observable<{ msg: string }> {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<{ msg: string }>(`${API_URL}/unsave`, { eventId }, { headers});
   }
 
   //Get functions
   /**
    * Fetches a single event using its ID.
-   * @param eventId The ID of the event to be fetched.
-   * @returns An event.
+  * @param eventId     The ID of the event to be fetched.
+  * @returns           An event.
    */
   getSingleEventById(eventId: number): Observable<any> {
     return this.http.get<any>(`${API_URL}/id/${eventId}`)
   }
 
-  getEventsWithTitle(title: string): Observable<BackendEvent[]> {
+  /**
+   * Fetches a list of events containing a user-input string in their title.
+   * @param title     The string input.
+   * @returns         The list of events with the given string in their title.
+   */
+  getAllEventsWithTitle(title: string): Observable<BackendEvent[]> {
     return this.http.get<BackendEvent[]>(`${API_URL}/by-title/${title}`)
   }
+
    /**
     * Fetches a list of all the events.
-    * @returns A list of all the events.
+  * @returns        A list of all the events.
     */
-  getEvents(): Observable<Event[] | BackendEvent[]> {
+  getAllEvents(): Observable<Event[] | BackendEvent[]> {
     return this.http.get<Event[] | BackendEvent[]>(`${API_URL}`);
   }
 
   /**
    * Fetches a list of all upcoming events (current or future date).
-   * @returns A list of all the future events.
+  * @returns         A list of all the future events.
    */
-  getUpcomingEvents(): Observable<Event[]> {
+  getAllUpcomingEvents(): Observable<Event[]> {
     console.log("Upcoming events")
     return this.http.get<Event[]>(`${API_URL}/upcoming`);
   }
 
   /**
    * Fetches a list of all past events (date before current one).
-   * @returns A list of all the past events.
+  * @returns         A list of all the past events.
    */
-  getPastEvents(): Observable<Event[]> {
+  getAllPastEvents(): Observable<Event[]> {
     console.log("Past events")
     return this.http.get<Event[]>(`${API_URL}/past`);
+  }
+
+  getAllEventsInCategory(category: string): Observable<{msg: string, eventsList:Event[]}> {
+    return this.http.get<{msg: string, eventsList: Event[]}>(`${API_URL}/${category.toLowerCase()}`)
   }
 
   /**
@@ -96,38 +123,40 @@ export class EventService {
     return this.http.get<BackendEvent[]>(`${API_URL}/user/${userId}`);
   }
 
+  /**
+   * Fetches a list of the events a specific user has added to their saved (bookmarked) list.
+   * @param userId    The ID of the requesting user.
+   * @returns         A list of all saved events.
+   */
   getSavedEvents(userId: number): Observable<{ msg: string, savedEventsList: BackendEvent[] }> {
     return this.http.get<{ msg: string, savedEventsList: BackendEvent[] }>(`${API_URL}/saved/${userId}`)
   }
 
   /**
    * Returns a venue by its name.
-   * @param venueName The name of the venue.
-   * @returns The venue's details.
+   * @param venueName   The name of the venue.
+   * @returns           The venue's details.
    */
   getVenueById(venueId: number): Observable<Venue> {
-    console.log("service venue id " +venueId);
     return this.http.get<Venue>(`${API_URL}/venues/${venueId}`)
   }
 
   getVenueByName(venueName: string): Observable<Venue> {
-    console.log("service venue name " + venueName);
-    
     return this.http.get<Venue>(`${API_URL}/venues?name=${venueName}`)
   }
 
   /**
    * Fetches a list of all the registered venues.
-   * @returns A list of all the already registered venues.
+   * @returns   A list of all the already registered venues.
    */
-  getVenues(): Observable<Venue[]> {
+  getRegisteredVenues(): Observable<Venue[]> {
     return this.http.get<Venue[]>(`${API_URL}/venues/registered`);
   }
 
   /**
    * Fetches a list of information whose category is specified by the user.
-   * @param searchCategory The category by which to fetch results (event, venue, performer, date)
-   * @returns The list of items corresponding to the category.
+   * @param searchCategory  The category by which to fetch results (event, venue, performer, date)
+   * @returns               The list of items corresponding to the category.
    */
   filterEvents(searchCategory: string): Observable<any[]> {
     return this.http.get<any[]>(`${API_URL}/filter-events?filter=${searchCategory}`);
@@ -135,8 +164,8 @@ export class EventService {
 
   /**
    * Examines whether a newly input venue name already exists.
-   * @param venueName The input venue name.
-   * @returns A message confirming or denying availability of the name.
+   * @param venueName   The input venue name.
+   * @returns           A message confirming or denying availability of the name.
    */
   checkDuplicateVenue(venueName: string) : Observable<{msg: string}> {
     return this.http.get<{msg: string}> (`${API_URL}/check-duplicate-venue`, { params: {venueName} })
@@ -148,32 +177,49 @@ export class EventService {
   //Update functions
   /**
    * Updates an event.
-   * @param eventId The ID of the event to update.
-   * @param event The event details as updated by the user.
-   * @returns A message of the result, the updated event.
+   * @param eventId   The ID of the event to update.
+   * @param event     The event details as updated by the user.
+   * @returns         A message of the result, the updated event.
    */
   // updateEvent(eventId: number, event: BackendEvent): Observable<{ msg: string, event: BackendEvent }> {
   //   return this.http.patch<{ msg: string, event: BackendEvent }>(`${API_URL}/update/${eventId}`, event);
   // }
-  updateEvent(eventId: number, eventToUpdate: FormData): Observable<{ msg: string, event: Event }> {
-    return this.http.patch<{ msg: string, event: Event }>(`${API_URL}/${eventId}`, eventToUpdate);
+
+  updateEvent(eventId: number, updateInformation: any): Observable<{ msg: string, event: Event }> {
+    // const token = localStorage.getItem('access_token');
+    // const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.patch<{ msg: string, event: Event }>(`${API_URL}/${eventId}`, updateInformation);
   }
 
+  /**
+   * Updates a venue's information.
+   * @param venueId         The ID of the venue to update. 
+   * @param venueToUpdate   The venue's updated information.
+   * @returns               The updated venue.
+   */
   updateVenue(venueId: number, venueToUpdate: any): Observable<{ msg: string, venue: Venue }> {
-    return this.http.patch<{ msg: string, venue: Venue }>(`${API_URL}/venues/${venueId}`, venueToUpdate);
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.patch<{ msg: string, venue: Venue }>(`${environment.apiURL}/api/admin/venues/${venueId}`, venueToUpdate, { headers });
   }
 
   //Delete functions
   /**
    * Deletes an event.
-   * @param eventId The ID of the event to be deleted.
-   * @returns A message confirming the result of the deletion attempt.
+   * @param eventId   The ID of the event to be deleted.
+   * @returns         A message confirming the result of the deletion attempt.
    */
   deleteEvent(eventId: number): Observable<{ msg: string }> {
     return this.http.delete<{ msg: string }>(`${API_URL}/${eventId}`);
   }
 
+  /**
+   * Deletes a venue.
+   * @param venueId   The ID of the venue to be deleted.
+   */
   deleteVenue(venueId: number) {
-    return this.http.delete(`${API_URL}/venues/${venueId}`);
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete(`${environment.apiURL}/api/admin/venues/${venueId}`, { headers });
   }
 }

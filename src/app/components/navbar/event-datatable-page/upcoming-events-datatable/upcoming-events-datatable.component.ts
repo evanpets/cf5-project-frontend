@@ -25,7 +25,7 @@ export class UpcomingEventsDatatableComponent {
   constructor(public dialog: Dialog, private eventService: EventService){}
 
   ngOnInit(): void {
-    this.eventService.getUpcomingEvents().subscribe(events => {
+    this.eventService.getAllUpcomingEvents().subscribe(events => {
       console.log("response", events);
       
       const currentDate = new Date();

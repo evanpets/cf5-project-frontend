@@ -73,7 +73,7 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
   }
 
   loadVenues() {
-    this.eventService.getVenues().subscribe({
+    this.eventService.getRegisteredVenues().subscribe({
       next: (venues) => {
         this.venues = venues;
         console.log('Venues loaded:', this.venues);
@@ -86,7 +86,7 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
   }
 
   loadAllEvents(): void {
-    this.eventService.getEvents().subscribe((response: Event[]) => {
+    this.eventService.getAllEvents().subscribe((response: Event[]) => {
       console.log("Response: ", response);
       this.events = response
       console.log("Events list", this.events);
@@ -176,7 +176,7 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
         return;
       }
 
-        const eventToUpdate: BackendEvent = {
+        const eventToUpdate: any = {
           eventId: this.currentEvent.eventId,
           title: this.editForm.value.title,
           description: this.editForm.value.description,
@@ -196,15 +196,39 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
           userId: this.currentEvent.userId
         };
 
-        console.log(
-          "Venue ID:" + eventToUpdate.venueId +
-          "\nVenue name:" + eventToUpdate.venueName +
-          "\nVenue addr ID:" + eventToUpdate.venueAddressId +
-          "\nVenue addr str:" + eventToUpdate.venueStreet +
-          "\nVenue addr strno:" + eventToUpdate.venueStreetNumber +
-          "\nVenue addr zip:" + eventToUpdate.venueZipCode +
-          "\nVenue addr city:" + eventToUpdate.venueCity 
-         );
+        // const eventToUpdate: Event = {
+        //   eventId: this.currentEvent.eventId,
+        //   title: this.editForm.value.title,
+        //   description: this.editForm.value.description,
+        //   venue: {
+        //     venueId: selectedVenue.venueId,
+        //     name: selectedVenue.name,
+        //     venueAddress: {
+        //       venueAddressId: selectedVenue.venueAddress.venueAddressId,
+        //       street: selectedVenue.venueAddress.street,
+        //       streetNumber: selectedVenue.venueAddress.streetNumber,
+        //       zipCode: selectedVenue.venueAddress.zipCode,
+        //       city: selectedVenue.venueAddress.city,
+        //     }
+        //   },
+        //   price: this.editForm.value.price,
+        //   date: this.editForm.value.date instanceof Date ? this.editForm.value.date.toISOString().split('T')[0] : this.editForm.value.date,
+        //   category: this.editForm.value.category,
+        //   performers: this.performers.controls.map(c => ({ name: c.value.name })),
+        //   imageUrl: this.editForm.value.eventImage,
+        //   isSaved: this.currentEvent.isSaved,
+        //   userId: this.currentEvent.userId
+        // };
+
+        // console.log(
+        //   "Venue ID:" + eventToUpdate.venueId +
+        //   "\nVenue name:" + eventToUpdate.venueName +
+        //   "\nVenue addr ID:" + eventToUpdate.venueAddressId +
+        //   "\nVenue addr str:" + eventToUpdate.venueStreet +
+        //   "\nVenue addr strno:" + eventToUpdate.venueStreetNumber +
+        //   "\nVenue addr zip:" + eventToUpdate.venueZipCode +
+        //   "\nVenue addr city:" + eventToUpdate.venueCity 
+        //  );
       const updateFormData = new FormData();
       updateFormData.append('eventToUpdate', JSON.stringify(eventToUpdate))
 
@@ -214,19 +238,20 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
           return;
         }
         updateFormData.append('eventImage', this.selectedFile, this.selectedFile.name);
-        console.log("File appended to FormData");
+        // console.log("File appended to FormData");
       }
 
       console.log("Update info: ", eventToUpdate);
       console.log(this.currentEvent.eventId);
-       
+      
+
       this.eventService.updateEvent(this.currentEvent.eventId, updateFormData).subscribe({
         next: (response) => {
-          console.log("Response: ", response,  response.msg);
+          console.log("Response: ", response);
           this.loadAllEvents();
         },
         error: (error) => {
-          console.error('Error updating event', error.msg);
+          console.error('Error updating event', error);
         }
       });
     } else {

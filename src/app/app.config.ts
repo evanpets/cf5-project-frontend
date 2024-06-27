@@ -36,16 +36,13 @@ export const appConfig: ApplicationConfig = {
       JwtModule.forRoot({
           config: {
               tokenGetter: tokenGetter,
-              allowedDomains: ['localhost:4200', 'localhost:5001'],
-              disallowedRoutes: ["localhost:4200/error"],
+              allowedDomains: ['https://localhost:4200', 'https://localhost:5001']
           },
       }),
   ),
     provideHttpClient(withInterceptorsFromDi()),
     { provide: LOCALE_ID, useValue: 'el-GR' },
     { provide: MAT_DATE_LOCALE, useValue: 'el-GR' },
-    { provide: MAT_DATE_FORMATS, useValue: GREEK_DATE_FORMATS },
-    // provideMomentDateAdapter()
-    
+    { provide: MAT_DATE_FORMATS, useValue: GREEK_DATE_FORMATS },    
   ]
 };

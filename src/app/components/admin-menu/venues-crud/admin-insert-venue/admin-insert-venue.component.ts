@@ -69,12 +69,11 @@ export class AdminInsertVenueComponent implements OnInit{
         
     this.eventService.insertVenue(venueToCreate).subscribe ({
       next: (response) => {
-        console.log("Venue inserted", response.msg)
+        console.log("Venue inserted", response)
         this.insertionSuccess = true;
       }, 
-      error: (response) => {
-        const message = response.error.msg
-        console.log("Error inserting venue", message)
+      error: (err) => {
+        console.log("Error inserting venue", err)
       }
     })
     }

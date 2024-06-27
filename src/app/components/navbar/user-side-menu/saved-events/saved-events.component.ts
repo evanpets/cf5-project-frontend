@@ -87,7 +87,7 @@ export class SavedEventsComponent implements OnInit{
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'confirmed') {
-        this.eventService.unsaveEvent(event.eventId, this.currentUser.userId).subscribe({
+        this.eventService.unsaveEvent(event.eventId).subscribe({
           next: (response) => {
             console.log("Unsaved", response);
             this.savedEvents = this.savedEvents.filter(e => e.eventId !== event.eventId);

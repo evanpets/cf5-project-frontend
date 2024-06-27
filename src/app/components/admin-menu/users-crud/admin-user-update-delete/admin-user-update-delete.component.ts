@@ -120,7 +120,7 @@ export class AdminUserUpdateDeleteComponent {
        };
 
       console.log("Update info: ", userToUpdate);
-      this.userService.updateUser(userToUpdate).subscribe({
+      this.userService.adminUpdateUser(userToUpdate).subscribe({
         next: (response) => {
           console.log("Response after update: ", response,  response.msg);
           this.loadUsers();

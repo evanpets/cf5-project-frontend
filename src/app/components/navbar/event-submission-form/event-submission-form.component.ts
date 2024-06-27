@@ -73,7 +73,7 @@ export class EventSubmissionFormComponent implements OnInit{
   }
 
   loadVenues() {
-    this.eventService.getVenues().subscribe({
+    this.eventService.getRegisteredVenues().subscribe({
       next: (venues) => {
         this.venues = venues;
         console.log('Venues loaded:', this.venues);

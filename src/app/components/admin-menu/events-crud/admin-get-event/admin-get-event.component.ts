@@ -52,7 +52,7 @@ export class AdminGetEventComponent {
   }
 
   getEventsWithTitle(title: string): void {
-    this.eventService.getEventsWithTitle(title).subscribe({
+    this.eventService.getAllEventsWithTitle(title).subscribe({
       next: (responses: BackendEvent[]) => {
         console.log(responses);
         this.events = responses.map(response => this.mapEvent(response));
