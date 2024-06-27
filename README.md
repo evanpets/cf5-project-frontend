@@ -8,7 +8,7 @@ The application runs on `https://localhost:4200/`. Type `ng serve` in the CLI to
 
 ## Instructions on how to set up
 
-Two SQL scripts are provided in .txt files: one that creates the database and user, and another that inserts data into the database. A dummy user to whom the events inserted are linked is inserted, but they cannot be retrieved because the password is directly imported to the database, which fails later validity changes. How to overcome this:
+Two SQL scripts are provided in .txt files in the same package: one that creates the database and user, and another that inserts data into the database. A dummy user to whom the events inserted are linked is inserted, but they cannot be retrieved because the password is directly imported to the database, which fails later validity changes. How to overcome this:
 
 Run the backend server. On load, Swagger will also load. You can go to the User controller methods and run `api/users/registration` using the following code (you can adapt it to your liking):
 ```
