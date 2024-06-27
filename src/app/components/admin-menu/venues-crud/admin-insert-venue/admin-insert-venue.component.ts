@@ -37,7 +37,6 @@ export class AdminInsertVenueComponent implements OnInit{
     this.eventService.checkDuplicateVenue(venueName).subscribe({
       next: (response) => {
         if (response && response.msg) {
-          console.log(response.msg);
           if (response.msg === "Venue name not registered yet") {
             this.form.get('name').setErrors(null);
           } else {
@@ -69,7 +68,7 @@ export class AdminInsertVenueComponent implements OnInit{
         
     this.eventService.insertVenue(venueToCreate).subscribe ({
       next: (response) => {
-        console.log("Venue inserted", response)
+        console.log(response)
         this.insertionSuccess = true;
       }, 
       error: (err) => {

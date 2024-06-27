@@ -21,7 +21,6 @@ export class EventCardComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     if (this.currentUser) {
-      console.log("Init user: " + this.currentUser.username);
       this.retrieveSavedStatus();
     }
   }
@@ -51,7 +50,6 @@ export class EventCardComponent implements OnInit, OnChanges {
     this.eventService.isEventSaved(this.event.eventId, this.currentUser.userId).subscribe({
       next: (response) => {
         this.event.isSaved = response.isSaved;
-        console.log("Saved status retrieved");
       },
       error: (error) => {
         console.error('Error checking if event is saved:', error);

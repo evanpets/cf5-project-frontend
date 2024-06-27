@@ -47,17 +47,13 @@
 
     passwordConfirmValidator() {
       const password = this.profileForm.get('password')?.value;
-      const confirmPassword = this.profileForm.get('confirmPassword')?.value;
-      // console.log("pw:", password, "confirmpw: ", confirmPassword);
-      
+      const confirmPassword = this.profileForm.get('confirmPassword')?.value;      
   
       if (password !== confirmPassword) {
         this.profileForm.get('confirmPassword')?.setErrors({ passwordMismatch: true });
         return { passwordMismatch: true };
       } else {
-        this.profileForm.get('confirmPassword')?.setErrors(null);
-        console.log("No conflict");
-        
+        this.profileForm.get('confirmPassword')?.setErrors(null);        
         return null;
       }
     }
@@ -70,8 +66,6 @@
       this.profileForm.get('password')?.enable();
       this.profileForm.get('confirmPassword')?.enable();
       this.profileForm.get('phoneNumber')?.enable();
-
-      // console.log(this.profileForm);
       
       this.profileForm.get('password')?.valueChanges.subscribe(value => {
         this.passwordConfirmValidator();
@@ -82,19 +76,10 @@
       });
     }
   
-    saveChanges(): void {
-      console.log("confirmPassword", this.profileForm.get('confirmPassword').value);
-      console.log("confirmPassword errors", this.profileForm.get('confirmPassword').errors);
-
-      console.log(this.profileForm.get('password').value);
-      console.log(this.profileForm.get('username').value);
-
-      
+    saveChanges(): void { 
       if (this.user && this.profileForm.valid) {
         const updatedUser = { ...this.user, ...this.profileForm.value };
         updatedUser.id = this.user.userId; 
-
-        console.log(updatedUser)
 
         if (!updatedUser.password) {
           delete updatedUser.password;
@@ -116,11 +101,7 @@
         });
       }
       else {
-        if (this.profileForm.get('confirmPassword').invalid) {
-          console.log("confirm password invalid");
-        }
         console.log("Invalid form");
-        
       }
     }
 

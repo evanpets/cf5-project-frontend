@@ -27,7 +27,6 @@ export class EventsListComponent {
   ngOnInit(): void {
     this.eventService.getAllUpcomingEvents().subscribe({
       next: (response) => {
-        console.log(response)
         this.events = response
         this.sortEventsByDate();
         this.loadTenMore();
@@ -66,7 +65,6 @@ export class EventsListComponent {
 
   onSearchCategoryChange(category: string): void {
     this.searchCategory = category;
-    console.log("category change");
     
     this.filterEvents();
   }

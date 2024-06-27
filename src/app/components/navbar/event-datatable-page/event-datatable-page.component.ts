@@ -18,7 +18,6 @@ export class EventDatatablePageComponent {
   constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
-    // Listen to route changes
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
@@ -26,7 +25,6 @@ export class EventDatatablePageComponent {
       this.activeTab = activeChild === 'past' ? 'past' : 'upcoming';
     });
 
-    // Initialize active tab
     const initialActiveChild = this.route.snapshot.firstChild?.url[0]?.path;
     this.activeTab = initialActiveChild === 'past' ? 'past' : 'upcoming';
   }

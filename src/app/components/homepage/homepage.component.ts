@@ -26,7 +26,6 @@ export class HomepageComponent implements OnInit{
       const username = (user as LoggedInUser).username;
       this.userService.getUserByUsername(username).subscribe({
         next: (response) => {
-          console.log('Current user ID: ', response.userId)
           console.log('Current user:', response);
             this.currentUser = response
         },

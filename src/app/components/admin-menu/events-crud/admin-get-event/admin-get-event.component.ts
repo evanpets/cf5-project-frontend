@@ -38,13 +38,12 @@ export class AdminGetEventComponent {
   getEventById(eventId: number): void {
     this.eventService.getSingleEventById(eventId).subscribe({
       next: (response: BackendEvent) => {
-        console.log("Response: " + JSON.stringify(response));
         this.events = [this.mapEvent(response)];
         this.currentIndex = 0;
         this.hasResult = true;
       }, 
       error: (error) => { 
-        console.error("Error fetching event by ID:", error);
+        console.error(error);
         this.events = [];
         this.hasResult = true;
       }

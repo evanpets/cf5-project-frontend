@@ -48,7 +48,6 @@ export class MyEventsComponent implements OnInit{
   isEditing: boolean = false;
   currentEvent: Event | null = null;
   currentUser: User
-  // initialVenueName: string;
   selectedFile: File | null = null
   venues: any[] = [];
   @ViewChild('fileInput') fileInput!: ElementRef;
@@ -77,11 +76,9 @@ export class MyEventsComponent implements OnInit{
 
   loadCurrentUser() {
     const username = (this.userService.user() as LoggedInUser).username
-    console.log(username)
     this.userService.getUserByUsername(username).subscribe({
       next: (response) => {
         this.currentUser = response;
-        console.log('Current user ID: ', this.currentUser.userId)
         console.log('Current user:', this.currentUser);
         this.loadUserEvents()
       },
@@ -95,7 +92,6 @@ export class MyEventsComponent implements OnInit{
     this.eventService.getRegisteredVenues().subscribe({
       next: (venues) => {
         this.venues = venues;
-        console.log('Venues loaded:', this.venues);
       },
       error: (error) => {
         console.error('Error fetching venues', error);
@@ -106,7 +102,6 @@ export class MyEventsComponent implements OnInit{
   loadUserEvents(): void {
     this.eventService.getUserEvents(this.currentUser.userId).subscribe({
       next: (response: BackendEvent[]) => {
-        console.log("Response: ",response);
         this.myEvents = response.map(event => ({
           eventId: event.eventId,
           title: event.title,
@@ -130,10 +125,6 @@ export class MyEventsComponent implements OnInit{
           imageUrl: event.imageUrl,
           isSaved: event.isSaved
         }));
-        console.log("MyEvents list",this.myEvents);
-        for (let event of this.myEvents) {
-          console.log("Event: ",JSON.stringify(event));
-        }
       },
       error: (err) => {
         console.log("Couldn't load any events");
@@ -145,7 +136,6 @@ export class MyEventsComponent implements OnInit{
   editEvent(event: Event): void {
     this.eventService.getSingleEventById(event.eventId).subscribe({
       next: (response) => {
-        console.log("Response: " + JSON.stringify(response));
         
         this.currentEvent = response
         this.isEditing = true;
@@ -158,18 +148,6 @@ export class MyEventsComponent implements OnInit{
         });
         
         const selectedVenue = this.venues.find(venue => venue.name === event.venue.name);
-        // const selectedVenue = response.venue;
-
-        //at this point the ids are undefined
-        console.log(
-          "Venue ID:" + selectedVenue.venueId +
-          "\nVenue name:" + selectedVenue.name +
-          "\nVenue addr ID:" + selectedVenue.venueAddressId +
-          "\nVenue addr str:" + selectedVenue.venueAddress.street +
-          "\nVenue addr strno:" + selectedVenue.venueAddress.streetNumber +
-          "\nVenue addr zip:" + selectedVenue.venueAddress.zipCode +
-          "\nVenue addr city:" + selectedVenue.venueAddress.city
-         );
 
         this.editForm.patchValue({
           title: event.title,
@@ -201,15 +179,6 @@ export class MyEventsComponent implements OnInit{
         venueZipCode: selectedVenue.venueAddress.zipCode,
         venueCity: selectedVenue.venueAddress.city
       });
-      console.log(
-        "Venue ID:" + selectedVenue.venueId +
-        "\nVenue name:" + selectedVenue.name +
-        "\nVenue addr ID:" + selectedVenue.venueAddressId +
-        "\nVenue addr str:" + selectedVenue.venueAddress.street +
-        "\nVenue addr strno:" + selectedVenue.venueAddress.streetNumber +
-        "\nVenue addr zip:" + selectedVenue.venueAddress.zipCode +
-        "\nVenue addr city:" + selectedVenue.venueAddress.city
-       );
     } else {
       console.error('Venue not found:', venueName);
     }
@@ -217,9 +186,7 @@ export class MyEventsComponent implements OnInit{
   
 
   saveEvent(): void {
-    if (this.editForm.valid && this.currentEvent) {
-      console.log("save beginning",this.currentEvent);
-      
+    if (this.editForm.valid && this.currentEvent) {      
       const selectedVenue = this.venues.find(venue => venue.name === this.editForm.value.venueName);
 
       const eventToUpdate: BackendEvent = {
@@ -242,30 +209,16 @@ export class MyEventsComponent implements OnInit{
         userId: this.currentEvent.userId
        };
 
-       console.log(
-        "Venue ID:" + eventToUpdate.venueId +
-        "\nVenue name:" + eventToUpdate.venueName +
-        "\nVenue addr ID:" + eventToUpdate.venueAddressId +
-        "\nVenue addr str:" + eventToUpdate.venueStreet +
-        "\nVenue addr strno:" + eventToUpdate.venueStreetNumber +
-        "\nVenue addr zip:" + eventToUpdate.venueZipCode +
-        "\nVenue addr city:" + eventToUpdate.venueCity 
-       );
-
       const updateFormData = new FormData();
       updateFormData.append('eventToUpdate', JSON.stringify(eventToUpdate))
 
       if (this.selectedFile) {
-        if (this.selectedFile.size > 5 * 1024 * 1024) { // 5 MB size limit
+        if (this.selectedFile.size > 5 * 1024 * 1024) { 
           alert("File size should be less than 5 MB.");
           return;
         }
         updateFormData.append('eventImage', this.selectedFile, this.selectedFile.name);
-        console.log("File appended to FormData");
       }
-
-      console.log("Update info: ", eventToUpdate);
-      console.log(this.currentEvent.eventId);
        
       this.eventService.updateEvent(this.currentEvent.eventId, updateFormData).subscribe({
         next: (response) => {
@@ -284,7 +237,6 @@ export class MyEventsComponent implements OnInit{
   openFileInput(event: any): void {
     event.preventDefault();
     event.stopPropagation();
-    // Trigger the hidden file input element
     if (this.fileInput) {
       this.fileInput.nativeElement.click();
     }

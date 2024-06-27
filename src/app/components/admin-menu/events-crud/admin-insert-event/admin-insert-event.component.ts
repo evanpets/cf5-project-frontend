@@ -58,11 +58,10 @@ export class AdminInsertEventComponent implements OnInit{
     this.eventService.getRegisteredVenues().subscribe({
       next: (venues) => {
         this.venues = venues;
-        console.log('Venues loaded:', this.venues);
 
       },
       error: (error) => {
-        console.error('Error fetching venues', error);
+        console.error(error);
       }
     });
   }
@@ -179,21 +178,17 @@ export class AdminInsertEventComponent implements OnInit{
         newPerformers: formValue.performers.map(p => ({ name: p.name })),
         userId: this.currentUser.userId
       };
-      console.log('Event to create:', eventToCreate);
 
       const formData = new FormData();
       formData.append('eventEntity', JSON.stringify(eventToCreate));
       if (this.selectedFile) {
-        if (this.selectedFile.size > 5 * 1024 * 1024) { // 5 MB size limit
+        if (this.selectedFile.size > 5 * 1024 * 1024) { 
           alert("File size should be less than 5 MB.");
           return;
         }
         formData.append('eventImage', this.selectedFile, this.selectedFile.name);
-        console.log("File appended to FormData");
       }
-
-      console.log("FormData content:", formData);
-      
+            
       this.eventService.createEvent(formData).subscribe ({
         next: (response) => {
           console.log("Event created", response)

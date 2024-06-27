@@ -76,7 +76,6 @@ export class EventSubmissionFormComponent implements OnInit{
     this.eventService.getRegisteredVenues().subscribe({
       next: (venues) => {
         this.venues = venues;
-        console.log('Venues loaded:', this.venues);
 
       },
       error: (error) => {
@@ -87,11 +86,9 @@ export class EventSubmissionFormComponent implements OnInit{
 
   loadCurrentUser() {
     const username = (this.userService.user() as LoggedInUser).username
-    console.log(username)
     this.userService.getUserByUsername(username).subscribe({
       next: (response) => {
         this.currentUser = response;
-        console.log('Current user: ', this.currentUser.userId)
         console.log('Current user:', this.currentUser);
       },
       error: (error) => {
@@ -197,20 +194,16 @@ export class EventSubmissionFormComponent implements OnInit{
         newPerformers: formValue.performers.map(p => ({ name: p.name })),
         userId: this.currentUser.userId
       };
-      console.log('Event to create:', eventToCreate);
 
       const formData = new FormData();
       formData.append('eventEntity', JSON.stringify(eventToCreate));
       if (this.selectedFile) {
-        if (this.selectedFile.size > 5 * 1024 * 1024) { // 5 MB size limit
+        if (this.selectedFile.size > 5 * 1024 * 1024) {
           alert("File size should be less than 5 MB.");
           return;
         }
         formData.append('eventImage', this.selectedFile, this.selectedFile.name);
-        console.log("File appended to FormData");
       }
-
-      console.log("FormData content:", formData);
       
       this.eventService.createEvent(formData).subscribe ({
         next: (response) => {

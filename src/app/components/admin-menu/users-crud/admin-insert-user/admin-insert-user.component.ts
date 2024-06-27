@@ -55,7 +55,6 @@ export class AdminInsertUserComponent {
     this.userService.check_duplicate_username(username).subscribe({
       next: (response) => {
         if(response && response.msg) {
-          console.log(response.msg)
           if (response.msg === "Username available") {
           this.form.get('username').setErrors(null)
           } else {

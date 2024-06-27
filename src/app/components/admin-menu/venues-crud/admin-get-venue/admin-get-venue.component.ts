@@ -30,7 +30,6 @@ export class AdminGetVenueComponent {
   getVenueByName(venueName: string): void {
     this.eventService.getVenueByName(venueName).subscribe({
       next: (response: Venue) => {
-        console.log(response);
         this.venue = response
         this.hasResult = true;
       },

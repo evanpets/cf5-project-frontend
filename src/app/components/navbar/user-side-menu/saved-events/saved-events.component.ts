@@ -27,7 +27,6 @@ export class SavedEventsComponent implements OnInit{
 
   loadCurrentUser() {
     const username = (this.userService.user() as LoggedInUser).username;
-    console.log(username);
     this.userService.getUserByUsername(username).subscribe({
       next: (response) => {
         this.currentUser = response;
@@ -43,7 +42,6 @@ export class SavedEventsComponent implements OnInit{
   loadSavedEvents() {
     this.eventService.getSavedEvents(this.currentUser.userId).subscribe({
       next: (response) => {
-        console.log(response.msg);
         console.log('Saved events:', response.savedEventsList);
         this.savedEvents = response.savedEventsList.map(event => ({
           eventId: event.eventId,

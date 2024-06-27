@@ -36,12 +36,11 @@ export class AdminGetUserComponent {
   getUserById(userId: number): void {
     this.userService.getUserById(userId).subscribe({
       next: (response: User) => {
-        console.log("Response: " + JSON.stringify(response));
         this.user = response
         this.hasResult = true;
       }, 
       error: (error) => { 
-        console.error("Error fetching event by ID:", error);
+        console.error(error);
         this.user = null
         this.hasResult = true;
       }
@@ -51,7 +50,6 @@ export class AdminGetUserComponent {
   getUserByUsername(username: string): void {
     this.userService.getUserByUsername(username).subscribe({
       next: (response: User) => {
-        console.log("Response: " + JSON.stringify(response));
         this.user = response
         this.hasResult = true;
       }, 

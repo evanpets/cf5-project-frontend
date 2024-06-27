@@ -23,9 +23,6 @@ export class EventService {
    * @returns       A message confirming the result of the insertion attempt.
    */
   createEvent(formData: FormData): Observable<Event> {
-    console.log("service");
-    console.log("Service data: " + formData);
-    
     return this.http.post<Event>(`${API_URL}/new`, formData);
   }
 
@@ -97,7 +94,6 @@ saveEvent(eventId: number): Observable<{ msg: string }> {
   * @returns         A list of all the future events.
    */
   getAllUpcomingEvents(): Observable<Event[]> {
-    console.log("Upcoming events")
     return this.http.get<Event[]>(`${API_URL}/upcoming`);
   }
 
@@ -106,7 +102,6 @@ saveEvent(eventId: number): Observable<{ msg: string }> {
   * @returns         A list of all the past events.
    */
   getAllPastEvents(): Observable<Event[]> {
-    console.log("Past events")
     return this.http.get<Event[]>(`${API_URL}/past`);
   }
 
@@ -171,6 +166,12 @@ saveEvent(eventId: number): Observable<{ msg: string }> {
     return this.http.get<{msg: string}> (`${API_URL}/check-duplicate-venue`, { params: {venueName} })
   }
 
+  /**
+   * Checks if an event is saved for a specific user
+   * @param eventId   The ID of the event.
+   * @param userId    The ID of the user.
+   * @returns         A true or false value of whether the event is saved.
+   */
   isEventSaved(eventId: number, userId: number): Observable<{ isSaved: boolean }> {
     return this.http.get<{ isSaved: boolean }>(`${API_URL}/is-saved/${eventId}`, { params: { eventId, userId } });
   }
@@ -181,13 +182,7 @@ saveEvent(eventId: number): Observable<{ msg: string }> {
    * @param event     The event details as updated by the user.
    * @returns         A message of the result, the updated event.
    */
-  // updateEvent(eventId: number, event: BackendEvent): Observable<{ msg: string, event: BackendEvent }> {
-  //   return this.http.patch<{ msg: string, event: BackendEvent }>(`${API_URL}/update/${eventId}`, event);
-  // }
-
   updateEvent(eventId: number, updateInformation: any): Observable<{ msg: string, event: Event }> {
-    // const token = localStorage.getItem('access_token');
-    // const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.patch<{ msg: string, event: Event }>(`${API_URL}/${eventId}`, updateInformation);
   }
 

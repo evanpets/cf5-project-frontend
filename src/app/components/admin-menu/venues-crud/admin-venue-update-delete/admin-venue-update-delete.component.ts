@@ -46,12 +46,10 @@ export class AdminVenueUpdateDeleteComponent implements OnInit{
   
   loadCurrentUser() {
     const username = (this.userService.user() as LoggedInUser).username
-    console.log(username)
     this.userService.getUserByUsername(username).subscribe({
       next: (response) => {
         this.currentUser = response;
         this.loadVenues();
-        console.log('Current user ID: ', this.currentUser.userId)
         console.log('Current user:', this.currentUser);
       },
       error: (error) => {
@@ -64,7 +62,6 @@ export class AdminVenueUpdateDeleteComponent implements OnInit{
     this.eventService.getRegisteredVenues().subscribe({
       next: (venues) => {
         this.venues = venues;
-        console.log('Venues loaded:', this.venues);
         if (this.venues.length > 0) {
           this.currentIndex = 0;
           this.currentVenue = this.venues[this.currentIndex];
@@ -77,13 +74,9 @@ export class AdminVenueUpdateDeleteComponent implements OnInit{
   }
 
   editVenue(venue: Venue): void {
-    console.log("edit started");
     
     this.eventService.getVenueById(venue.venueId).subscribe({
       next: (response: any) => {
-        console.log("Response: "+ response.name);
-        console.log("VAddr Id " + response.venueAddress.venueAddressId);
-        
         
         this.currentVenue = response;
 
@@ -105,10 +98,8 @@ export class AdminVenueUpdateDeleteComponent implements OnInit{
   }
 
   saveVenue(): void {
-    console.log('Form Submitted');
 
     if (this.editForm.valid && this.currentVenue) {
-      console.log("save beginning",this.currentVenue);
       
       const venueToUpdate: Venue = {
         venueId: this.currentVenue.venueId,
@@ -122,10 +113,8 @@ export class AdminVenueUpdateDeleteComponent implements OnInit{
         }
        };
 
-      console.log("Update info: ", venueToUpdate);
       this.eventService.updateVenue(this.currentVenue.venueId, venueToUpdate).subscribe({
         next: (response) => {
-          console.log("Response after update: ", response,  response.msg);
           this.loadVenues();
         },
         error: (error) => {

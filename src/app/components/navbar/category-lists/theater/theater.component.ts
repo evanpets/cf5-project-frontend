@@ -23,13 +23,7 @@ export class TheaterComponent  implements OnInit{
   ngOnInit(): void {
     this.eventService.getAllEventsInCategory(this.eventCategory).subscribe({
       next: (response) => {
-        console.log(response)
         this.events = response.eventsList
-        console.log(this.events);
-        for (var event in this.events) {
-          console.log(event);
-          
-        }
         
         this.sortEventsByDate();
         this.loadTenMore();

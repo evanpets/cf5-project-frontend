@@ -44,12 +44,10 @@ export class AdminUserUpdateDeleteComponent {
   
   loadCurrentUser() {
     const username = (this.userService.user() as LoggedInUser).username
-    console.log(username)
     this.userService.getUserByUsername(username).subscribe({
       next: (response) => {
         this.currentActiveUser = response;
         this.loadUsers();
-        console.log('Current user ID: ', this.currentActiveUser.userId)
         console.log('Current user:', this.currentActiveUser);
       },
       error: (error) => {
@@ -62,7 +60,6 @@ export class AdminUserUpdateDeleteComponent {
     this.userService.getAllUsers().subscribe({
       next: (users) => {
         this.users = users;
-        console.log('Users loaded:', this.users);
         if (this.users.length > 0) {
           this.currentIndex = 0;
           this.displayedUser = this.users[this.currentIndex];
@@ -74,13 +71,9 @@ export class AdminUserUpdateDeleteComponent {
     });
   }
 
-  editUser(user: User): void {
-    console.log("edit started");
-    
+  editUser(user: User): void {    
     this.userService.getUserByUsername(user.username).subscribe({
-      next: (response: User) => {
-        console.log("Role: " + response.role);
-        
+      next: (response: User) => {        
         this.displayedUser = response;
 
         this.editForm.patchValue({
@@ -102,11 +95,8 @@ export class AdminUserUpdateDeleteComponent {
   }
 
   saveUser(): void {
-    console.log('Form Submitted');
 
-    if (this.editForm.valid && this.displayedUser) {
-      console.log("save beginning",this.displayedUser);
-      
+    if (this.editForm.valid && this.displayedUser) {      
       const userToUpdate: User = {
         userId: this.displayedUser.userId,
         username: this.editForm.value.username,
@@ -119,10 +109,8 @@ export class AdminUserUpdateDeleteComponent {
 
        };
 
-      console.log("Update info: ", userToUpdate);
       this.userService.adminUpdateUser(userToUpdate).subscribe({
         next: (response) => {
-          console.log("Response after update: ", response,  response.msg);
           this.loadUsers();
         },
         error: (error) => {

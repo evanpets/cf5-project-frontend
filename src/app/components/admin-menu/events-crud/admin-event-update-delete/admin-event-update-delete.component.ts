@@ -58,12 +58,10 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
 
   loadCurrentUser() {
     const username = (this.userService.user() as LoggedInUser).username
-    console.log(username)
     this.userService.getUserByUsername(username).subscribe({
       next: (response) => {
         this.currentUser = response;
         this.loadVenues();
-        console.log('Current user ID: ', this.currentUser.userId)
         console.log('Current user:', this.currentUser);
       },
       error: (error) => {
@@ -76,7 +74,6 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
     this.eventService.getRegisteredVenues().subscribe({
       next: (venues) => {
         this.venues = venues;
-        console.log('Venues loaded:', this.venues);
         this.loadAllEvents();
       },
       error: (error) => {
@@ -87,9 +84,7 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
 
   loadAllEvents(): void {
     this.eventService.getAllEvents().subscribe((response: Event[]) => {
-      console.log("Response: ", response);
       this.events = response
-      console.log("Events list", this.events);
 
       this.events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
       this.setClosestEventIndex();
@@ -142,7 +137,7 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
         });
       },
       error: (err) => {
-        console.log("Error fetching response", err);
+        console.log(err);
       }
     })
   }
@@ -164,17 +159,10 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
   
 
   saveEvent(): void {
-    console.log('Form Submitted');
-
     if (this.editForm.valid && this.currentEvent) {
       console.log("save beginning",this.currentEvent);
       
       const selectedVenue = this.venues.find(venue => venue.name === this.editForm.value.name);
-
-      if (!selectedVenue) {
-        console.error('Selected venue is invalid');
-        return;
-      }
 
         const eventToUpdate: any = {
           eventId: this.currentEvent.eventId,
@@ -196,74 +184,34 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
           userId: this.currentEvent.userId
         };
 
-        // const eventToUpdate: Event = {
-        //   eventId: this.currentEvent.eventId,
-        //   title: this.editForm.value.title,
-        //   description: this.editForm.value.description,
-        //   venue: {
-        //     venueId: selectedVenue.venueId,
-        //     name: selectedVenue.name,
-        //     venueAddress: {
-        //       venueAddressId: selectedVenue.venueAddress.venueAddressId,
-        //       street: selectedVenue.venueAddress.street,
-        //       streetNumber: selectedVenue.venueAddress.streetNumber,
-        //       zipCode: selectedVenue.venueAddress.zipCode,
-        //       city: selectedVenue.venueAddress.city,
-        //     }
-        //   },
-        //   price: this.editForm.value.price,
-        //   date: this.editForm.value.date instanceof Date ? this.editForm.value.date.toISOString().split('T')[0] : this.editForm.value.date,
-        //   category: this.editForm.value.category,
-        //   performers: this.performers.controls.map(c => ({ name: c.value.name })),
-        //   imageUrl: this.editForm.value.eventImage,
-        //   isSaved: this.currentEvent.isSaved,
-        //   userId: this.currentEvent.userId
-        // };
-
-        // console.log(
-        //   "Venue ID:" + eventToUpdate.venueId +
-        //   "\nVenue name:" + eventToUpdate.venueName +
-        //   "\nVenue addr ID:" + eventToUpdate.venueAddressId +
-        //   "\nVenue addr str:" + eventToUpdate.venueStreet +
-        //   "\nVenue addr strno:" + eventToUpdate.venueStreetNumber +
-        //   "\nVenue addr zip:" + eventToUpdate.venueZipCode +
-        //   "\nVenue addr city:" + eventToUpdate.venueCity 
-        //  );
       const updateFormData = new FormData();
       updateFormData.append('eventToUpdate', JSON.stringify(eventToUpdate))
 
       if (this.selectedFile) {
-        if (this.selectedFile.size > 5 * 1024 * 1024) { // 5 MB size limit
+        if (this.selectedFile.size > 5 * 1024 * 1024) { 
           alert("File size should be less than 5 MB.");
           return;
         }
         updateFormData.append('eventImage', this.selectedFile, this.selectedFile.name);
-        // console.log("File appended to FormData");
       }
-
-      console.log("Update info: ", eventToUpdate);
-      console.log(this.currentEvent.eventId);
-      
 
       this.eventService.updateEvent(this.currentEvent.eventId, updateFormData).subscribe({
         next: (response) => {
-          console.log("Response: ", response);
           this.loadAllEvents();
         },
         error: (error) => {
-          console.error('Error updating event', error);
+          console.error(error);
         }
       });
     } else {
       console.log("Couldn't save");
-      
     }
   }
 
   openFileInput(event: any): void {
     event.preventDefault();
     event.stopPropagation();
-    // Trigger the hidden file input element
+
     if (this.fileInput) {
       this.fileInput.nativeElement.click();
     }
@@ -345,13 +293,9 @@ export class EventConfirmDeleteDialogComponent {
   constructor(private dialogRef: DialogRef, private router: Router, private eventService: EventService, @Inject(DIALOG_DATA) public event: any) {}
 
   confirmDelete(eventId: number) {
-    if (!eventId) {
-      console.error('Event is undefined or null');
-      return;
-    } 
     this.eventService.deleteEvent(eventId).subscribe({
       next: (response) => {
-        console.log("Delete complete", response);
+        console.log(response);
         this.reloadCurrentRoute()
       },
       error: (err) => {

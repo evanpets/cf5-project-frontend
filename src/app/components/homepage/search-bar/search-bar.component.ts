@@ -17,7 +17,6 @@ import { FormsModule } from '@angular/forms';
 export class SearchBarComponent implements OnInit{
   @Output() searchCategoryChange = new EventEmitter<string>();
   @Output() searchQueryChange = new EventEmitter<string>();
-  // @Output() searchOptionSelected = new EventEmitter<any>();
 
 
   sourcedResults: any[] = []
@@ -43,9 +42,6 @@ export class SearchBarComponent implements OnInit{
   }
 
   filterEvents() {
-    // this.searchCategoryChange.emit(this.searchCategory);
-    // if (!this.searchCategory) {return;}
-
     this.eventService.filterEvents(this.searchCategory).subscribe({
       next: (response: any[]) => {
         this.sourcedResults = response
@@ -61,13 +57,10 @@ export class SearchBarComponent implements OnInit{
     this.searchQuery = query;
     this.searchQueryChange.emit(this.searchQuery);
     if (query.length >= 2) {
-      console.log(query.toString())
-      console.log(this.filterableOptions)
       
       this.filterableOptions = this.sourcedResults.filter(option =>
         this.getDisplayValue(option).toLowerCase().includes(query.toLowerCase())
       )
-      console.log(this.filterableOptions)
     } else {
       this.filterableOptions = []
     }

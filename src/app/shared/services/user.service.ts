@@ -94,7 +94,6 @@ export class UserService {
   updateUser(user: User): Observable<{ msg: string }> {
     const token = localStorage.getItem('access_token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    console.log("Service: ", user.userId, user.username)
     return this.http.patch<{ msg: string, user: User }>(`${API_URL}/${user.userId}`, user, { headers});
   }
 
@@ -104,10 +103,8 @@ export class UserService {
    * @returns An observable that emits a success message and the updated user.
    */
   adminUpdateUser(user: User): Observable<{ msg: string, user: User}> {
-    console.log("Service: ", user.userId, user.username)
     const token = localStorage.getItem('access_token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    console.log(headers);
     return this.http.patch<{ msg: string, user: User }>(`${environment.apiURL}/api/admin/users/${user.userId}`, user,  { headers });
   }
 

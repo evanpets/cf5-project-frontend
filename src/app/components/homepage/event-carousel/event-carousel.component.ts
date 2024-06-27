@@ -20,7 +20,6 @@ export class EventCarouselComponent {
   ngOnInit(): void {
     this.eventService.getAllUpcomingEvents().subscribe({
       next: (response) => {
-        console.log(response)
         this.events = response
       },
       error: (err) => {

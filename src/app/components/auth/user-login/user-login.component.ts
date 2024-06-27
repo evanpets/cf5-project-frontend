@@ -41,23 +41,16 @@ export class UserLoginComponent {
       next: (response) => {
         console.log(response)
         const access_token =  response.token;
-        console.log("Access token: ", access_token)
 
         localStorage.setItem('access_token', access_token)
-        console.log("Access token after set: ", access_token)
 
         const decodedToken = jwtDecode<DecodedTokenSubject>(access_token);
-        console.log('Decoded Token Subject:', decodedToken);
 
         const decodedTokenSubject: LoggedInUser = {
           username: decodedToken[claimName],
           email: decodedToken[claimEmail],
           role: decodedToken[claimRole]
         };
-
-        console.log('Decoded Token Subject:', decodedTokenSubject);
-
-        console.log("Decoded items: " + decodedTokenSubject.email + " " + decodedTokenSubject.username)
         
         this.userService.user.set({
           username: decodedTokenSubject.username,
