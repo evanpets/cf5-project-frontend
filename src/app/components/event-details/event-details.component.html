@@ -14,11 +14,17 @@
         </tr>
         <tr>
           <th>Venue:</th>
-          <td><span>{{ event?.venue.name }} ({{ event?.venue.venueAddress.streetNumber }} {{ event?.venue.venueAddress.street }}, {{ event?.venue.venueAddress.zipCode }}, {{ event?.venue.venueAddress.city }})</span></td>
+          <td>
+            @if (event?.venue.name) {
+              <span>{{ event?.venue.name }} ({{ event?.venue.venueAddress.streetNumber }} {{ event?.venue.venueAddress.street }}, {{ event?.venue.venueAddress.zipCode }}, {{ event?.venue.venueAddress.city }})</span>
+            } @else {
+              TBA
+            }
+          </td>
         </tr>
         <tr>
           <th>City:</th>
-          <td>{{ event?.venue.venueAddress.city }}</td>
+          <td>{{ event?.venue.venueAddress.city ? event.venue.venueAddress.city : "TBA" }}</td>
         </tr>
         <tr>
           <th>Description:</th>

@@ -7,7 +7,7 @@
         <h4 class="card-title"> {{event.title}}</h4>
         <div class="d-flex justify-content-between mt-2">
             <p class="card-text"><small>{{ formatDate(event.date) }}</small></p>
-            <p class="card-text"><small>{{event.venue.name}}</small></p>
+            <p class="card-text"><small>{{ event.venue?.name ? event.venue.name : "TBA" }}</small></p>
         </div>
     </div>
 </div>

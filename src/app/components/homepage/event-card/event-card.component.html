@@ -17,7 +17,7 @@
         <h5 class="card-text"> {{ event.title }}</h5>
       </div>
       <div>
-        <p class="card-text mt-2"> {{ event.venue.name }}</p>
+        <p class="card-text mt-2"> {{ event.venue?.name ? event.venue.name : "TBA"}}</p>
       </div>
     </div>
   </a>

@@ -186,8 +186,8 @@ saveEvent(eventId: number): Observable<{ msg: string }> {
    * @param event     The event details as updated by the user.
    * @returns         A message of the result, the updated event.
    */
-  updateEvent(eventId: number, updateInformation: any): Observable<{ msg: string, event: Event }> {
-    return this.http.patch<{ msg: string, event: Event }>(`${API_URL}/${eventId}`, updateInformation);
+  updateEvent(eventId: number, updateInformation: any): Observable<{ msg: string, updatedEvent: Event }> {
+    return this.http.patch<{ msg: string, updatedEvent: Event }>(`${API_URL}/${eventId}`, updateInformation);
   }
 
   /**

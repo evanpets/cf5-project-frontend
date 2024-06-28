@@ -2,8 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { EventCardComponent } from 'src/app/components/homepage/event-card/event-card.component';
 import { Event } from 'src/app/shared/interfaces/event';
-import { User } from 'src/app/shared/interfaces/user';
+import { LoggedInUser, User } from 'src/app/shared/interfaces/user';
 import { EventService } from 'src/app/shared/services/event.service';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-music',
@@ -13,15 +14,17 @@ import { EventService } from 'src/app/shared/services/event.service';
   styleUrl: './music.component.css'
 })
 export class MusicComponent implements OnInit{
+  currentUser: User
   events: Event[] = []
   filteredEvents: Event[] = [];
   visibleEvents: Event[] = [];
   loadCount = 10;
   eventCategory: string = 'Music';
 
-  constructor(private eventService: EventService) {}
+  constructor(private eventService: EventService, private userService: UserService) {}
 
   ngOnInit(): void {
+    this.loadCurrentUser();
     this.eventService.getAllUpcomingEventsInCategory(this.eventCategory).subscribe({
       next: (response) => {
         this.events = response.eventsList
@@ -35,6 +38,19 @@ export class MusicComponent implements OnInit{
     })
   }
 
+  loadCurrentUser() {
+    const username = (this.userService.user() as LoggedInUser).username
+    this.userService.getUserByUsername(username).subscribe({
+      next: (response) => {
+        this.currentUser = response;
+        console.log('Current user:', this.currentUser);
+      },
+      error: (error) => {
+        console.error('Error fetching current user', error);
+      }
+    });
+  }
+  
   sortEventsByDate(): void {
     this.events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }

@@ -112,6 +112,7 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
       next: (response) => {
         this.currentEvent = response
         
+        this.editForm.reset();
         this.performers.clear();
         event.performers.forEach(performer => {
           this.performers.push(this.fb.group({
@@ -120,7 +121,7 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
 
         });
 
-        const selectedVenue = this.venues.find(venue => venue.venueId === event.venue.venueId);
+        const selectedVenue = this.venues.find(venue => venue.venueId === event.venue?.venueId);
 
         this.editForm.patchValue({
           title: event.title,
@@ -160,21 +161,24 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
 
   saveEvent(): void {
     if (this.editForm.valid && this.currentEvent) {
-      console.log("save beginning",this.currentEvent);
       
       const selectedVenue = this.venues.find(venue => venue.name === this.editForm.value.name);
 
-        const eventToUpdate: any = {
+        const eventToUpdate: Event = {
           eventId: this.currentEvent.eventId,
           title: this.editForm.value.title,
           description: this.editForm.value.description,
-          venueId: selectedVenue.venueId,
-          venueName: selectedVenue.name,
-          venueAddressId: selectedVenue.venueAddress.venueAddressId,
-          venueStreet: selectedVenue.venueAddress.street,
-          venueStreetNumber: selectedVenue.venueAddress.streetNumber,
-          venueZipCode: selectedVenue.venueAddress.zipCode,
-          venueCity: selectedVenue.venueAddress.city,
+          venue: {
+            venueId: selectedVenue.venueId,
+            name: selectedVenue.name,
+            venueAddress: {
+              venueAddressId: selectedVenue.venueAddress.venueAddressId,
+              street: selectedVenue.venueAddress.street,
+              streetNumber: selectedVenue.venueAddress.streetNumber,
+              zipCode: selectedVenue.venueAddress.zipCode,
+              city: selectedVenue.venueAddress.city,
+            }
+          },
           price: this.editForm.value.price,
           date: this.editForm.value.date instanceof Date ? this.editForm.value.date.toISOString().split('T')[0] : this.editForm.value.date,
           category: this.editForm.value.category,
@@ -197,6 +201,8 @@ export class AdminEventUpdateDeleteComponent implements OnInit{
 
       this.eventService.updateEvent(this.currentEvent.eventId, updateFormData).subscribe({
         next: (response) => {
+          console.log(response);
+          
           this.loadAllEvents();
         },
         error: (error) => {
