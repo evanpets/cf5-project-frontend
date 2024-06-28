@@ -1,7 +1,7 @@
 <div class="my-3 container d-flex flex-column">
-  <h2 class="text-center">My Events</h2>
-  <div *ngIf="myEvents.length > 0" class="container d-flex flex-row">
-    <div  class="mt-3 col-12 d-flex flex-column justify-content-between me-2 container">
+  <h2 *ngIf="!isEditing" class="text-center">My Events</h2>
+  <div *ngIf="myEvents.length > 0 && !isEditing" class="container d-flex flex-row">
+    <div class="mt-3 col-12 d-flex flex-column justify-content-between me-2 container">
       <app-events-datatable [data]="myEvents" [actionsTemplate]="actionsTemplate" class="overflow-x-auto"></app-events-datatable>
     </div>
   </div>
@@ -11,7 +11,7 @@
 
 
   <div *ngIf="isEditing" class="d-flex flex-column align-items-center border border-2 border-black shadow rounded-2 col-12 mb-4">
-    <h2 class="text-center my-3">Edit Event</h2>
+    <h2 class="text-center my-3">Edit Submitted Event</h2>
   
     <form [formGroup]="editForm" (ngSubmit)="saveEvent()" class="d-flex flex-column col-11" action="patch" [@slideInOut]="'in'">
         <mat-form-field >
