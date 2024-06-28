@@ -39,7 +39,7 @@ export class TheaterComponent  implements OnInit{
   }
 
   loadCurrentUser() {
-    const username = (this.userService.user() as LoggedInUser).username
+    const username = (this.userService.user() as LoggedInUser)?.username
     this.userService.getUserByUsername(username).subscribe({
       next: (response) => {
         this.currentUser = response;
