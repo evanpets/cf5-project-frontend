@@ -4,6 +4,8 @@ This application was developed by Evangelos Petsalis with the aim of serving as 
 
 ## How to run
 
+Before you can run the project, you need to run `npm i` in the CLI to download and install the packages needed to properly run the application.
+
 The application runs on `https://localhost:4200/`. Type `ng serve` in the CLI to load it.
 
 ## Instructions on how to set up
